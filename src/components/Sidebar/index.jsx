@@ -1,10 +1,13 @@
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const Sidebar = ({IdProofs}) => {
-  console.log(IdProofs,"IdProofs")
-  const handleOnDragEnd = () => {};
+const Sidebar = ({ IdProofs, setId }) => {
+  console.log(IdProofs, "IdProofs");
+  const handleOnDragEnd = (result) => {
+    console.log(result,IdProofs,result?.source?.index,IdProofs[result?.source?.index], "result");
+    setId(IdProofs[result?.source?.index])
+  };
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
       <aside className="fixed top-14 z-30   hidden h-[calc(100vh-3.5rem)] bg-background/95 w-1/5 shrink-0 md:sticky md:block">
         <div
           data-radix-scroll-area-viewport=""
