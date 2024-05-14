@@ -125,7 +125,8 @@ export const ItemTypes = {
         backgroundColor: "#27AE60",
         color: "#FFFFFF",
         borderColor: "#27AE60"
-      }
+      },
+      placeholder:"ENter the ration card"
     },
   ];
   
