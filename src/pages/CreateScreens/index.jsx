@@ -1,14 +1,14 @@
-import FixedMobileScreen from '@/components/MobileScreen'
-import Sidebar from '@/components/Sidebar'
-import { idProofs } from "@/constants/constants";
+"use client"
+import FixedMobileScreen from "@/components/MobileScreen";
+import Sidebar from "@/components/Sidebar";
 const CreateScreens = () => {
   return (
-    <div className='flex justify-between bg-gray-200'>
-        <Sidebar IdProofs={idProofs}/>
-        <FixedMobileScreen/>
-         <div></div>
+    <div className="flex justify-between bg-gray-200">
+      <Sidebar/>
+      <FixedMobileScreen/>
+      <div></div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateScreens
+export default CreateScreens;
