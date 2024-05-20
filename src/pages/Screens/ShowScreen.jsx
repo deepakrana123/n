@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { finalSpaceCharacters } from "../../constants/constants";
 import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 const ShowScreen = () => {
   const [dragValue, setDragValue] = useState(finalSpaceCharacters);
   const handleOnDragEnd = (result) => {
@@ -38,12 +47,12 @@ const ShowScreen = () => {
 
 console.log(dragValue,"dragValue")
   return (
-    <div className="w-full bg-slate-300 min-h-screen p-4">
+    <div className="w-full bg-slate-300 h-screen p-4">
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="characters">
           {(provided) => (
             <div
-              className="grid grid-cols-3 gap-4"
+              className="grid grid-cols-4 gap-4"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -54,40 +63,44 @@ console.log(dragValue,"dragValue")
                     <Draggable draggableId={id} index={index}>
                       {(provided) => (
                         <Link to={`/screen/${id}`}>
-                          <div
+                          <Card
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className="bg-white rounded-lg shadow-md"
+                            className="w-[300px] h-[200px] cursor-pointer"
                           >
-                             <div> 
-                              <img
-                                src={thumb}
-                                alt={name}
-                                className="w-full h-40 object-cover rounded-t-lg"
-                              /> 
-                               <div className="p-4"> 
-                                <p className="text-center font-semibold">
-                                  {screenName}
-                                </p>
-                              </div> 
-                             </div>
-                          </div>
+                            <CardHeader>
+                              <CardTitle>{name}</CardTitle>
+                              <CardDescription>
+                                Card Description
+                              </CardDescription>
+                              <CardContent>
+                                <img
+                                  src={thumb}
+                                  alt={name}
+                                  className="w-full h-40 object-cover rounded-t-lg"
+                                />
+                              </CardContent>
+                            </CardHeader>
+                          </Card>
                         </Link>
                       )}
                     </Draggable>
                   ) : (
                     <Link to={`/screen/${id}`}>
-                      <div className="bg-white rounded-lg shadow-md">
-                        {/* <img
-                          src={thumb}
-                          alt={name}
-                          className="w-full h-40 object-cover rounded-t-lg"
-                        /> */}
-                        <div className="p-4">
-                          <p className="text-center font-semibold">{screenName}</p>
-                        </div>
-                      </div>
+                      <Card className="w-[300px] h-[200px] cursor-pointer">
+                        <CardHeader>
+                          <CardTitle>{name}</CardTitle>
+                          <CardDescription>Card Description</CardDescription>
+                          <CardContent>
+                            <img
+                              src={thumb}
+                              alt={name}
+                              className="w-full h-40 object-cover rounded-t-lg"
+                            />
+                          </CardContent>
+                        </CardHeader>
+                      </Card>
                     </Link>
                   )}
                 </React.Fragment>
