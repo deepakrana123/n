@@ -5,6 +5,7 @@ import SheetSide from "../Drawer/Drawer";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { editScreenDeatils, saveSceen } from "@/services/reducer/ScreenReducer";
+import { Button } from "../ui/button";
 const a = [
   {
     row: 1,
@@ -74,6 +75,7 @@ const newRows = {
 const Form = ({ screenId }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [tableData, setTableData] = useState([]);
   const screens = useSelector((state) => state.screen.screens);
   const row = useSelector((state) => state.screen.data)[screenId];
   const data = useSelector((state) => state.screen.data);
@@ -90,42 +92,49 @@ const Form = ({ screenId }) => {
     });
     dispatch(saveSceen(updatedData));
   };
-  // function addRowHeader(tableData, columnHeaderId) {
-  //   if (tableData.length === 0) {
-  //     const newRow = {
-  //       row: 1,
-  //       columns: [columnHeaderId],
-  //     };
-  //     tableData.push(newRow);
-  //   } else {
-  //     const lastRow = tableData[tableData.length - 1];
-  //     if (lastRow.columns.length <= 2) {
-  //       lastRow.columns.push(columnHeaderId);
-  //     } else {
-  //       const newRow = {
-  //         row: lastRow.row + 1,
-  //         columns: [...columnHeaderId],
-  //       };
-  //       tableData.push(newRow);
-  //     }
-  //   }
-  //   setRows(tableData);
-  // }
+  function addRowHeader(tableData, columnHeaderId) {
+    console.log(columnHeaderId, "columnHeaderId");
+    if (tableData.length === 0) {
+      const newRow = {
+        row: 1,
+        columns: [],
+      };
+      if (columnHeaderId != undefined)
+        newRow.columns.push(columnHeaderId[columnHeaderId?.length - 1]);
+      tableData.push(newRow);
+    } else if (tableData.length >= 1) {
+      if (
+        tableData[tableData.length - 1].columns.length > 0 &&
+        tableData[tableData.length - 1].columns.length < 2
+      ) {
+        tableData[tableData.length - 1].columns.push(
+          columnHeaderId[columnHeaderId?.length - 1]
+        );
+      } else {
+        const newRow = {
+          row: tableData.length - 1,
+          columns: [],
+        };
+        newRow.columns.push(columnHeaderId[columnHeaderId?.length - 1]);
+        tableData.push(newRow);
+      }
+    }
+
+    setTableData(tableData);
+  }
   useEffect(() => {
-    // addRowHeader(id);
-  });
-  console.log(row, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    addRowHeader(tableData, row);
+  }, [row]);
+  console.log(tableData, "tableData");
   const handleSepratedFunction = (id, formValue) => {
     const newData = JSON.parse(JSON.stringify(data));
     const screen = newData[screenId];
-        if (screen) {
-      const itemsToUpdate = screen.filter(
-        (item) => item.id === id.id
-      );
+    if (screen) {
+      const itemsToUpdate = screen.filter((item) => item.id === id.id);
       itemsToUpdate.forEach((item) => {
         Object.assign(item, formValue);
       });
-      dispatch(editScreenDeatils([newData,screenId]))
+      dispatch(editScreenDeatils([newData, screenId]));
       return newData;
     } else {
       return newData;
@@ -157,37 +166,35 @@ const Form = ({ screenId }) => {
 
         <div className="container">
           <div id="rows-container">
-            {row?.map((item, index) => (
+            {tableData?.map((row, index) => (
               <div key={index} className="flex justify-center mb-[16px]">
-                {/* {row.columns &&
+                {row.columns &&
                   row.columns.length > 0 &&
                   row.columns.map((item, index) => (
-                    
-                  ))} */}
-                <div
-                  key={index}
-                  className="grid w-full max-w-md items-center gap-2"
-                >
-                  <div className="flex justify-between">
-                    <Label
-                      htmlFor={item.label}
-                      className="block mb-1 text-sm font-medium text-gray-700"
+                    <div
+                      key={index}
+                      className="grid w-full max-w-md items-center gap-2"
                     >
-                      {item.label}{" "}
-                    </Label>
-                    <SheetSide
-                      rowValue={item}
-                      handleSepratedFunction={handleSepratedFunction}
-                    />
-                  </div>
-                  <Input
-                    type={item.field}
-                    id="email"
-                    placeholder={item.label}
-                    className="w-full p-3 focus:ring-2 focus:ring-blue-500 bg-transparent"
-                  />
-                  {/* <p>{item.}</p> */}
-                </div>
+                      <div className="flex justify-between">
+                        <Label
+                          htmlFor={item.label}
+                          className="block mb-1 text-sm font-medium text-gray-700"
+                        >
+                          {item.label}{" "}
+                        </Label>
+                        <SheetSide
+                          rowValue={item}
+                          handleSepratedFunction={handleSepratedFunction}
+                        />
+                      </div>
+                      <Input
+                        type={item.field}
+                        id="email"
+                        placeholder={item.label}
+                        className="w-full p-3 focus:ring-2 focus:ring-blue-500 bg-transparent"
+                      />
+                    </div>
+                  ))}
               </div>
             ))}
           </div>
