@@ -1,45 +1,74 @@
-// import MobileForm from "../components/MobileComponent";
 
-export const ItemTypes = {
-  Hii: "hii",
-};
-
-export const moveHii = (x, y) => {
-  console.log(x, y);
-};
-export const canMoveHii = (x, y) => {
-  console.log(x, y);
-};
 export const finalSpaceCharacters = [
   {
     id: "screen1",
-    name: "Screen One",
+    screenName: "Screen One",
     thumb: "/images/screen1.png",
-    draggable: true,
+    isDraggable: true,
+    isMandatory:true
   },
   {
     id: "screen2",
-    name: "Screen Two",
+    screenName: "Screen Two",
     thumb: "/images/screen2.png",
-    draggable: true,
+    isDraggable: true,
+    isMandatory:true
   },
   {
     id: "screen3",
-    name: "Screen Three",
+    screenName: "Screen Three",
     thumb: "/images/screen3.png",
-    draggable: false,
+    isDraggable: false,
+    isMandatory:true
   },
   {
     id: "mooncake",
-    name: "Mooncake",
+    screenName: "Mooncake",
     thumb: "/images/mooncake.png",
-    draggable: false,
+    isDraggable: false,
+    isMandatory:true
   },
   {
     id: "quinn",
-    name: "Quinn Ergon",
+    screenName: "Quinn Ergon",
     thumb: "/images/quinn.png",
-    draggable: true,
+    isDraggable: true,
+    isMandatory:true
+  },
+  {
+    id: "screen12",
+    screenName: "Screen One",
+    thumb: "/images/screen1.png",
+    isDraggable: true,
+    isMandatory:true
+  },
+  {
+    id: "screen22",
+    screenName: "Screen Two",
+    thumb: "/images/screen2.png",
+    isDraggable: true,
+    isMandatory:true
+  },
+  {
+    id: "screen10",
+    screenName: "Screen Three",
+    thumb: "/images/screen3.png",
+    isDraggable: false,
+    isMandatory:true
+  },
+  {
+    id: "mooncake10",
+    screenName: "Mooncake",
+    thumb: "/images/mooncake.png",
+    isDraggable: false,
+    isMandatory:true
+  },
+  {
+    id: "quinn10",
+    screenName: "Quinn Ergon",
+    thumb: "/images/quinn.png",
+    isDraggable: true,
+    isMandatory:true
   },
 ];
 export const idProofs = [
@@ -54,6 +83,16 @@ export const idProofs = [
   {
     id: "voter",
     label: "Voter ID Card",
+    dependableField:[
+      {
+        id: "aadhaarVoter",
+        label: "Aadhaar Voter Card",
+      },
+      {
+        id: "panVoter",
+        label: "PAN Voter Card",
+      },
+    ]
   },
   {
     id: "passport",
@@ -66,14 +105,6 @@ export const idProofs = [
   {
     id: "ration",
     label: "Ration Card",
-  },
-  {
-    id: "aadhaar-1",
-    label: "Aadhaar Card-1",
-  },
-  {
-    id: "pan-1",
-    label: "PAN Card-1",
   },
   {
     id: "voter-1",
@@ -91,4 +122,53 @@ export const idProofs = [
     id: "ration-1",
     label: "Ration Card-1",
   },
+  {
+    id: "aadhaar-2",
+    label: "Aadhaar Card-2",
+  },
+  {
+    id: "pan-2",
+    label: "PAN Card-2",
+  },
+  {
+    id: "voter-2",
+    label: "Voter ID Card-2",
+  },
+  {
+    id: "passport-2",
+    label: "Passport-2",
+  },
+  {
+    id: "driving_license-2",
+    label: "Driving License-2",
+  },
+  {
+    id: "ration-2",
+    label: "Ration Card-2",
+  },
+  {
+    id: "aadhaar-3",
+    label: "Aadhaar Card-3",
+  },
+  {
+    id: "pan-3",
+    label: "PAN Card-3",
+  },
+  {
+    id: "voter-3",
+    label: "Voter ID Card-3",
+  },
+  {
+    id: "passport-3",
+    label: "Passport-3",
+  },
+  {
+    id: "driving_license-3",
+    label: "Driving License-3",
+  },
+  {
+    id: "ration-3",
+    label: "Ration Card-3",
+  },
 ];
+

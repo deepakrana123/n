@@ -7,7 +7,7 @@ import CreateScreens from "./pages/CreateScreens";
 function App() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<ShowScreen />} />
         <Route path="/screen/:screenId" element={<CreateScreens />} />

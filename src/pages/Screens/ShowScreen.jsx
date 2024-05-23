@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, {  useState } from "react";
 import { finalSpaceCharacters } from "../../constants/constants";
 import { Link } from "react-router-dom";
+import { FaTimes } from "react-icons/fa";
 import {
   Card,
   CardContent,
@@ -13,105 +13,86 @@ import {
 
 const ShowScreen = () => {
   const [dragValue, setDragValue] = useState(finalSpaceCharacters);
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(dragValue);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    if (result.destination.index !== result.source.index) {
-      const draggedItem = dragValue[result.source.index];
-      const droppedItem = dragValue[result.destination.index];
-      items[result.source.index] = droppedItem;
-      items[result.destination.index] = draggedItem;
-    }
-    setDragValue(items);
-  };
-  useEffect(() => {
-    // http://localhost:5173/
-   const a= fetch('http://10.101.29.84:8080/lending/api/all',{
-    method: 'GET',
-    headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-    }
-   })
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        
-        setDragValue(data);
-      });
-  }, []);
-  // console.log(photos)
+  const [targetValue, setTargetValue] = useState("");
 
-console.log(dragValue,"dragValue")
+  const swapIds = (id1, id2) => {
+    let index1 = dragValue.findIndex((screen) => screen.id === id1);
+    let index2 = dragValue.findIndex((screen) => screen.id === id2);
+    const newArray = [...dragValue];
+    if (
+      newArray[index1].isDraggable === true &&
+      newArray[index2].isDraggable === true &&
+      index1 >= 0 &&
+      index1 < newArray.length &&
+      index2 >= 0 &&
+      index2 < newArray.length
+    ) {
+      let temp = newArray[index1];
+      newArray[index1] = newArray[index2];
+      newArray[index2] = temp;
+    } else {
+      console.log("Elements are not draggable");
+    }
+    setDragValue(newArray);
+  };
+
+  const handleDragStart = (event, item) => {
+    event.dataTransfer.setData("text/plain", item);
+  };
+
+  const handleDrop = (event) => {
+    const item = event.dataTransfer.getData("text/plain");
+    swapIds(item, targetValue);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDragEnter = (id) => {
+    setTargetValue(id);
+  };
+
   return (
-    <div className="w-full bg-slate-300 h-screen p-4">
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="characters">
-          {(provided) => (
-            <div
-              className="grid grid-cols-4 gap-4"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
+    <div className="w-full bg-slate-300 min-h-screen p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {dragValue?.map(({ id, screenName, thumb, isDraggable }, index) => (
+          <div
+            className="relative group border border-gray-200 rounded-lg shadow-lg overflow-hidden bg-white"
+            draggable={isDraggable}
+            onDragStart={(event) => handleDragStart(event, id)}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragEnter={() => handleDragEnter(id)}
+            key={id}
+          >
+            <button
+              className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700 focus:outline-none flex items-center justify-center"
+              onClick={() => console.log(`Delete item with id: ${id}`)}
             >
-              {dragValue?.map(({ id, screenName, thumb, isDraggable }, index) => (
-               
-                <React.Fragment key={id}>
-                  {isDraggable ? (
-                    <Draggable draggableId={id} index={index}>
-                      {(provided) => (
-                        <Link to={`/screen/${id}`}>
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="w-[300px] h-[200px] cursor-pointer"
-                          >
-                            <CardHeader>
-                              <CardTitle>{name}</CardTitle>
-                              <CardDescription>
-                                Card Description
-                              </CardDescription>
-                              <CardContent>
-                                <img
-                                  src={thumb}
-                                  alt={name}
-                                  className="w-full h-40 object-cover rounded-t-lg"
-                                />
-                              </CardContent>
-                            </CardHeader>
-                          </Card>
-                        </Link>
-                      )}
-                    </Draggable>
-                  ) : (
-                    <Link to={`/screen/${id}`}>
-                      <Card className="w-[300px] h-[200px] cursor-pointer">
-                        <CardHeader>
-                          <CardTitle>{name}</CardTitle>
-                          <CardDescription>Card Description</CardDescription>
-                          <CardContent>
-                            <img
-                              src={thumb}
-                              alt={name}
-                              className="w-full h-40 object-cover rounded-t-lg"
-                            />
-                          </CardContent>
-                        </CardHeader>
-                      </Card>
-                    </Link>
-                  )}
-                </React.Fragment>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+              <FaTimes />
+            </button>
+            <Link to={`/screen/${id}`}>
+              <Card className="w-full h-full cursor-pointer">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold">{screenName}</CardTitle>
+                  <CardDescription>Card Description</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <img
+                    src={thumb}
+                    alt={screenName}
+                    className="w-full h-40 object-cover"
+                  />
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default ShowScreen;
+

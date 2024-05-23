@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { editScreenDeatils, saveSceen } from "@/services/reducer/ScreenReducer";
 import { Button } from "../ui/button";
+import { useParams } from "react-router-dom";
 const a = [
   {
     row: 1,
@@ -72,8 +73,9 @@ const newRows = {
   row: 1,
   columns: [],
 };
-const Form = ({ screenId }) => {
+const Form = () => {
   const dispatch = useDispatch();
+  const { screenId }=useParams()
   const [isEditing, setIsEditing] = useState(false);
   const [tableData, setTableData] = useState([]);
   const screens = useSelector((state) => state.screen.screens);
@@ -167,7 +169,7 @@ const Form = ({ screenId }) => {
         <div className="container">
           <div id="rows-container">
             {tableData?.map((row, index) => (
-              <div key={index} className="flex justify-center mb-[16px]">
+              <div key={index} className="flex justify-center mb-[16px]" contentEditable>
                 {row.columns &&
                   row.columns.length > 0 &&
                   row.columns.map((item, index) => (
