@@ -13,6 +13,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { PopoverDemo } from "@/components/PopOver/popOver";
 import { useDispatch, useSelector } from "react-redux";
+import { saveScreen } from "@/services/reducer/ScreenReducer";
+import { FaArrowRight } from "react-icons/fa";
 const ShowScreen = () => {
   const screensDrag = useSelector((state) => state.screen.screens);
   const dispatch = useDispatch();
@@ -38,6 +40,7 @@ const ShowScreen = () => {
         description: `${newArray[index1].screenName} and ${newArray[index2].screenName} are swapped`,
       });
     } else {
+      console.log("hlo not done");
       toast({
         variant: "destructive",
         title: "You are trying to move a freezed screen",
@@ -65,11 +68,11 @@ const ShowScreen = () => {
   };
 
   return (
-    <div className="w-full bg-slate-300 min-h-screen p-6">
+    <div className="w-full bg-gray-900 opacity-1 min-h-screen p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {screensDrag?.map(({ id, screenName, thumb, isDraggable }, index) => (
           <div
-            className="relative group border border-gray-200 rounded-lg shadow-lg overflow-hidden bg-white"
+            className="max-w-7xl mx-auto "
             draggable={isDraggable}
             onDragStart={(event) => handleDragStart(event, id)}
             onDrop={handleDrop}
@@ -77,24 +80,46 @@ const ShowScreen = () => {
             onDragEnter={() => handleDragEnter(id)}
             key={id}
           >
-            <PopoverDemo screenId={id} />
-            <Link to={`/screen/${id}`}>
-              <Card className="w-full h-full cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold">
-                    {screenName}
-                  </CardTitle>
-                  <CardDescription>Card Description</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <img
-                    src={thumb}
-                    alt={screenName}
-                    className="w-full h-40 object-cover"
-                  />
-                </CardContent>
-              </Card>
-            </Link>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-8 h-[200px] w-[300px]">
+                <svg
+                  className="w-20 h-20 text-purple-800"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M6.75 6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.25C16.3546 4.75 17.25 5.64543 17.25 6.75V19.25L12 14.75L6.75 19.25V6.75Z"
+                  ></path>
+                </svg>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+
+                  <p className="text-slate-900 ">{screenName}</p>
+                  <PopoverDemo />
+                  </div>
+                  <p className="text-slate-300">
+                    {
+                      "Profile card design using CSS, which was developed by vsnthdev. Moreover, you can customize it according to your wish and need."
+                    }
+                  </p>
+                  <span className="flex space-x-1">
+                    <Link
+                      to={`/screen/${id}`}
+                      className="block text-indigo-400 group-hover:text-slate-800 transition duration-200"
+                      target="_blank"
+                    >
+                      Change Screen
+                    </Link>
+                    <FaArrowRight className="block text-indigo-400 group-hover:text-slate-800 transition duration-200" />
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

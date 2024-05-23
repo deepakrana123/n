@@ -13,19 +13,23 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { useState } from "react";
 
 export function PopoverDemo({ id }) {
-  const handleSave=()=>{
+  const [isOpen, setIsOpen] = useState(false);
+  const handleSave = () => {
     const itemsToUpdate = screen.filter((item) => item.id === id.id);
-      itemsToUpdate.forEach((item) => {
-        Object.assign(item, formValue);
-      });
-  }
+    itemsToUpdate.forEach((item) => {
+      Object.assign(item, formValue);
+    });
+  };
+  const handleDelete = () => {};
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">
-          <VscExpandAll />
+        <Button variant="outline" className="px-[3px] py-[2px] cursor-pointer h-5">
+          <BsThreeDotsVertical  />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
@@ -42,7 +46,7 @@ export function PopoverDemo({ id }) {
               <Input
                 id="width"
                 defaultValue={"screen Name"}
-                className="col-span-2 h-8"
+                className="col-span-2 h-8 text-popover"
                 onChange={() => ""}
               />
             </div>
@@ -75,14 +79,20 @@ export function PopoverDemo({ id }) {
             </div>
           </div>
           <div className="flex justify-between">
-            <Button onClick={()=>handleSave()}>Save</Button>
-            <Button onClick={()=>handleDelete()}>
-            <HoverCard>
-              <HoverCardTrigger>Delete</HoverCardTrigger>
-              <HoverCardContent>
-                Are you sure you wants to delete this
-              </HoverCardContent>
-            </HoverCard>
+            <Button
+              onClick={() => handleSave()}
+              className="
+              bg-customCyan opacity-1"
+            >
+              Save
+            </Button>
+            <Button onClick={() => handleDelete()}>
+              <HoverCard>
+                <HoverCardTrigger>Delete</HoverCardTrigger>
+                <HoverCardContent>
+                  Are you sure you wants to delete this
+                </HoverCardContent>
+              </HoverCard>
             </Button>
           </div>
         </div>

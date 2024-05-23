@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { idProofs } from "@/constants/constants";
 import { useSelector, useDispatch } from "react-redux";
 import { Input } from "../ui/input";
+import SheetSide from "../Drawer/Drawer";
 
 const FixedMobileScreen = () => {
   const [data, setData] = useState([]);
@@ -28,11 +29,17 @@ const FixedMobileScreen = () => {
       }
       else if (isNewRow && value.dependableField == undefined) {
         newData.push({
-          row: rowIndex,
+          row: rowIndex+1,
           columns: [value],
         });
       }
-       else {
+      else if(isNewRow === false && value.label==='Header ' && value.id =='header'){
+        newData.push({
+          row:rowIndex+1,
+          columns:[value]
+        })
+      }
+       else if(isNewRow==false && value.label!='Header ' && value.id !=='header' ) {
         newData[rowIndex].columns.push(value);
       }
       setData(newData);
@@ -85,14 +92,24 @@ const FixedMobileScreen = () => {
           onDrop={(event) => handleDrop(event, rowIndex, false)}
         >
           {row.columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="p-2 border bg-white shadow-sm rounded-md"
+            <div key={columnIndex} className="p-2 "
             style={{ width: row.columns.length === 1 ? '100%' : '50%' }}>
+              {column.id==='header'?(
+                 <h1
+                 className="text-blue text-3xl font-bold cursor-pointer"
+                //  onClick={() => setIsEditing((prev) => !prev)}
+               >
+                 {column.label}
+               </h1>
+              ):(
               <input
                 type="text"
                 value={column.label}
-                onChange={() => {}}
+                // onChange={() => {}}
                 className="w-[50%]"
               />
+              )}
+              <SheetSide/>
             </div>
           ))}
         </div>
