@@ -6,6 +6,7 @@ export const screenSlice = createSlice({
   initialState: {
     data: {},
     screens: finalSpaceCharacters,
+    prevScreens: finalSpaceCharacters,
   },
   reducers: {
     addScreen: (state, action) => {
@@ -16,7 +17,8 @@ export const screenSlice = createSlice({
         state.data[action.payload[1]] = [action.payload[0]];
       }
     },
-    saveSceen: (state, action) => {
+    saveScreen: (state, action) => {
+      state.prevScreens = state.screens;
       state.screens = action.payload;
     },
     editScreenDeatils: (state, action) => {
