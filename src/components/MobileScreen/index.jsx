@@ -109,7 +109,9 @@ const FixedMobileScreen = () => {
                 className="w-[50%]"
               />
               )}
-              <SheetSide screenId={screenId}/>
+              <SheetSide screenId={screenId} show={
+                  field.id == "header" && field.label == "Header" ? true : false
+                }/>
             </div>
           ))}
         </div>

@@ -14,7 +14,7 @@ import {
 } from "../ui/sheet";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { useSelector } from "react-redux";
-const SheetSide = ({ screenId, sheetWidth = "w-[500px]" }) => {
+const SheetSide = ({ screenId,showForHeaderOrNot, sheetWidth = "w-[500px]" }) => {
   const rowValue = useSelector((state) => state.screen.screens);
   const data = useSelector((state) => state.screen.data);
   const [inputFields, setInputFields] = useState([
@@ -88,7 +88,7 @@ const SheetSide = ({ screenId, sheetWidth = "w-[500px]" }) => {
       return newData;
     }
   };
-  console.log(rowValue[screenId], screenId, "fij:K/ebgfKbn");
+  console.log(rowValue, screenId, "fij:K/ebgfKbn");
   return (
     <div className="flex flex-col gap-2">
       <Sheet>
@@ -101,13 +101,14 @@ const SheetSide = ({ screenId, sheetWidth = "w-[500px]" }) => {
           side="right"
         >
           <SheetHeader>
-            {/* <SheetTitle>
+            <SheetTitle>
               {rowValue.filter((item) => item.id === screenId)[0].screenName}
             </SheetTitle>
             <SheetDescription>
-              Edit {rowValue.filter((item) => item.id === screenId)[0].screenName}{" "}
+              Edit{" "}
+              {rowValue.filter((item) => item.id === screenId)[0].screenName}{" "}
               Properties
-            </SheetDescription> */}
+            </SheetDescription>
           </SheetHeader>
           <div className="p-1 flex flex-wrap justify-between">
             {inputFields.map((field) => (
