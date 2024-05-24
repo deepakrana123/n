@@ -8,7 +8,7 @@ import SheetSide from "../Drawer/Drawer";
 const FixedMobileScreen = () => {
   const [data, setData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const { screenId } = useParams();
+  const {id:screenId}=useParams()
   const dispatch = useDispatch();
   const screens = useSelector((state) => state.screen.screens);
   const handleDrop = (event, rowIndex, isNewRow) => {
@@ -87,16 +87,16 @@ const FixedMobileScreen = () => {
       {data.map((row, rowIndex) => (
         <div
           key={rowIndex}
-          className="flex gap-2 p-2 mb-2 bg-gray-100"
+          className="flex gap-2 p-1 mb-2 bg-gray-100"
           onDragOver={handleDragOver}
           onDrop={(event) => handleDrop(event, rowIndex, false)}
         >
           {row.columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="p-2 "
+            <div key={columnIndex} className="p-2 flex justify-between"
             style={{ width: row.columns.length === 1 ? '100%' : '50%' }}>
               {column.id==='header'?(
                  <h1
-                 className="text-blue text-3xl font-bold cursor-pointer"
+                 className="text-blue text-1xl font-bold cursor-pointer"
                 //  onClick={() => setIsEditing((prev) => !prev)}
                >
                  {column.label}
@@ -109,7 +109,7 @@ const FixedMobileScreen = () => {
                 className="w-[50%]"
               />
               )}
-              <SheetSide/>
+              <SheetSide screenId={screenId}/>
             </div>
           ))}
         </div>

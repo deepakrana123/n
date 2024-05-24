@@ -10,7 +10,7 @@ function App() {
       {/* <Header /> */}
       <Routes>
         <Route path="/" element={<ShowScreen />} />
-        <Route path="/screen/:screenId" element={<CreateScreens />} />
+        <Route path="/screen/:id" element={<CreateScreens />} />
       </Routes>
     </>
   );

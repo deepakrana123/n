@@ -12,9 +12,9 @@ const Sidebar = () => {
             key={item?.label + "" + String(index)}
             draggable
             onDragStart={(event) => handleDragStart(event, item?.id)} // Pass unique id as a parameter
-            className="cursor-pointer p-2 mb-2 bg-white shadow-sm rounded-md"
+            className="cursor-pointer p-2 mb-2 hover:bg-violet-600  focus:outline-none focus:ring focus:ring-violet-300 "
           >
-            {item?.label}
+            { item?.label}
           </div>
         ))}
       </div>
