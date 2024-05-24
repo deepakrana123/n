@@ -18,6 +18,7 @@ const SheetSide = ({ screenId,showForHeaderOrNot, sheetWidth = "w-[500px]" }) =>
   const rowValue = useSelector((state) => state.screen.screens);
   const data = useSelector((state) => state.screen.data);
   const [inputFields, setInputFields] = useState([
+    
     {
       id: "required",
       type: "checkbox",

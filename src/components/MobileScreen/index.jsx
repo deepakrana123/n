@@ -4,6 +4,8 @@ import { idProofs } from "@/constants/constants";
 import { useSelector, useDispatch } from "react-redux";
 import { Input } from "../ui/input";
 import SheetSide from "../Drawer/Drawer";
+import { Label } from "@radix-ui/react-label";
+import { addScreen } from "@/services/reducer/ScreenReducer";
 
 const FixedMobileScreen = () => {
   const [data, setData] = useState([]);
@@ -11,6 +13,8 @@ const FixedMobileScreen = () => {
   const {id:screenId}=useParams()
   const dispatch = useDispatch();
   const screens = useSelector((state) => state.screen.screens);
+  const screen = useSelector((state) => state.screen.data);
+  console.log(screens,screen,"screens.com")
   const handleDrop = (event, rowIndex, isNewRow) => {
     event.preventDefault();
     const item = event.dataTransfer.getData('text/plain');
@@ -42,6 +46,7 @@ const FixedMobileScreen = () => {
        else if(isNewRow==false && value.label!='Header ' && value.id !=='header' ) {
         newData[rowIndex].columns.push(value);
       }
+      dispatch(addScreen(newData))
       setData(newData);
     }
   };
@@ -95,23 +100,37 @@ const FixedMobileScreen = () => {
             <div key={columnIndex} className="p-2 flex justify-between"
             style={{ width: row.columns.length === 1 ? '100%' : '50%' }}>
               {column.id==='header'?(
+                <>
+                
                  <h1
                  className="text-blue text-1xl font-bold cursor-pointer"
                 //  onClick={() => setIsEditing((prev) => !prev)}
                >
                  {column.label}
                </h1>
+                <SheetSide screenId={screenId} showForHeaderOrNot={
+                  column.id == "header" && column.label == "Header" ? true : false
+                }/>
+                </>
               ):(
+                <div className="flex flex-col">
+                <div className="flex">
+                <Label>
+                {column.label}
+                </Label>
+                <SheetSide screenId={screenId} 
+             
+                />
+                  </div>
+                
               <input
                 type="text"
                 value={column.label}
                 // onChange={() => {}}
                 className="w-[50%]"
               />
+              </div>
               )}
-              <SheetSide screenId={screenId} show={
-                  field.id == "header" && field.label == "Header" ? true : false
-                }/>
             </div>
           ))}
         </div>
