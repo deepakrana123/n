@@ -2,7 +2,6 @@ import { idProofs } from "@/constants/constants";
 
 const Sidebar = () => {
   const handleDragStart = (event, item) => {
-    console.log(event,item)
     event.dataTransfer.setData("text/plain", item);
   };
   return (

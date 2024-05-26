@@ -282,6 +282,16 @@ export const idProofs=[
         label: "Header",
         color: "",
       },
+      {
+        id: "button",
+        label: "Save",
+        color: "",
+      },
+      {
+        id: "button",
+        label: "Back",
+        color: "",
+      },
     ]
   },
   {
