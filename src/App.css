@@ -1,0 +1,18 @@
+.scrollbar-mobile::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-mobile::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-mobile::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-mobile::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}
+

@@ -1,7 +1,7 @@
 "use client";
 import FixedMobileScreen from "@/components/MobileScreen";
 import Sidebar from "@/components/Sidebar";
-import bg from "../../../public/home-background.png";
+
 const CreateScreens = () => {
   return (
     <>

@@ -11,18 +11,17 @@ export const screenSlice = createSlice({
   reducers: {
     addScreen: (state, action) => {
       console.log(action.payload, "hiii");
-      if (state.data[action.payload[1]]) {
-        state.data[action.payload[1]].push(action.payload[0]);
-      } else {
-        state.data[action.payload[1]] = [action.payload[0]];
-      }
+      if (state.data[action.payload[0]]) delete state.data[action.payload[0]]
+      state.data[action.payload[0]] = [action.payload[1]];
+      
     },
     saveScreen: (state, action) => {
       state.prevScreens = state.screens;
       state.screens = action.payload;
     },
     editScreenDeatils: (state, action) => {
-      state.data[action.payload[1]] = action.payload[0][action.payload[1]];
+      console.log(action.payload, "hiii");
+      state.data[action.payload[0]] = [action.payload[1]];
     },
   },
 });

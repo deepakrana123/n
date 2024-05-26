@@ -40,11 +40,15 @@ const ShowScreen = () => {
         description: `${newArray[index1].screenName} and ${newArray[index2].screenName} are swapped`,
       });
     } else {
-      console.log("hlo not done");
+      console.log("hihi")
       toast({
         variant: "destructive",
         title: "You are trying to move a freezed screen",
-        description: "Freezed screen cannot be moved",
+        description: `${
+          newArray[index1].isDraggable === true
+            ? newArray[index1].screenName
+            : newArray[index2].screenName
+        } this screen is freezed`,
       });
     }
     dispatch(saveScreen(newArray));
@@ -97,26 +101,6 @@ const ShowScreen = () => {
                       d="M6.75 6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.25C16.3546 4.75 17.25 5.64543 17.25 6.75V19.25L12 14.75L6.75 19.25V6.75Z"
                     ></path>
                   </svg>
-                  {/* <div className="space-y-2 gap-3">
-                  <div className="flex justify-between">
-
-                  <p className="text-slate-900 ">{screenName}</p>
-                  <PopoverDemo />
-                  </div>
-                  <p className="text-slate-300">
-                   {description}
-                  </p>
-                  <span className="flex space-x-1">
-                    <Link
-                      to={`/screen/${id}`}
-                      className="block text-indigo-400 group-hover:text-slate-800 transition duration-200"
-                      target="_blank"
-                    >
-                      Change Screen
-                    </Link>
-                    <FaArrowRight className="block text-indigo-400 group-hover:text-slate-800 transition duration-200" />
-                  </span>
-                </div> */}
                   <div className="space-y-2 gap-3">
                     <div className="flex flex-col justify-between h-full">
                       <div className="flex justify-between">
@@ -130,7 +114,6 @@ const ShowScreen = () => {
                         <Link
                           to={`/screen/${id}`}
                           className="block text-indigo-400 group-hover:text-slate-800 transition duration-200"
-                          target="_blank"
                         >
                           Change Screen
                         </Link>
