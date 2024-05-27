@@ -1,31 +1,31 @@
 import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { finalSpaceCharacters, idProofs } from "@/constants/constants";
-import { useSelector, useDispatch } from "react-redux";
-import { Input } from "../ui/input";
 import SheetSide from "../Drawer/Drawer";
-import { Label } from "@radix-ui/react-label";
-import { addScreen } from "@/services/reducer/ScreenReducer";
 import { FaPlusCircle } from "react-icons/fa";
+import { useToast } from "../ui/use-toast";
+
+const setColumnIndex=()=>{
+
+}
 const getColumnWidth = (columnsLength) => {
   switch (columnsLength) {
     case 1:
-      return "100%";
+      return "w-full";
     case 2:
-      return "50%";
+      return "w-1/2";
     case 3:
-      return "33.33%";
+      return "w-1/3";
     default:
-      return "100%";
+      return "w-full";
   }
 };
 
 const FixedMobileScreen = () => {
   const [data, setData] = useState([]);
-  const [isScrollable, setIsScrollable] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const { toast } = useToast();
   const screenId = useMemo(() => {
     return id;
   }, [id]);
@@ -36,8 +36,28 @@ const FixedMobileScreen = () => {
     const item = event.dataTransfer.getData("text/plain");
     const value = idProofs[0].columns.filter((items) => items.id === item)[0];
     const newData = JSON.parse(JSON.stringify(data));
-    console.log(value, isNewRow, rowIndex, "hiii");
-
+    const threeInOneRow =
+      newData?.filter((item) => item?.row == rowIndex)[0]?.columns?.length >= 3;
+    console.log(newData, value, "", "newData");
+    if (threeInOneRow) {
+      toast({
+        variant: "destructive",
+        title: "Try to make new row",
+        description: `More then three input fields in one row is not allowed`,
+      });
+      return;
+    }
+    const condition = newData?.some((item) => {
+      return item?.columns.some((news) => news.id === "button");
+    });
+    if (condition && value.id != "button") {
+      toast({
+        variant: "destructive",
+        title: "Could not add row after button",
+        description: `More then three input fields in one row is not allowed`,
+      });
+      return;
+    }
     if (value) {
       if (isNewRow) {
         if (value.id === "header" && value.label === "Header") {
@@ -102,52 +122,33 @@ const FixedMobileScreen = () => {
     setScreens(newScreen);
     // dispatch(saveScreen([screenId, newScreen]));
   };
-  const handleSave = (id, formValue) => {
-    console.log(id, data, formValue);
+  const handleSave = (rowIndex,columnIndex, formValue) => {
     const newData = JSON.parse(JSON.stringify(data));
-    const screen = newData;
-    if (screen && formValue) {
-      const itemsToUpdate = screen
-        .filter((item) => item.id === id)
-        .filter((item) => item.id === formValue.id);
-      console.log(itemsToUpdate, "itemsToUpdate");
-      itemsToUpdate.forEach((item) => {
-        Object.assign(item, formValue);
-      });
-      console.log(newData, "newData");
-      return newData;
-    } else {
-      return newData;
-    }
+    Object.assign(newData.filter((item) => item.row === rowIndex)[0].columns[columnIndex],formValue)
+    setData(newData)
   };
   const handleDragEnter = (id) => {
-    // setTargetValue(id);
     console.log(id);
   };
-  console.log(data, "idmm");
+  const handleDelete=(rowIndex,columnIndex)=>{
+    const newData = JSON.parse(JSON.stringify(data));
+    const b=newData.filter((item)=>item.row ===rowIndex)[0]
+console.log(columnIndex,rowIndex,b,"hihi")
+  }
+
   return (
-    <div className="w-full h-full max-w-md mx-auto overflow-hidden shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
-      {isEditing ? (
-        <div className="p-4">
-          <input
-            type="text"
-            value={screens.find((item) => item.id === screenId)?.name || ""}
-            onChange={handleInputChange}
-            onBlur={() => setIsEditing(false)}
-            className="border p-2 w-full rounded-md shadow-sm"
-          />
-        </div>
-      ) : (
-        <div className="p-4 flex justify-center">
-          <h1
-            className="text-blue-500 text-xl font-bold cursor-pointer text-center"
-            onClick={() => setIsEditing((prev) => !prev)}
-          >
-            {screens.find((item) => item.id === screenId)?.name || ""}
-          </h1>
-        </div>
-      )}
-      <div className="h-[calc(100vh-120px)] p-4 overflow-y-auto scrollbar-mobile bg-gray-50 rounded-b-xl">
+    <div className="w-full h-full max-w-md mx-auto overflow-y-auto scrollbar-mobile shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
+      <div className="p-4 flex justify-center">
+        <h1
+          contenteditable="true"
+          onInput={(e) => console.log(e.target.textContent, screenId)}
+          className="text-blue-500 text-xl font-bold cursor-pointer text-center"
+        >
+          {screens.find((item) => item.id === screenId)?.name || ""}
+        </h1>
+      </div>
+
+      <div className="h-[calc(100vh-80px)] p-2  bg-gray-50 rounded-b-xl">
         {data.map((row, rowIndex) => (
           <div
             key={rowIndex}
@@ -155,13 +156,25 @@ const FixedMobileScreen = () => {
             onDragOver={handleDragOver}
             onDrop={(event) => handleDrop(event, rowIndex, false)}
           >
-            {row.columns.map((column, columnIndex) => (
+            {row?.label ? (
+              <div className="flex justify-between">
+                <div
+                  contenteditable="true"
+                  onInput={(e) => console.log(e.target.textContent, row)}
+                  className=" mb-2 border-gray-300 p-2 w-full text-gray-700 text-xl font-semibold "
+                >
+                  {row?.label}
+                </div>
+                {/* <div>hii</div> */}
+              </div>
+            ) : (
+              ""
+            )}
+            {row?.columns?.map((column, columnIndex) => (
               <div
                 key={columnIndex}
-                className={`flex flex-col mb-4 p-2 ${
-                  row.columns.length === 1
-                    ? "w-full"
-                    : `w-1/${row.columns.length}`
+                className={`flex flex-col mb-4 p-[5px] 
+                  ${getColumnWidth(row.columns.length)}
                 }`}
                 onDragEnter={() => handleDragEnter(rowIndex)}
               >
@@ -171,9 +184,20 @@ const FixedMobileScreen = () => {
                   </button>
                 ) : (
                   <>
-                    <label className="mb-2 text-gray-700 text-sm font-semibold">
-                      {column.label}
-                    </label>
+                    <div className="flex justify-between ">
+                      <label className="mb-2 text-gray-700 text-sm font-semibold">
+                        {column.label}
+                      </label>
+                      <SheetSide
+                        column={column}
+                        screenId={screenId}
+                        screens={screens}
+                        parentId={row.row}
+                        handleSave={handleSave}
+                        columnIndex={columnIndex}
+                        handleDelete={handleDelete}
+                      />
+                    </div>
                     <input
                       type={column.type}
                       placeholder={column.placeholder}

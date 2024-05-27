@@ -8,7 +8,7 @@ const Sidebar = () => {
     <aside className="fixed top-0 z-30 bg-gray-100 w-[25%] shrink-0 md:sticky md:block p-4 shadow-lg">
       <div
         className={`${
-          idProofs.length > 2
+          idProofs.length > 0
             ? "h-[656px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
             : ""
         }`}

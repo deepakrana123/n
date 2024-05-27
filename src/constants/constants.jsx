@@ -124,13 +124,12 @@ export const finalSpaceCharacters = [
   },
 ];
 
-
-export const idProofs=[
+export const idProofs = [
   {
-    id:"1",
-    header:"Input Fields",
-    draggable:true,
-    columns:[
+    id: "1",
+    header: "Input Fields",
+    draggable: true,
+    columns: [
       {
         id: "text",
         label: "Text Input",
@@ -150,7 +149,7 @@ export const idProofs=[
       {
         id: "voter",
         label: "Voter ID Card",
-        placeholder: "Enter your Voter Ic",
+        placeholder: "Enter your Voter ID",
         maxlength: 50,
         maxLengthMessage: "",
         minlength: 3,
@@ -278,6 +277,22 @@ export const idProofs=[
         validationMessage: "",
       },
       {
+        id: "range",
+        label: "Range Input",
+        placeholder: "Enter text here",
+        maxlength: 50,
+        maxLengthMessage: "",
+        minlength: 3,
+        required: true,
+        minLengthMessage: "",
+        color: "",
+        disabled: false,
+        readonly: false,
+        value: "",
+        validation: "",
+        validationMessage: "",
+      },
+      {
         id: "header",
         label: "Header",
         color: "",
@@ -292,26 +307,199 @@ export const idProofs=[
         label: "Back",
         color: "",
       },
-    ]
+    ],
   },
   {
-    id:"2",
-    header:"AlignMent",
-    draggable:false,
-    columns:[
+    id: "2",
+    header: "AlignMent",
+    draggable: false,
+    columns: [
       {
-        id:"One_In_Row",
-        label:"One In Row"
+        id: "One_In_Row",
+        label: "One In Row",
       },
       {
-        id:"two_in_Row",
-        label:"Two In Row"
-      }
-    ]
-  }
-]
+        id: "two_in_Row",
+        label: "Two In Row",
+      },
+    ],
+  },
+];
 
-
+export const d = [
+  {
+    value: "firstname",
+    label: "First Name",
+    type: "text",
+  },
+  {
+    value: "lastname",
+    label: "Last Name",
+    type: "text",
+  },
+  {
+    value: "middlename",
+    label: "Middle Name",
+    type: "text",
+  },
+  {
+    value: "fathername",
+    label: "Father's Name",
+    type: "text",
+  },
+  {
+    value: "mothername",
+    label: "Mother's Name",
+    type: "text",
+  },
+  {
+    value: "dateofbirth",
+    label: "Date of Birth",
+    type: "date",
+  },
+  {
+    value: "streetaddress",
+    label: "Street Address",
+    type: "text",
+  },
+  {
+    value: "city",
+    label: "City",
+    type: "text",
+  },
+  {
+    value: "state",
+    label: "State",
+    type: "select",
+    options: [
+      { key: "AP", value: "Andhra Pradesh" },
+      { key: "AR", value: "Arunachal Pradesh" },
+      { key: "AS", value: "Assam" },
+      { key: "BR", value: "Bihar" },
+      { key: "CG", value: "Chhattisgarh" },
+      { key: "GA", value: "Goa" },
+      { key: "GJ", value: "Gujarat" },
+      { key: "HR", value: "Haryana" },
+      { key: "HP", value: "Himachal Pradesh" },
+      { key: "JK", value: "Jammu and Kashmir" },
+      { key: "JH", value: "Jharkhand" },
+      { key: "KA", value: "Karnataka" },
+      { key: "KL", value: "Kerala" },
+      { key: "MP", value: "Madhya Pradesh" },
+      { key: "MH", value: "Maharashtra" },
+      { key: "MN", value: "Manipur" },
+      { key: "ML", value: "Meghalaya" },
+      { key: "MZ", value: "Mizoram" },
+      { key: "NL", value: "Nagaland" },
+      { key: "OD", value: "Odisha" },
+      { key: "PB", value: "Punjab" },
+      { key: "RJ", value: "Rajasthan" },
+      { key: "SK", value: "Sikkim" },
+      { key: "TN", value: "Tamil Nadu" },
+      { key: "TS", value: "Telangana" },
+      { key: "TR", value: "Tripura" },
+      { key: "UK", value: "Uttarakhand" },
+      { key: "UP", value: "Uttar Pradesh" },
+      { key: "WB", value: "West Bengal" },
+    ],
+  },
+  {
+    value: "postalcode",
+    label: "Postal Code",
+    type: "text",
+  },
+  {
+    value: "country",
+    label: "Country",
+    type: "text",
+  },
+  {
+    value: "idnumber",
+    label: "ID Number",
+    type: "text",
+  },
+  {
+    value: "mobilenumber",
+    label: "Mobile Number",
+    type: "text",
+  },
+  {
+    value: "secondarymobilenumber",
+    label: "Secondary Mobile Number",
+    type: "text",
+  },
+  {
+    value: "contactnumber",
+    label: "Contact Number",
+    type: "text",
+  },
+  {
+    value: "email",
+    label: "Email",
+    type: "email",
+  },
+  {
+    value: "nationality",
+    label: "Nationality",
+    type: "text",
+  },
+  {
+    value: "gender",
+    label: "Gender",
+    type: "select",
+    options: [
+      { key: "F", value: "Female" },
+      { key: "M", value: "Male" },
+      { key: "T", value: "Transgender" },
+    ],
+  },
+  {
+    value: "maritalstatus",
+    label: "Marital Status",
+    type: "select",
+    options: [
+      { key: "S", value: "Single" },
+      { key: "M", value: "Married" },
+      { key: "D", value: "Divorced" },
+      { key: "W", value: "Widowed" },
+    ],
+  },
+  {
+    value: "husbandname",
+    label: "Husband's Name",
+    type: "text",
+  },
+  {
+    value: "nomineename",
+    label: "Nominee Name",
+    type: "text",
+  },
+  {
+    value: "nominee_relationship",
+    label: "Nominee Relationship",
+    type: "text",
+  },
+  {
+    value: "coapplicant_firstname",
+    label: "Co-Applicant First Name",
+    type: "text",
+  },
+  {
+    value: "coapplicant_lastname",
+    label: "Co-Applicant Last Name",
+    type: "text",
+  },
+  {
+    value: "coapplicant_mobilenumber",
+    label: "Co-Applicant Mobile Number",
+    type: "text",
+  },
+  {
+    value: "coapplicant_email",
+    label: "Co-Applicant Email",
+    type: "text",
+  },
+];
 export const drawerConstant = [
   {
     id: "color",
@@ -332,7 +520,7 @@ export const drawerConstant = [
     placeholder: "Do you want to change placeholder",
     value: "placeholder",
   },
-  { id: "label", type: "text", label: "Change the label", value: "Label" },
+  { id: "label", type: "select", label: "Change the label", value: "Label",options:d },
   {
     id: "maxLength",
     type: "number",
@@ -359,42 +547,4 @@ export const drawerConstant = [
   },
 ];
 
-// if (value) {
-//   const newData = [...data];
-//   if (
-//     value.dependableField != undefined &&
-//     value.dependableField.length > 0
-//   ) {
-//     let col = [...value.dependableField];
-//     delete value.dependableField;
-//     col.push(value);
-//     newData.push({
-//       row: isNewRow ? rowIndex : rowIndex + 1,
-//       columns: col,
-//     });
-//     isNewRow = false;
-//   } else if (isNewRow && value.dependableField == undefined) {
-//     newData.push({
-//       row: rowIndex + 1,
-//       columns: [value],
-//     });
-//   } else if (
-//     isNewRow === false &&
-//     value.label === "Header " &&
-//     value.id == "header"
-//   ) {
-//     newData.push({
-//       row: rowIndex + 1,
-//       ...value,
-//       columns: [],
-//     });
-//   } else if (
-//     isNewRow == false &&
-//     value.label != "Header " &&
-//     value.id !== "header"
-//   ) {
-//     newData[rowIndex].columns.push(value);
-//   }
-//   // dispatch(addScreen([screenId, newData]));s
-//   setData(newData);
-//
+
