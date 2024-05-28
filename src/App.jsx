@@ -5,7 +5,6 @@ import { Route, Routes } from "react-router-dom";
 import CreateScreens from "./pages/CreateScreens";
 import Flow from "./pages/Flow/Flow";
 import Login from "./pages/Auth/login";
-import EmiCalculator from "./pages/Emi";
 import ForgetPassword from "./pages/Auth/forgetPassword";
 import ResetPassword from "./pages/Auth/resetPassword";
 import Regisiter from "./pages/Auth/regisiter";
@@ -13,12 +12,12 @@ import Regisiter from "./pages/Auth/regisiter";
 function App() {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <Routes>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/forgetPassword" element={<ForgetPassword/>}/>
-        <Route path="/resetPassword" element={<ResetPassword/>}/>
-        <Route path="/registor" element={<Regisiter/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgetPassword" element={<ForgetPassword />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/registor" element={<Regisiter />} />
         <Route path="/" element={<ShowScreen />} />
         <Route path="/screen/:id" element={<CreateScreens />} />
         <Route path="/flow" element={<Flow />} />

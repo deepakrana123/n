@@ -164,7 +164,7 @@ export const idProofs = [
         dependableField: [
           {
             id: "aadhaarVoter",
-            label: "Aadhaar Voter Card",
+            label: "Aadhaar  Card",
             parentId: "voter",
             placeholder: "Enter text here",
             maxlength: 50,

@@ -6,7 +6,8 @@ const CreateScreens = () => {
   return (
     <>
       
-      <div className="relative flex justify-between w-full h-full bg-gray-200 bg-opacity-50"
+      <div className="relative flex justify-between w-full  bg-gray-900 
+      min-h-screen"
      >
         <Sidebar />
         <FixedMobileScreen />
