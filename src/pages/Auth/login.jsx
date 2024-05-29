@@ -4,6 +4,19 @@ import { Label } from "@/components/ui/label";
 import React from "react";
 import { Link } from "react-router-dom";
 const Login = () => {
+  const handleLogin=()=>{
+    fetch("http://10.101.28.138/lending/admin/login", { 
+    method: "POST", 
+    body: JSON.stringify({ 
+        title: "foo", 
+        body: "bar", 
+        userId: 1 
+    }), 
+    headers: { 
+        "Content-type": "application/json; charset=UTF-8"
+    } 
+}) 
+  }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
@@ -42,7 +55,8 @@ const Login = () => {
           </div>
           <Button
             className="w-full bg-blue-600 text-white py-2 rounded cursor-pointer hover:bg-blue-700"
-            type="submit"
+            // type="submit"
+            onClick={()=>handleLogin()}
           >Login</Button>
         </form>
       </div>
