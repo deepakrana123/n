@@ -2,9 +2,9 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
+    // './pages/**/*.{js,jsx}',
+    // './components/**/*.{js,jsx}',
+    // './app/**/*.{js,jsx}',
     './src/**/*.{js,jsx}',
   ],
   prefix: "",
@@ -19,7 +19,6 @@ module.exports = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
-        customCyan: 'rgb(14, 211, 207)',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -60,12 +59,12 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
         },
       },
       animation: {

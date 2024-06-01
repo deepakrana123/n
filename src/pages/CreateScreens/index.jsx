@@ -5,7 +5,6 @@ import Sidebar from "@/components/Sidebar";
 const CreateScreens = () => {
   return (
     <>
-      
       <div className="relative flex justify-between w-full  bg-gray-900 
       min-h-screen"
      >

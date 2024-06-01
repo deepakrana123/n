@@ -14,3 +14,5 @@ export const getScreenDeatilsApi = createApi({
     };
   },
 });
+
+

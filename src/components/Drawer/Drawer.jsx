@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -52,10 +52,26 @@ const SheetSide = ({
       color: newColor.hex,
     });
   };
-  console.log(
-    formData
-  );
-
+  useEffect(() => {
+    const a=  fetch(`http://10.101.28.30:8080/api/findAllFieldsByType/${'text'}`,{
+       method: "GET", 
+       headers: { 
+         "Content-type": "application/json; charset=UTF-8"
+     } 
+     })
+       .then((res) => {
+         if (!res.ok) {
+           throw new Error("Network response was not ok");
+         }
+         return res.json();
+       })
+       .then((data) => {
+         console.log(data);
+       })
+       .catch((error) => {
+         console.error("Error fetching data:", error);
+       });
+   }, []);
   return (
     <div className="flex flex-col gap-2">
       <Sheet>
