@@ -134,6 +134,7 @@ export const idProofs = [
         id: "text",
         label: "Text Input",
         placeholder: "Enter text here",
+        icon:"MdTextFields",
         maxlength: 50,
         maxLengthMessage: "",
         minlength: 3,

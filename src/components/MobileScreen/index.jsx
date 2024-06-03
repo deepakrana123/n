@@ -32,14 +32,19 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
   // const location = useLocation();
   // const state = location.state;
   // console.log(state, template, "state");
-  const handleDrop = (event, rowIndex, isNewRow) => {
+  const handleDrop = (
+    event,
+    rowIndex,
+    isNewRow,
+    parent = {},
+    columnIndex = 0
+  ) => {
     event.preventDefault();
     const item = event.dataTransfer.getData("text/plain");
     const value = idProofs[0].columns.filter((items) => items.id === item)[0];
     const newData = JSON.parse(JSON.stringify(data));
     const threeInOneRow =
       newData?.filter((item) => item?.row == rowIndex)[0]?.columns?.length >= 3;
-    console.log(newData, value, isNewRow, rowIndex, "", "newData");
     if (threeInOneRow) {
       toast({
         variant: "destructive",
@@ -99,7 +104,23 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
           delete value.dependableField;
           col.push(value);
           newData[rowIndex].columns.push(...col);
-        } else if (isNewRow === false && value.dependableField === undefined) {
+        } else if (
+          isNewRow === false &&
+          parent.id === "section" &&
+          value.dependableField === undefined
+        ) {
+          console.log(newData, isNewRow, rowIndex, parent, "", "newData");
+          // newData[rowIndex].columns.push([value]);
+          newData[rowIndex].column.push({
+            row: rowIndex ,
+            columns: [],
+            ...value,
+          });
+        }
+        else if(
+          isNewRow === false &&
+          value.dependableField === undefined
+        ){
           newData[rowIndex].columns.push(value);
         }
       }
@@ -165,7 +186,7 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
   }, []);
   console.log(datas, data, createSingleFormName, "datas");
   return (
-    <div className="bg-white w-90 h-160 max-w-md mx-auto overflow-y-auto scrollbar-mobile shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
+    <div className="bg-white w-90 h-180 max-w-md mx-auto overflow-y-auto scrollbar-mobile shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
       <div className="p-4 flex justify-center">
         {/* <h1
           contenteditable="true"
@@ -175,91 +196,76 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
           {screens.find((item) => item.id === screenId)?.name || ""}
         </h1> */}
       </div>
-
-      <div className="h-[calc(100vh-80px)] p-2  bg-gray-50 rounded-b-xl">
-        {data?.map((row, rowIndex) => (
+      <div className="h-[calc(100vh-80px)] p-2 bg-gray-50 rounded-b-xl">
+        {data.map((row, rowIndex) => (
           <div
             key={rowIndex}
             className="flex flex-wrap w-full"
             onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, rowIndex, false)}
+            onDrop={(event) => handleDrop(event, rowIndex, false, row)}
           >
-            {row?.label ? (
+            {row.label ? (
               <div>
                 <div
-                  contenteditable="true"
+                  contentEditable="true"
                   onInput={(e) => console.log(e.target.textContent, row)}
-                  className=" mb-2 border-gray-300 p-2 w-full text-gray-700 text-xl font-semibold "
+                  className="mb-2 border-gray-300 p-2 w-full text-gray-700 text-xl font-semibold"
                 >
-                  {row?.label}
+                  {row.label}
                 </div>
-                <>
-                  {row?.columns?.map((column, columnIndex) => {
-                    <div
-                      key={columnIndex}
-                      className={`flex flex-col mb-4 p-[5px] 
-                   ${getColumnWidth(row.columns.length)}
-                 }`}
-                      onDragEnter={() => handleDragEnter(rowIndex)}
-                    >
-                      {column.id === "button" ? (
-                        <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
-                          {column.label}
-                        </button>
-                      ) : (
-                        <>
-                          <div className="flex justify-between ">
-                            <label className="mb-2 text-gray-700 text-sm font-semibold">
-                              {column.label}
-                            </label>
-                            {/* <button>
-                              </button> */}
-                            {/* <SheetSide
-                              column={column}
-                              screenId={screenId}
-                              screens={screens}
-                              parentId={row.row}
-                              handleSave={handleSave}
-                              columnIndex={columnIndex}
-                              handleDelete={handleDelete}
-                            /> */}
-                          </div>
-                          <input
-                            type={column.type}
-                            placeholder={column.placeholder}
-                            maxLength={column.maxlength}
-                            minLength={column.minlength}
-                            required={column.required}
-                            onChange={() => {
-                              "";
-                            }}
-                            className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                            value={column.value}
-                          />
-                          {column.required && column.value === "" && (
-                            <span className="text-red-500 text-xs mt-1">
-                              {column.validationMessage}
-                            </span>
-                          )}
-                          {(column.minlength || column.maxlength) && (
-                            <span className="text-red-500 text-xs mt-1">
-                              {column.minLengthMessage ||
-                                column.maxLengthMessage}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>;
-                  })}
-                </>
+                {row.columns.map((column, columnIndex) => (
+                  <div
+                    key={columnIndex}
+                    className={`flex flex-col mb-4 p-[5px] ${getColumnWidth(
+                      row.columns.length
+                    )}`}
+                    onDragEnter={() => handleDragEnter(rowIndex)}
+                  >
+                    {column.id === "button" ? (
+                      <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
+                        {column.label}
+                      </button>
+                    ) : (
+                      <>
+                        <div className="flex justify-between">
+                          <label className="mb-2 text-gray-700 text-sm font-semibold">
+                            {column.label}
+                          </label>
+                        </div>
+                        <input
+                          type={column.type || "text"}
+                          placeholder={column.placeholder}
+                          maxLength={column.maxlength}
+                          minLength={column.minlength}
+                          required={column.required}
+                          onChange={(event) =>
+                            handleValueChange(column, row, event)
+                          }
+                          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          value={column.value}
+                        />
+                        {column.required && column.value === "" && (
+                          <span className="text-red-500 text-xs mt-1">
+                            {column.validationMessage}
+                          </span>
+                        )}
+                        {(column.minlength || column.maxlength) && (
+                          <span className="text-red-500 text-xs mt-1">
+                            {column.minLengthMessage || column.maxLengthMessage}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
             ) : (
-              row?.columns?.map((column, columnIndex) => (
+              row.columns.map((column, columnIndex) => (
                 <div
                   key={columnIndex}
-                  className={`flex flex-col mb-2 p-[5px] 
-                  ${getColumnWidth(row.columns.length)}
-                }`}
+                  className={`flex flex-col mb-2 p-[5px] ${getColumnWidth(
+                    row.columns.length
+                  )}`}
                   onDragEnter={() => handleDragEnter(rowIndex)}
                 >
                   {column.id === "button" ? (
@@ -268,22 +274,13 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
                     </button>
                   ) : (
                     <>
-                      <div className="flex justify-between ">
+                      <div className="flex justify-between">
                         <label className="mb-2 text-gray-700 text-sm font-semibold">
                           {column.label}
                         </label>
-                        {/* <SheetSide
-                          column={column}
-                          screenId={screenId}
-                          screens={screens}
-                          parentId={row.row}
-                          handleSave={handleSave}
-                          columnIndex={columnIndex}
-                          handleDelete={handleDelete}
-                        /> */}
                       </div>
                       <input
-                        type={column.type}
+                        type={column.type || "text"}
                         placeholder={column.placeholder}
                         maxLength={column.maxlength}
                         minLength={column.minlength}

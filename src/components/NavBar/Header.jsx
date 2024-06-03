@@ -8,10 +8,10 @@ import Logout from "./Logout";
 const Header = () => {
   return (
     <React.Fragment>
-      <nav className="flex justify-between items-center border-b border-border h-[60px] px-4 py-2">
+      <nav className="flex justify-between items-center border-b border-border h-[80px] px-2 py-2">
         <Logo />
         <div className="flex gap-4 items-center">
-          <ThemeSwitcher />
+          {/* <ThemeSwitcher /> */}
           <Logout/>
         </div>
       </nav>

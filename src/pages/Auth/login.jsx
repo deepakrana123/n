@@ -42,20 +42,20 @@ const Login = () => {
       })
       .then((data) => {
         if (data.code == 200 || true) {
+          console.log(data, "data");
           toast({
-            description: data?.message ?data?.message:"done",
+            description: data?.message ? data?.message : "done",
           });
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              token:
-                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbmRyYS5yYW5hQHNhc3RlY2hzdHVkaW8uY29tIiwiaWF0IjoxNzE3MTU5MDY0LCJleHAiOjE3MTcxOTUwNjR9.oBA7lu9xzvKYO_V5FG6YjGERmSW26lm88wuS53JB-d0",
-              username: "devendra.rana@sastechstudio.com",
-            })
-          );
+          // localStorage.setItem(
+          //   "user",
+          //   JSON.stringify({
+          //     token:
+          //       "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbmRyYS5yYW5hQHNhc3RlY2hzdHVkaW8uY29tIiwiaWF0IjoxNzE3MTU5MDY0LCJleHAiOjE3MTcxOTUwNjR9.oBA7lu9xzvKYO_V5FG6YjGERmSW26lm88wuS53JB-d0",
+          //     username: "devendra.rana@sastechstudio.com",
+          //   })
+          // );
           navigate("/login");
-        } 
-        else if (data.status == 401) {
+        } else if (data.status == 401) {
           toast({
             title: "Something went wrong",
             description: "Either email or password is wrong",
