@@ -17,11 +17,13 @@ import CreateStepForm from "./pages/Template/createStepForm";
 
 function App() {
   let isSignedIn = false;
-  const user = useSelector((state) => state.screen.user);
-  if (user) {
+  const user = JSON.parse(
+    useSelector((state) => state.screen.user)
+  );
+  if (Object.keys(user).length>0) {
+    console.log("hiii")
     isSignedIn = true;
   }
-  console.log(isSignedIn, "hihi");
   return (
     <>
       <Header />
@@ -33,11 +35,44 @@ function App() {
         <Route
           path="/"
           element={
-            <Protected isSignedIn={true}>
+            <Protected isSignedIn={isSignedIn}>
               <Template />
             </Protected>
           }
         />
+        <Route
+          path="/createTemplate"
+          element={
+            // <Protected isSignedIn={true}>
+            <CreateTemplate />
+            // {/* </Protected> */}
+          }
+        />
+        <Route
+          path="/createSingleForm"
+          element={
+            // <Protected isSignedIn={true}>
+            <CreateSingleForm />
+            // {/* </Protected> */}
+          }
+        />
+        <Route
+          path="/createStepForm"
+          element={
+            // <Protected isSignedIn={isSignedIn}>
+            <CreateStepForm />
+            // </Protected>
+          }
+        />
+        <Route
+          path="/createScreen"
+          element={
+            // <Protected isSignedIn={isSignedIn}>
+            <CreateScreens />
+            // </Protected>
+          }
+        />
+        {/* 
         <Route
           path="/createTemplate"
           element={
@@ -53,15 +88,8 @@ function App() {
               <CreateTemplate />
             </Protected>
           }
-        /> */}
-        <Route
-          path="/createSingleForm"
-          element={
-            <Protected isSignedIn={true}>
-              <CreateSingleForm />
-            </Protected>
-          }
-        />
+        /> 
+      
         <Route
           path="/getAllScreenOfTemplate"
           element={
@@ -93,7 +121,7 @@ function App() {
               <Flow />
             </Protected>
           }
-        />
+        /> */}
       </Routes>
     </>
   );

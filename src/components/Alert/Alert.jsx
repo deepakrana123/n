@@ -11,8 +11,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useDispatch } from "react-redux";
+import { logout } from "@/services/reducer/ScreenReducer";
 
 const Alert = () => {
+  const dispatch=useDispatch()
   return (
     <>
       <AlertDialog>
@@ -30,7 +33,7 @@ const Alert = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => ""}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => localStorage.removeItem("user")}>Ok</AlertDialogAction>
+            <AlertDialogAction onClick={() => dispatch(logout({}))}>Ok</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

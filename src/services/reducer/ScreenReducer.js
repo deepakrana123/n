@@ -8,8 +8,8 @@ export const screenSlice = createSlice({
     screens: finalSpaceCharacters,
     prevScreens: finalSpaceCharacters,
     template: [],
-    user: JSON.parse(JSON.stringify(localStorage.getItem("user")))
-      ? JSON.parse(JSON.stringify(localStorage.getItem("user")))
+    user: localStorage.getItem("user")
+      ? localStorage.getItem("user")
       : {},
   },
   reducers: {
@@ -35,12 +35,13 @@ export const screenSlice = createSlice({
       state.data[action.payload[0]] = [action.payload[1]];
     },
     login: (state, action) => {
+      console.log(action.payload,"hi")
       localStorage.setItem("user", JSON.stringify(action.payload));
       state.user = JSON.parse(JSON.stringify(localStorage.getItem("user")));
     },
     logout: (state, action) => {
       localStorage.removeItem("user");
-      state.user = {};
+      state.user = action.payload;
     },
   },
 });

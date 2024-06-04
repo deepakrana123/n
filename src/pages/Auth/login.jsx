@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "@/services/reducer/ScreenReducer";
 const Login = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -12,8 +14,8 @@ const Login = () => {
   });
   const [error, setError] = useState({});
   const navigate = useNavigate();
+  const dispatch=useDispatch()
   const handleLogin = (event) => {
-    console.log(formData, "form");
     event.preventDefault();
     if (formData) {
       let errors = {};
@@ -40,32 +42,22 @@ const Login = () => {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
-        if (data.code == 200 || true) {
+       .then((response)=>{
+        console.log(response)
+        if(response.status === 403){
           toast({
-            description: data?.message ?data?.message:"done",
-          });
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              token:
-                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbmRyYS5yYW5hQHNhc3RlY2hzdHVkaW8uY29tIiwiaWF0IjoxNzE3MTU5MDY0LCJleHAiOjE3MTcxOTUwNjR9.oBA7lu9xzvKYO_V5FG6YjGERmSW26lm88wuS53JB-d0",
-              username: "devendra.rana@sastechstudio.com",
-            })
-          );
-          navigate("/login");
-        } 
-        else if (data.status == 401) {
-          toast({
-            title: "Something went wrong",
-            description: "Either email or password is wrong",
+            // variant: "destructive",
+            title: "Email or password is wrong",
+            description: `Email or password is wrong`,
           });
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+        if(response.code===200){
+          dispatch(login(response.data))
+          navigate("/")
+        }
+       })
   };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900">
