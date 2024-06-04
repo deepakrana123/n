@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 let a = {
@@ -16,6 +16,7 @@ const CreateStepForm = () => {
           description: "Creating your first form ",
         }
   ]);
+  const navigate = useNavigate();
   return (
     <div className="w-full min-h-screen p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -28,9 +29,10 @@ const CreateStepForm = () => {
             aria-expanded="false"
             aria-controls="radix-:Rdllb6la:"
             data-state="closed"
-            // onClick={() => 
+            onClick={() => 
+              index===0?setCreateStepForm((prev)=>[...prev,a]):navigate("/createScreen")
 
-            // }
+            }
           >
             <svg
               stroke="currentColor"

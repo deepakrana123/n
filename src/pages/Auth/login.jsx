@@ -12,21 +12,82 @@ const Login = () => {
   });
   const [error, setError] = useState({});
   const navigate = useNavigate();
-  const handleLogin = (event) => {
-    console.log(formData, "form");
+  // const handleLogin = (event) => {
+  //   console.log(formData, "form");
+  //   event.preventDefault();
+  //   if (formData) {
+  //     let errors = {};
+  //     for (const key in formData) {
+  //       if (formData[key] === "") {
+  //         errors[key] = `${key} this field is required`;
+  //       }
+  //     }
+  //     if (Object.keys(errors).length > 0) {
+  //       setError(errors);
+  //       return errors;
+  //     }
+  //   }
+  //   fetch("http://15.207.88.248:8080/admin/login", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       email: formData.email,
+  //       password: formData.password,
+  //     }),
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //     },
+  //   })
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       if (data.code == 200 || true) {
+  //         toast({
+  //           description: data?.message ?data?.message:"done",
+  //         });
+  //         localStorage.setItem(
+  //           "user",
+  //           JSON.stringify({
+  //             token:
+  //               "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbmRyYS5yYW5hQHNhc3RlY2hzdHVkaW8uY29tIiwiaWF0IjoxNzE3MTU5MDY0LCJleHAiOjE3MTcxOTUwNjR9.oBA7lu9xzvKYO_V5FG6YjGERmSW26lm88wuS53JB-d0",
+  //             username: "devendra.rana@sastechstudio.com",
+  //           })
+  //         );
+  //         navigate("/login");
+  //       }
+  //       else if (data.status == 401) {
+  //         toast({
+  //           title: "Something went wrong",
+  //           description: "Either email or password is wrong",
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // };
+  const handleLogin = async (event) => {
     event.preventDefault();
+
+    console.log(formData, "form");
+
     if (formData) {
       let errors = {};
+
+      // Validate form data
       for (const key in formData) {
         if (formData[key] === "") {
           errors[key] = `${key} this field is required`;
         }
       }
+
+      // If there are errors, set them and return early
       if (Object.keys(errors).length > 0) {
         setError(errors);
-        return errors;
+        return;
       }
     }
+<<<<<<< HEAD
     fetch("http://15.207.88.248:8080/admin/login", {
       method: "POST",
       body: JSON.stringify({
@@ -64,7 +125,49 @@ const Login = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+=======
+
+    try {
+      const response = await fetch("http://15.207.88.248:8080/admin/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+>>>>>>> 7ab729c422f7c49d93834eaaee3773e46bef9ed4
       });
+
+      const data = await response.json();
+
+      if (response.ok && data.code === 200) {
+        toast({
+          description: data?.message || "Login successful",
+        });
+        console.log(data,"hii")
+        localStorage.setItem("user", JSON.stringify(data?.data));
+
+        navigate("/")
+      } else if (response.status === 401) {
+        toast({
+          title: "Authentication Error",
+          description: "Either email or password is incorrect",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: data?.message || "An unknown error occurred",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast({
+        title: "Network Error",
+        description: "Failed to connect to the server. Please try again later.",
+      });
+    }
   };
 
   return (
