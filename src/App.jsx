@@ -91,7 +91,7 @@ function App() {
         /> 
       
         <Route
-          path="/getAllScreenOfTemplate"
+          path="/getAllScreenOfTemplate/:id"
           element={
             <Protected isSignedIn={true}>
               <ShowScreen />
@@ -99,7 +99,7 @@ function App() {
           }
         />
         <Route
-          path="/screen/:id"
+          path="/createScreen"
           element={
             <Protected isSignedIn={isSignedIn}>
               <CreateScreens />

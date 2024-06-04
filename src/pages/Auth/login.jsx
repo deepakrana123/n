@@ -17,16 +17,23 @@ const Login = () => {
   const dispatch=useDispatch()
   const handleLogin = (event) => {
     event.preventDefault();
+
+    console.log(formData, "form");
+
     if (formData) {
       let errors = {};
+
+      // Validate form data
       for (const key in formData) {
         if (formData[key] === "") {
           errors[key] = `${key} this field is required`;
         }
       }
+
+      // If there are errors, set them and return early
       if (Object.keys(errors).length > 0) {
         setError(errors);
-        return errors;
+        return;
       }
     }
     fetch("http://15.207.88.248:8080/admin/login", {

@@ -4,14 +4,21 @@ import { addTemplate } from "@/services/reducer/ScreenReducer";
 import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+<<<<<<< HEAD
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 
 let a = {
   id: "create",
+=======
+import { Link, useNavigate } from "react-router-dom";
+let a = {
+  templateId: "create",
+>>>>>>> 7ab729c422f7c49d93834eaaee3773e46bef9ed4
   templateName: "Create Work Flow",
   description: "Creating an new workflow",
 };
 const Template = () => {
+<<<<<<< HEAD
   const naviagte = useNavigate();
   const user = JSON.parse(
     useSelector((state) => state.screen.user)
@@ -51,6 +58,62 @@ const Template = () => {
               {id === "create" ? (
                 <button
                   className="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2 group border border-primary/20 h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4"
+=======
+  const [template, setTemplate] = useState([]);
+  const user = JSON.parse(useSelector((state) => state.screen.user));
+  console.log(user, user.token, "user");
+  const { toast } = useToast();
+  const naviagte = useNavigate();
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch("http://15.207.88.248:8080/api/findAll", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.code === 200) {
+          setTemplate([...data?.data, a]);
+          toast({
+            description: data?.message,
+          });
+        } else if (response.status === 401) {
+          toast({
+            title: "Authentication Error",
+            description: "Either email or password is incorrect",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: data?.message || "An unknown error occurred",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast({
+          title: "Network Error",
+          description:
+            "Failed to connect to the server. Please try again later.",
+        });
+      }
+    })();
+  }, []);
+  console.log(template, "template");
+  return (
+    <div className="w-full min-h-screen p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {template?.map(
+          ({ templateId, templateName, templateType, description }, index) => (
+            <>
+              {templateId === "create" ? (
+                <button
+                  class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2 group border border-primary/20 h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4"
+>>>>>>> 7ab729c422f7c49d93834eaaee3773e46bef9ed4
                   type="button"
                   aria-haspopup="dialog"
                   aria-expanded="false"
@@ -76,7 +139,14 @@ const Template = () => {
                   </p>
                 </button>
               ) : (
+<<<<<<< HEAD
                 <div class="rounded-xl border bg-card text-card-foreground shadow">
+=======
+                <div
+                  class="rounded-xl border bg-card text-card-foreground shadow"
+                  key={templateId}
+                >
+>>>>>>> 7ab729c422f7c49d93834eaaee3773e46bef9ed4
                   <div class="flex flex-col space-y-1.5 p-6">
                     <h3 class="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
                       <span class="truncate font-bold">{templateName}</span>
@@ -84,6 +154,7 @@ const Template = () => {
                         {templateType}
                       </div>
                     </h3>
+<<<<<<< HEAD
                     {/* <p class="flex items-center justify-between text-muted-foreground text-sm">
                     1 day ago
                   </p> */}
@@ -108,6 +179,15 @@ const Template = () => {
                     >
                       <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path>
                     </svg> */}
+=======
+                  </div>
+                  <div class="flex items-center p-6 pt-0">
+                    <Link
+                      class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 w-full mt-2 text-md gap-4"
+                      to={`/getAllScreenOfTemplate/${templateId}`}
+                    >
+                      View {templateName}{" "}
+>>>>>>> 7ab729c422f7c49d93834eaaee3773e46bef9ed4
                     </Link>
                   </div>
                 </div>
