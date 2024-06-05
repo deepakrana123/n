@@ -18,10 +18,10 @@ import CreateStepForm from "./pages/Template/createStepForm";
 function App() {
   let isSignedIn = false;
   const user = JSON.parse(
-    useSelector((state) => state.screen.user)
+    JSON.stringify(useSelector((state) => state.screen.user))
   );
-  if (Object.keys(user).length>0) {
-    console.log("hiii")
+  if (Object.keys(user).length > 0) {
+    console.log("hiii");
     isSignedIn = true;
   }
   return (
@@ -43,66 +43,16 @@ function App() {
         <Route
           path="/createTemplate"
           element={
-            // <Protected isSignedIn={true}>
-            <CreateTemplate />
-            // {/* </Protected> */}
+            <Protected isSignedIn={true}>
+              <CreateTemplate />
+            </Protected>
           }
         />
         <Route
           path="/createSingleForm"
           element={
-            // <Protected isSignedIn={true}>
-            <CreateSingleForm />
-            // {/* </Protected> */}
-          }
-        />
-        <Route
-          path="/createStepForm"
-          element={
-            // <Protected isSignedIn={isSignedIn}>
-            <CreateStepForm />
-            // </Protected>
-          }
-        />
-        <Route
-          path="/createScreen"
-          element={
-            // <Protected isSignedIn={isSignedIn}>
-            <CreateScreens />
-            // </Protected>
-          }
-        />
-        {/* 
-        <Route
-          path="/createTemplate"
-          element={
             <Protected isSignedIn={true}>
-              <CreateTemplate />
-            </Protected>
-          }
-        />
-        {/* <Route
-          path="/getAllScreenOfTemplate"
-          element={
-            <Protected isSignedIn={true}>
-              <CreateTemplate />
-            </Protected>
-          }
-        /> 
-      
-        <Route
-          path="/getAllScreenOfTemplate/:id"
-          element={
-            <Protected isSignedIn={true}>
-              <ShowScreen />
-            </Protected>
-          }
-        />
-        <Route
-          path="/createScreen"
-          element={
-            <Protected isSignedIn={isSignedIn}>
-              <CreateScreens />
+              <CreateSingleForm />
             </Protected>
           }
         />
@@ -115,13 +65,21 @@ function App() {
           }
         />
         <Route
-          path="/flow"
+          path="/createScreen"
           element={
             <Protected isSignedIn={isSignedIn}>
-              <Flow />
+              <CreateScreens />
             </Protected>
           }
-        /> */}
+        />
+        <Route
+          path="/getScreens/:id"
+          element={
+            <Protected isSignedIn={isSignedIn}>
+              <ShowScreen />
+            </Protected>
+          }
+        />
       </Routes>
     </>
   );

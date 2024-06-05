@@ -29,9 +29,6 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
   }, [id]);
   const [screens, setScreens] = useState(finalSpaceCharacters);
   const [datas, setDatas] = useState([]);
-  // const location = useLocation();
-  // const state = location.state;
-  // console.log(state, template, "state");
   const handleDrop = (event, rowIndex, isNewRow) => {
     event.preventDefault();
     const item = event.dataTransfer.getData("text/plain");
@@ -165,7 +162,7 @@ const FixedMobileScreen = ({ createSingleFormName }) => {
   }, []);
   console.log(datas, data, createSingleFormName, "datas");
   return (
-    <div className="bg-white w-90 h-160 max-w-md mx-auto overflow-y-auto scrollbar-mobile shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
+    <div className="bg-white w-90 h-100 max-w-md mx-auto overflow-y-auto scrollbar-mobile shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
       <div className="p-4 flex justify-center">
         {/* <h1
           contenteditable="true"

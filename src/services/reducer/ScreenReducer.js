@@ -8,15 +8,14 @@ export const screenSlice = createSlice({
     screens: finalSpaceCharacters,
     prevScreens: finalSpaceCharacters,
     template: [],
-    user: localStorage.getItem("user")
-      ? localStorage.getItem("user")
-      : {},
+    templateVisited: [],
+    user: localStorage.getItem("user") ? localStorage.getItem("user") : {},
   },
   reducers: {
     addTemplate: (state, action) => {
-      console.log(state?.template,action)
+      console.log(state?.template, action);
       if (state?.template?.length > 0) {
-        state?.template.push(action.payload)
+        state?.template.push(action.payload);
       }
       state.template = JSON.parse(JSON.stringify(action.payload));
     },
@@ -35,7 +34,7 @@ export const screenSlice = createSlice({
       state.data[action.payload[0]] = [action.payload[1]];
     },
     login: (state, action) => {
-      console.log(action.payload,"hi")
+      console.log(action.payload, "hi");
       localStorage.setItem("user", JSON.stringify(action.payload));
       state.user = JSON.parse(JSON.stringify(localStorage.getItem("user")));
     },
@@ -43,9 +42,19 @@ export const screenSlice = createSlice({
       localStorage.removeItem("user");
       state.user = action.payload;
     },
+    templateVisited: (state, action) => {
+      state.templateVisited.push(action.payload);
+    },
   },
 });
-export const { addScreen, saveScreen, editScreenDeatils, login, logout ,addTemplate} =
-  screenSlice.actions;
+export const {
+  addScreen,
+  saveScreen,
+  editScreenDeatils,
+  login,
+  logout,
+  addTemplate,
+  templateVisited
+} = screenSlice.actions;
 
 export default screenSlice.reducer;

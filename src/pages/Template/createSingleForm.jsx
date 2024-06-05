@@ -1,26 +1,55 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import { DialogOpenClose } from "./dailog";
 import CreateScreens from "../CreateScreens";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+let a = {
+  templateField: "kyc_form",
+  templateName: "KYC Form",
+  templateType: "multiStepForm",
+  icon: "",
+  description: "",
+};
 const CreateSingleForm = () => {
-  const { state } = useLocation();
-  const setCreateScreenHeader = (event) => {
-    console.log(state, event, "State");
-    event.id = event.screenName;
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(true);
+  const user = JSON.parse(useSelector((state) => state.screen.user));
+  const setCreateScreenHeader = async (event) => {
     if (event) {
-      state.pop();
-      state.push(event);
+      a.orgId = 101;
+      a.templateField = event.screenName.split(" ").join("_");
+      a.templateName = event.screenName;
+      a.templateType = "singleForm";
+      a.description = event.description;
+      await fetch("http://15.207.88.248:8080/api/saveCustomTemplate", {
+        method: "POST",
+        body: JSON.stringify(a),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          if (data.code === 200) {
+            console.log(a, "a");
+            setOpen((prev) => !prev);
+            navigate("/createScreen", {state:{ ...a, fieldsMap: [] }});
+          }
+        });
     }
   };
-  console.log(state, "createScreenHeader");
+  console.log(open);
   return (
     <>
       <DialogOpenClose
-        open={true}
+        open={open}
+        setOpen={setOpen}
         setCreateScreenHeader={setCreateScreenHeader}
       />
-      <CreateScreens template={state} />
+      {/* <CreateScreens template={state} /> */}
     </>
   );
 };

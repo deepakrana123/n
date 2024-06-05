@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "@/services/reducer/ScreenReducer";
+import { AES } from "crypto-js";
 const Login = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const Login = () => {
   });
   const [error, setError] = useState({});
   const navigate = useNavigate();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const handleLogin = (event) => {
     event.preventDefault();
 
@@ -49,22 +50,21 @@ const Login = () => {
       .then((res) => {
         return res.json();
       })
-       .then((response)=>{
-        console.log(response)
-        if(response.status === 403){
+      .then((response) => {
+        console.log(response);
+        if (response.status === 403) {
           toast({
             // variant: "destructive",
             title: "Email or password is wrong",
             description: `Email or password is wrong`,
           });
         }
-        if(response.code===200){
-          dispatch(login(response.data))
-          navigate("/")
+        if (response.code === 200) {
+          dispatch(login(response.data));
+          navigate("/");
         }
-       })
+      });
   };
-
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900">

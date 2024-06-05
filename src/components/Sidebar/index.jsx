@@ -1,82 +1,99 @@
 import { idProofs } from "@/constants/constants";
 import { useEffect, useState } from "react";
+import { Separator } from "../ui/separator";
+import { Button } from "../ui/button";
+import {
+  MdOutlineNumbers,
+  MdArrowDropDownCircle,
+  MdRadioButtonChecked,
+  MdRadioButtonUnchecked,
+  MdCheckBox,
+  MdCheckBoxOutlineBlank,
+  MdDateRange,
+  MdWorkOutline,
+} from "react-icons/md";
+import { AiOutlineFileText, AiOutlineFontSize } from "react-icons/ai";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { FaArrowLeft, FaEdit, FaSave, FaUniversity } from "react-icons/fa";
+
+const getIcon = {
+  numberField: (
+    <MdOutlineNumbers className="h-8 w-8 text-white cursor-grab" />
+  ),
+  textField: <AiOutlineFontSize className="h-8 w-8 text-white cursor-grab" />,
+  selectDropdown: (
+    <MdArrowDropDownCircle className="h-8 w-8 text-white cursor-grab" />
+  ),
+  radio: <MdRadioButtonChecked className="h-8 w-8 text-white cursor-grab" />,
+  checkbox: <MdCheckBox className="h-8 w-8 text-white cursor-grab" />,
+  pincode: <RiLockPasswordLine className="h-8 w-8 text-white cursor-grab" />,
+  bank: <FaUniversity className="h-8 w-8 text-white cursor-grab" />,
+  dateField: <MdDateRange className="h-8 w-8 text-white cursor-grab" />,
+  occupation: <MdWorkOutline className="h-8 w-8 text-white cursor-grab" />,
+  textArea: <AiOutlineFileText className="h-8 w-8 text-white cursor-grab" />,
+  save: <FaSave className="h-8 w-8 text-white cursor-grab" />,
+  back: <FaArrowLeft className="h-8 w-8 text-white cursor-grab" />,
+  update: <FaEdit className="h-8 w-8 text-white cursor-grab" />,
+};
 
 const Sidebar = () => {
   const [dragEnd, setDragEnd] = useState(null);
-  const [isDragging, setIsDragging] = useState(false); 
+  const [isDragging, setIsDragging] = useState(false);
   const handleDragStart = (event, item) => {
     event.dataTransfer.setData("text/plain", item);
     setDragEnd(item);
-    setIsDragging(true)
+    setIsDragging(true);
   };
-  useEffect(() => {
-    const a = fetch("http://15.207.88.248:8080/admin/findAllInputMaster", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // setIdProofs((prev)=>prev[0].columns[])
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
 
   const handleDragEnd = () => {
     setDragEnd(null);
-    setIsDragging(false)
+    setIsDragging(false);
   };
 
   return (
-    <aside className="fixed top-0 z-30 bg-gray-900 w-full md:w-[25%] shrink-0 md:sticky md:block p-4 shadow-lg">
-      <div
-        className={`${
-          idProofs.length > 0
-            ? "h-[512px] overflow-y-auto scrollbar-mobile smooth-auto"
-            : ""
-        }`}
-      >
-        {idProofs.map((item, index) => (
-          <div key={index} className="mb-6">
-            <h1 className="text-2xl text-white mb-4">{item.header}</h1>
-            {item.draggable &&
-              item.columns?.map((newItem, index) => (
-                <div
-                  key={newItem?.label + "" + String(index)}
-                  draggable
-                  onDragStart={(event) => handleDragStart(event, newItem?.id)}
-                  onDragEnd={(event) => handleDragEnd(event)}
-                  className={`cursor-grab p-2 mb-2 text-white bg-gray-800 hover:bg-violet-800 focus:outline-none focus:ring focus:ring-violet-300 rounded-md 
-                  ${dragEnd === newItem?.id ? 'bg-green-800 opacity-50' : ''}`}
-                >
-                  {newItem?.label}
-                </div>
-              ))}
-            <div className="flex flex-row gap-3 flex-wrap">
-              {!item.draggable &&
-                item.columns?.map((newItem, index) => (
-                  <div
+    <aside
+      className="w-[400px]  h-[600px] max-w-[400px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
+    scrollbar-mobile smooth-auto"
+    >
+      <div>
+        <p className="text-sm text-foreground/70">Drag and drop elements</p>
+        <Separator className="my-2" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 place-items-center">
+          {idProofs.map(({ header, columns, draggable, icon }, index) => (
+            <>
+              <p className="text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">
+                {header}
+              </p>
+              {draggable &&
+                columns?.map((newItem, index) => (
+                  <Button
                     key={newItem?.label + "" + String(index)}
-                    className="cursor-pointer p-2 mb-2 text-white bg-gray-800 hover:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300 rounded-md transition duration-200"
+                    draggable
+                    onDragStart={(event) => handleDragStart(event, newItem?.id)}
+                    onDragEnd={(event) => handleDragEnd(event)}
+                    className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
                   >
-                    {newItem?.label}
-                  </div>
+                    {getIcon[newItem?.icon]}
+                    {console.log(icon,"icon")}
+                    <p className="text-xs">{newItem?.label}</p>
+                  </Button>
                 ))}
-            </div>
-          </div>
-        ))}
+              {draggable == false &&
+                columns?.map((newItem, index) => (
+                  <Button
+                    variant={"outline"}
+                    key={newItem?.label + "" + String(index)}
+                    className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
+                  >
+                    {getIcon[icon]}
+                    <p className="text-xs">{newItem?.label}</p>
+                  </Button>
+                ))}
+            </>
+          ))}
+        </div>
       </div>
     </aside>
   );
 };
-
 export default Sidebar;

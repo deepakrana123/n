@@ -14,16 +14,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
-export function DialogOpenClose({ open, setCreateScreenHeader }) {
+export function DialogOpenClose({ open,setOpen, setCreateScreenHeader }) {
   const [isOpen, setIsOpen] = useState(open);
   const [inputSingleForm, setInputSingleForm] = useState({
     screenName: "",
     description: "",
   });
   return (
-    <Dialog open={isOpen}>
-      {/* <DialogTrigger asChild open={isOpen}>
-      </DialogTrigger> */}
+    <Dialog open={open}> 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create form</DialogTitle>
@@ -66,7 +64,7 @@ export function DialogOpenClose({ open, setCreateScreenHeader }) {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => setIsOpen((prev) => !prev)}
+              onClick={() => setOpen((prev) => !prev)}
               className="bg-blue-400"
             >
               Close

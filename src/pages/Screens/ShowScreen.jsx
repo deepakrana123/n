@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { PopoverDemo } from "@/components/PopOver/popOver";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,17 +9,20 @@ import Logo from "@/components/Logo/Logo";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BsWindowDesktop } from "react-icons/bs";
 import { IoMdSunny } from "react-icons/io";
-import { finalSpaceCharacters } from "@/constants/constants";
+import { and, finalSpaceCharacters } from "@/constants/constants";
 
 const ShowScreen = () => {
+  const { id: templateId } = useParams();
+  console.log(templateId, "id");
+  const user = JSON.parse(useSelector((state) => state.screen.user));
   const [screen, setScreen] = useState([]);
   const [targetValue, setTargetValue] = useState("");
   const { theme, setTheme } = useState("light");
   const { toast } = useToast();
   const swapIds = (id1, id2) => {
-    let index1 = screensDrag.findIndex((screen) => screen.id === id1);
-    let index2 = screensDrag.findIndex((screen) => screen.id === id2);
-    const newArray = [...screensDrag];
+    let index1 = screen.findIndex((screen) => screen.id === id1);
+    let index2 = screen.findIndex((screen) => screen.id === id2);
+    const newArray = [...screen];
     if (
       newArray[index1].isDraggable === true &&
       newArray[index2].isDraggable === true &&
@@ -67,23 +70,54 @@ const ShowScreen = () => {
     setTargetValue(id);
   };
 
+  // useEffect(() => {
+  //   // const b = and.filter((item) => item.templateId === templateId);
+  //   // console.log(b, "b");
+  //   // setScreen(b);
+  //   // user.orgId=101
+  //   // fetch(
+  //   //   `http://15.207.88.248:8080/api/getScreenByTemplateId/${templateId}`,
+  //   //   {
+  //   //     method: "GET",
+  //   //     headers: {
+  //   //       "Content-type": "application/json; charset=UTF-8",
+  //   //       Authorization: `Bearer ${user.token}`,
+  //   //     },
+  //   //   }
+  //   // )
+  //   //   .then((res) => {
+  //   //     if (!res.ok) {
+  //   //       throw new Error("Network response was not ok");
+  //   //     }
+  //   //     return res.json();
+  //   //   })
+  //   //   .then((data) => {
+  //   //     setScreen(data?.data);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching data:", error);
+  //   //   });
+  // }, []);
   useEffect(() => {
-    fetch("http://15.207.88.248:8080/api/findAllScreenMaster", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZXZlbmRyYS5yYW5hQHNhc3RlY2hzdHVkaW8uY29tIiwiaWF0IjoxNzE3MTYwNDEwLCJleHAiOjE3MTcxOTY0MTB9.Vr1yfr5bLlg44SIzeslwgw5P9nAiL5uYG06x1xWZIb0",
-      },
-    })
+    fetch(
+      `http://15.207.88.248:8080/api/findAllScreenMaster/${"6659e4186e35a10301c5870e"||templateId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    )
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
         return res.json();
       })
       .then((data) => {
-        setScreen(data?.data);
+        if (data.code == 200) {
+          console.log(data.code, "data", data);
+          // setTemplateVisited([...data.data]);
+          setScreen(data?.data)
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -116,17 +150,16 @@ const ShowScreen = () => {
         console.error("Error fetching data:", error);
       });
   };
-  console.log(screen, "screen");
   return (
     <>
-      <div className="w-full bg-gray-900 opacity-1 min-h-screen p-6">
-        <Button className="text-black-300 h-8 mb-2 bg-white" onClick={() => ""}>
+      <div className="w-full min-h-screen p-6">
+        <Button className="text-white h-8 mb-2 bg-black" onClick={() => ""}>
           Submit
         </Button>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[
-            ...finalSpaceCharacters,
+            ...screen,
             {
               id: "create",
               screenName: "Create Work",
@@ -140,7 +173,10 @@ const ShowScreen = () => {
                 description,
                 thumb,
                 isDraggable,
-                fieldsMapList,
+                fieldsMap,
+                isMandatory,
+                templateId,
+                ...rest
               },
               index
             ) => (
@@ -153,41 +189,36 @@ const ShowScreen = () => {
                 onDragEnter={() => handleDragEnter(id)}
                 key={id}
               >
-                <div className="relative group">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                  <div className="relative px-7 py-6 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-8 h-[200px] w-[300px]">
-                    {/* <svg
-                    className="w-20 h-20 text-purple-800"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
-                      d="M6.75 6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.25C16.3546 4.75 17.25 5.64543 17.25 6.75V19.25L12 14.75L6.75 19.25V6.75Z"
-                    ></path>
-                  </svg> */}
-                    <div className="space-y-2 gap-3">
-                      <div className="flex flex-col justify-between h-full">
-                        <div className="flex justify-between">
-                          <p className="text-slate-900">{screenName}</p>
-                          <PopoverDemo />
-                        </div>
-                        <p className="text-slate-300 flex-1.5">{description}</p>
-                        <span className="flex space-x-1">
-                          <Link
-                            to={`/screen/${id}`}
-                            className="block text-indigo-400 group-hover:text-slate-800 transition duration-200"
-                            state={fieldsMapList}
-                          >
-                            Change Screen
-                          </Link>
-                          <FaArrowRight className="block text-indigo-400 group-hover:text-slate-800 transition duration-200" />
-                        </span>
+                <div class="rounded-xl border bg-card text-card-foreground shadow">
+                  <div class="flex flex-col space-y-1.5 p-6">
+                    <h3 class="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
+                      <span class="truncate font-bold">{screenName}</span>
+                      <div class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80">
+                        {isMandatory === "Y" ? "Mandatory" : "Not Mandatory"}
                       </div>
-                    </div>
+                    </h3>
+                  </div>
+                  <div class="p-6 pt-0 h-[20px] truncate text-sm text-muted-foreground">
+                    {/* {description} */}
+                  </div>
+                  <div className="flex items-center p-6 pt-0">
+                    <Link
+                      className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 w-full mt-2 text-md gap-4"
+                      to={"/createScreen"}
+                      state={{
+                        id,
+                        screenName,
+                        description,
+                        thumb,
+                        isDraggable,
+                        fieldsMap,
+                        isMandatory,
+                        templateId,
+                        ...rest
+                      }}
+                    >
+                      Edit {screenName}{" "}
+                    </Link>
                   </div>
                 </div>
               </div>
