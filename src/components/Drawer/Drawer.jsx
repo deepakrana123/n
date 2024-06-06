@@ -22,12 +22,14 @@ const abc = (data, value) => {
   return data.filter((item) => item.type == value.id);
 };
 const SheetSide = ({
-  column,
-  screenId,
-  screens,
-  parentId,
+  open,
+  setOpen,
+  column="",
+  screenId="",
+  screens="",
+  parentId="",
   handleSave,
-  columnIndex,
+  columnIndex="",
   handleDelete,
   sheetWidth = "w-[500px]",
 }) => {
@@ -52,31 +54,31 @@ const SheetSide = ({
       color: newColor.hex,
     });
   };
-  useEffect(() => {
-    const a=  fetch(`http://10.101.28.30:8080/api/findAllFieldsByType/${'text'}`,{
-       method: "GET", 
-       headers: { 
-         "Content-type": "application/json; charset=UTF-8"
-     } 
-     })
-       .then((res) => {
-         if (!res.ok) {
-           throw new Error("Network response was not ok");
-         }
-         return res.json();
-       })
-       .then((data) => {
-         console.log(data);
-       })
-       .catch((error) => {
-         console.error("Error fetching data:", error);
-       });
-   }, []);
+  // useEffect(() => {
+  //   const a=  fetch(`http://10.101.28.30:8080/api/findAllFieldsByType/${'text'}`,{
+  //      method: "GET", 
+  //      headers: { 
+  //        "Content-type": "application/json; charset=UTF-8"
+  //    } 
+  //    })
+  //      .then((res) => {
+  //        if (!res.ok) {
+  //          throw new Error("Network response was not ok");
+  //        }
+  //        return res.json();
+  //      })
+  //      .then((data) => {
+  //        console.log(data);
+  //      })
+  //      .catch((error) => {
+  //        console.error("Error fetching data:", error);
+  //      });
+  //  }, []);
   return (
     <div className="flex flex-col gap-2">
-      <Sheet>
-        <SheetTrigger asChild>
-          <HiOutlinePencilSquare className="cursor-pointer" />
+      <Sheet open={open}>
+        <SheetTrigger >
+          <HiOutlinePencilSquare className="cursor-pointer"  onClick={()=>setOpen((prev)=>!prev)}/>
         </SheetTrigger>
         <SheetContent
           className={`bg-white shadow-md rounded-lg ${sheetWidth}`}
@@ -84,21 +86,21 @@ const SheetSide = ({
           side="right"
         >
           <SheetHeader>
-            <SheetTitle>
+            {/* <SheetTitle>
               {screens.filter((item) => item.id === screenId)[0].screenName}
             </SheetTitle>
             <SheetDescription>
               Edit{" "}
               {screens.filter((item) => item.id === screenId)[0].screenName}{" "}
               Properties
-            </SheetDescription>
+            </SheetDescription> */}
           </SheetHeader>
-          <div className="grid grid-cols-2 gap-4 p-2">
+          <div className="grid grid-cols-1 gap-1 p-2">
             {drawerConstant.map((field) => (
               <div key={field.id} className="flex flex-col">
                 <Label
                   htmlFor={field.id}
-                  className="text-right text-sm text-muted-foreground"
+                  className="text-left text-sm text-muted-foreground"
                 >
                   {field.label}
                 </Label>
@@ -114,7 +116,7 @@ const SheetSide = ({
                     id={field.id}
                     type="checkbox"
                     defaultChecked={formData[field.id]}
-                    className=" w-5 h-5 p-2 ml-20 mt-4 border rounded"
+                    className=" w-5 h-5 p-2 ml-2 mt-4 border rounded"
                     onChange={(e) => handleInputChange(e, field.id)}
                   />
                 ) : field.type === "text" || field.type === "number" ? (
@@ -135,7 +137,7 @@ const SheetSide = ({
                   >
                     {field?.options &&
                       abc(field.options, column)?.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option key={option.value} value={option.label}>
                           {option.label}
                         </option>
                       ))}
@@ -145,7 +147,7 @@ const SheetSide = ({
             ))}
           </div>
           <SheetFooter className="flex justify-end">
-            <SheetClose asChild>
+            {/* <SheetClose asChild> */}
               <>
                 <Button
                   type="submit"
@@ -160,7 +162,7 @@ const SheetSide = ({
                   Delete
                 </Button>
               </>
-            </SheetClose>
+            {/* </SheetClose> */}
           </SheetFooter>
         </SheetContent>
       </Sheet>

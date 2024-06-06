@@ -2,24 +2,24 @@
 import FixedMobileScreen from "@/components/MobileScreen";
 import Sidebar from "@/components/Sidebar";
 import NewForm from "./newForm";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import { LuPencilLine } from "react-icons/lu";
+import { IoPencilOutline } from "react-icons/io5";
 const CreateScreens = () => {
   const { state } = useLocation();
+  const [editOn, setEditOn] = useState(false);
   const user = JSON.parse(useSelector((state) => state.screen.user));
+  const headerRef = useRef();
   useEffect(() => {
-    if(state){
-      setCurrentScreenState(state?.fieldsMap);
+    if (state) {
+      setCurrentScreenState(state?.fieldsMap || []);
     }
   }, [state]);
-  console.log("@@state.fieldsMapstate.fieldsMap", state);
-
   const [currentScreenState, setCurrentScreenState] = useState(
     state?.fieldsMap || []
   );
-
   const handleSubmit = () => {
     fetch(`http://15.207.88.248:8080/api/updateScreenTemplateDetail`, {
       method: "POST",
@@ -29,7 +29,7 @@ const CreateScreens = () => {
       },
       body: JSON.stringify({
         ...state,
-        templateId: "6659e4186e35a10301c5870e", // need to remove this lne
+        // templateId: "6659e4186e35a10301c5870e", // need to remove this lne
         fieldsMap: currentScreenState,
       }),
     })
@@ -50,9 +50,25 @@ const CreateScreens = () => {
     <>
       <main className="flex flex-col w-full">
         <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
-          <h2 className="truncate font-medium">
-            <span className="text-muted-foreground mr-2">Form:</span>
-            {state?.screenName || state?.templateName}
+          <h2 className="truncate font-medium flex">
+            <p className="text-muted-foreground mr-2">Screen:</p>
+            {editOn ? (
+              <input
+                ref={headerRef}
+                type="text"
+                placeholder="enter your name"
+                onChange={(event) => (state.screenName = event.target.value)}
+                onBlue={() => setEditOn((prev) => !prev)}
+              />
+            ) : (
+              <>
+                <IoPencilOutline
+                  className="mt-2 mr-2"
+                  onClick={() => setEditOn((prev) => !prev)}
+                />
+                <p className="text-muted-foreground">{state?.screenName}</p>
+              </>
+            )}
           </h2>
           <div className="flex items-center gap-2">
             <button
@@ -129,6 +145,8 @@ const CreateScreens = () => {
         <div className="flex w-full min-h-screen bg-accent bg-[url(/paper.svg)]">
           <Sidebar />
           <NewForm data={currentScreenState} setData={setCurrentScreenState} />
+          {/* <Drawer/> */}
+          <div></div>
         </div>
       </main>
     </>

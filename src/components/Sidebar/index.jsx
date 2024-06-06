@@ -3,37 +3,35 @@ import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import {
-  MdOutlineNumbers,
   MdArrowDropDownCircle,
   MdRadioButtonChecked,
-  MdRadioButtonUnchecked,
   MdCheckBox,
-  MdCheckBoxOutlineBlank,
   MdDateRange,
   MdWorkOutline,
 } from "react-icons/md";
 import { AiOutlineFileText, AiOutlineFontSize } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaArrowLeft, FaEdit, FaSave, FaUniversity } from "react-icons/fa";
+import { LuUpload } from "react-icons/lu";
+import { TbNumber123 } from "react-icons/tb";
 
 const getIcon = {
-  numberField: (
-    <MdOutlineNumbers className="h-8 w-8 text-white cursor-grab" />
-  ),
-  textField: <AiOutlineFontSize className="h-8 w-8 text-white cursor-grab" />,
+  numberField: <TbNumber123 className="h-8 w-8 text-black cursor-grab" />,
+  textField: <AiOutlineFontSize className="h-8 w-8 text-black cursor-grab" />,
   selectDropdown: (
-    <MdArrowDropDownCircle className="h-8 w-8 text-white cursor-grab" />
+    <MdArrowDropDownCircle className="h-8 w-8 text-black cursor-grab" />
   ),
-  radio: <MdRadioButtonChecked className="h-8 w-8 text-white cursor-grab" />,
-  checkbox: <MdCheckBox className="h-8 w-8 text-white cursor-grab" />,
-  pincode: <RiLockPasswordLine className="h-8 w-8 text-white cursor-grab" />,
-  bank: <FaUniversity className="h-8 w-8 text-white cursor-grab" />,
-  dateField: <MdDateRange className="h-8 w-8 text-white cursor-grab" />,
-  occupation: <MdWorkOutline className="h-8 w-8 text-white cursor-grab" />,
-  textArea: <AiOutlineFileText className="h-8 w-8 text-white cursor-grab" />,
-  save: <FaSave className="h-8 w-8 text-white cursor-grab" />,
-  back: <FaArrowLeft className="h-8 w-8 text-white cursor-grab" />,
-  update: <FaEdit className="h-8 w-8 text-white cursor-grab" />,
+  radio: <MdRadioButtonChecked className="h-8 w-8 text-black cursor-grab" />,
+  checkbox: <MdCheckBox className="h-8 w-8 text-black cursor-grab" />,
+  pincode: <RiLockPasswordLine className="h-8 w-8 text-black cursor-grab" />,
+  bank: <FaUniversity className="h-8 w-8 text-black cursor-grab" />,
+  dateField: <MdDateRange className="h-8 w-8 text-black cursor-grab" />,
+  occupation: <MdWorkOutline className="h-8 w-8 text-black cursor-grab" />,
+  textArea: <AiOutlineFileText className="h-8 w-8 text-black cursor-grab" />,
+  save: <FaSave className="h-8 w-8 text-black cursor-grab" />,
+  back: <FaArrowLeft className="h-8 w-8 text-black cursor-grab" />,
+  update: <FaEdit className="h-8 w-8 text-black cursor-grab" />,
+  upload: <LuUpload className="h-8 w-8 text-black cursor-grab" />,
 };
 
 const Sidebar = () => {
@@ -52,46 +50,42 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="w-[400px]  h-[600px] max-w-[400px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
+      className="w-[350px]  h-[600px] max-w-[350px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
     scrollbar-mobile smooth-auto"
     >
-      <div>
-        <p className="text-sm text-foreground/70">Drag and drop elements</p>
-        <Separator className="my-2" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 place-items-center">
-          {idProofs.map(({ header, columns, draggable, icon }, index) => (
-            <>
-              <p className="text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">
-                {header}
-              </p>
-              {draggable &&
-                columns?.map((newItem, index) => (
-                  <Button
-                    key={newItem?.label + "" + String(index)}
-                    draggable
-                    onDragStart={(event) => handleDragStart(event, newItem?.id)}
-                    onDragEnd={(event) => handleDragEnd(event)}
-                    className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
-                  >
-                    {getIcon[newItem?.icon]}
-                    {console.log(icon,"icon")}
-                    <p className="text-xs">{newItem?.label}</p>
-                  </Button>
-                ))}
-              {draggable == false &&
-                columns?.map((newItem, index) => (
-                  <Button
-                    variant={"outline"}
-                    key={newItem?.label + "" + String(index)}
-                    className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
-                  >
-                    {getIcon[icon]}
-                    <p className="text-xs">{newItem?.label}</p>
-                  </Button>
-                ))}
-            </>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-1 place-items-center">
+        {idProofs.map(({ header, columns, draggable, icon }, index) => (
+          <>
+            <p className="text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">
+              {header}
+            </p>
+            {draggable &&
+              columns?.map((newItem, index) => (
+                <Button
+                  variant={"outline"}
+                  key={newItem?.label + "" + String(index)}
+                  draggable
+                  onDragStart={(event) => handleDragStart(event, newItem?.id)}
+                  onDragEnd={(event) => handleDragEnd(event)}
+                  className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
+                >
+                  {getIcon[newItem?.icon]}
+                  <p className="text-xs">{newItem?.label}</p>
+                </Button>
+              ))}
+            {draggable == false &&
+              columns?.map((newItem, index) => (
+                <Button
+                  variant={"outline"}
+                  key={newItem?.label + "" + String(index)}
+                  className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
+                >
+                  {getIcon[icon]}
+                  <p className="text-xs">{newItem?.label}</p>
+                </Button>
+              ))}
+          </>
+        ))}
       </div>
     </aside>
   );

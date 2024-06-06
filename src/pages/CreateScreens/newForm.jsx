@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 // import { useToast } from "../../components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import SheetSide from "@/components/Drawer/Drawer";
 const getColumnWidth = (columnsLength) => {
+  console.log(columnsLength, "columnsLength");
   switch (columnsLength) {
     case 1:
       return "w-full";
@@ -15,89 +17,24 @@ const getColumnWidth = (columnsLength) => {
       return "w-full";
   }
 };
-let initialData = [
-  {
-    row: 0,
-    columns: [
-      {
-        id: "company",
-        label: "Company",
-        parentId: "occupation",
-        placeholder: "Enter your Company",
-        maxlength: 50,
-        maxLengthMessage: "Company cannot be more than 50 characters",
-        minlength: 3,
-        required: true,
-        minLengthMessage: "Company must be at least 3 characters",
-        color: "",
-        disabled: false,
-        readonly: false,
-        value: "",
-        validation: "",
-        validationMessage: "",
-      },
-      {
-        id: "monthlySalary",
-        label: "Monthly Salary",
-        parentId: "income",
-        placeholder: "Enter your Monthly Salary",
-        maxlength: 20,
-        maxLengthMessage: "Monthly Salary cannot be more than 20 characters",
-        minlength: 1,
-        required: true,
-        minLengthMessage: "Monthly Salary must be at least 1 character",
-        color: "",
-        disabled: false,
-        readonly: false,
-        value: "",
-        validation: "^[0-9]+(\\.[0-9]{1,2})?$",
-        validationMessage: "Invalid Monthly Salary format",
-      },
-    ],
-  },
-  {
-    row: 1,
-    columns: [
-      {
-        id: "company",
-        label: "Company",
-        parentId: "occupation",
-        placeholder: "Enter your Company",
-        maxlength: 50,
-        maxLengthMessage: "Company cannot be more than 50 characters",
-        minlength: 3,
-        required: true,
-        minLengthMessage: "Company must be at least 3 characters",
-        color: "",
-        disabled: false,
-        readonly: false,
-        value: "",
-        validation: "",
-        validationMessage: "",
-      },
-      {
-        id: "monthlySalary",
-        label: "Monthly Salary",
-        parentId: "income",
-        placeholder: "Enter your Monthly Salary",
-        maxlength: 20,
-        maxLengthMessage: "Monthly Salary cannot be more than 20 characters",
-        minlength: 1,
-        required: true,
-        minLengthMessage: "Monthly Salary must be at least 1 character",
-        color: "",
-        disabled: false,
-        readonly: false,
-        value: "",
-        validation: "^[0-9]+(\\.[0-9]{1,2})?$",
-        validationMessage: "Invalid Monthly Salary format",
-      },
-    ],
-  },
-];
-const NewForm = ({data=[],setData}) => {
-  console.log("@@@@@@@2data",data)
+const getHieghtSection = (columnsLength) => {
+  console.log(columnsLength, "columnsLength");
+  switch (columnsLength) {
+    case 0:
+      return "h-[100px]";
+    case 1:
+      return "h-[200px]";
+    case 2:
+      return "h-[300px]";
+    default:
+      return "h-[350px]";
+  }
+};
+
+const NewForm = ({ data = [], setData }) => {
+  const [open, setOpen] = useState(false);
   // const [data, setData] = useState(initialState);
+  const [targetIndex, setTargetIndex] = useState("");
   const { toast } = useToast();
   const handleDrop = (
     event,
@@ -106,6 +43,7 @@ const NewForm = ({data=[],setData}) => {
     subRowIndex = "",
     subColumnIndex = ""
   ) => {
+    console.log(event, rowIndex, isNewRow, "hiii");
     const item = event.dataTransfer.getData("text/plain");
     const value = idProofs[0].columns.filter((items) => items.id === item)[0];
     const newData = JSON.parse(JSON.stringify(data));
@@ -117,15 +55,6 @@ const NewForm = ({data=[],setData}) => {
     if (subRowIndex && subColumnIndex) {
       newData[rowIndex].columns[subRowIndex].columns.push(value);
     }
-    console.log(
-      event,
-      rowIndex,
-      isNewRow,
-      subRowIndex,
-      subColumnIndex,
-      "hiiii"
-    );
-
     if (condition && value.id != "button") {
       toast({
         variant: "destructive",
@@ -142,7 +71,6 @@ const NewForm = ({data=[],setData}) => {
       });
       return;
     }
-    console.log(value, event, rowIndex, isNewRow, subRowIndex, subColumnIndex);
     if (isNewRow) {
       if (value.id === "section") {
         newData.push({
@@ -191,31 +119,88 @@ const NewForm = ({data=[],setData}) => {
     }
     setData(newData);
   };
-  const handleDragEnter = (rowIndex) => {
-    // console.log(rowIndex);
-  };
+  console.log(data, "data");
+
   const handleDragOver = (event) => {
+    // console.log(event, "event");
     event.preventDefault();
   };
 
-  const handleSubmit=()=>{
-    console.log(initialData)
-  }
-  console.log(data, "newData");
+  const handleSave = (parentId, columnIndex, formData) => {
+    let newArr = JSON.parse(JSON.stringify(data));
+    if (
+      parentId < newArr.length &&
+      columnIndex < newArr[parentId]["columns"].length
+    ) {
+      newArr[parentId]["columns"][columnIndex] = formData;
+    }
+    setData(newArr);
+    setOpen((prev) => !prev);
+  };
+
+  const handleDelete = (parentId, columnIndex) => {
+    let newArr = JSON.parse(JSON.stringify(data));
+    if (
+      parentId < newArr.length &&
+      columnIndex < newArr[parentId]["columns"].length
+    ) {
+      newArr[parentId]["columns"].splice(columnIndex, 1);
+    }
+    setData(newArr);
+  };
+  const handleValueChange = (parentId, columnIndex, event) => {
+    let newArr = JSON.parse(JSON.stringify(data));
+    console.log(parentId, columnIndex, event.target.value, "hii");
+    if (
+      parentId < newArr.length &&
+      columnIndex < newArr[parentId]["columns"].length
+    ) {
+      newArr[parentId]["columns"][columnIndex].value = event.target.value;
+      setData(newArr);
+    }
+  };
+  const handleDragEnter = (id) => {
+    setTargetIndex(id);
+  };
+  const swapIds = (index1, index2) => {
+    const newArray = [...data];
+    let temp = newArray[index1];
+    newArray[index1] = newArray[index2];
+    newArray[index2] = temp;
+    setData(newArray);
+  };
+  const handleDropRow = (event) => {
+    console.log(event, "event");
+    const item = event.dataTransfer.getData("text/plain");
+    swapIds(item, targetIndex);
+  };
+
+  const handleDragStart = (event, rowIndex) => {
+    event.dataTransfer.setData("text/plain", rowIndex);
+  };
   return (
-    <div className="bg-white w-90 h-100 max-w-md mx-auto  shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
+    // <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
+    //   <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
+    //     {data?.map((row, rowIndex) => (row.id === "section" ? "" : ""))}
+    //   </div>
+    // </div>
+    <div className="bg-white w-full h-100 max-w-md mx-auto  shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
       <div className="h-[calc(100vh-70px)] p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
-        {data.map((row, rowIndex) =>
+        {data?.map((row, rowIndex) =>
           row.id === "section" ? (
-            <div key={rowIndex} className="flex flex-col">
-              <div
-                // contentEditable="true"
-                // onInput={(e) => console.log(e.target.textContent, row)}
-                className="mb-2 border-gray-300 p-2 w-full text-gray-700 text-xl font-semibold"
-                onDrop={(event) => handleDrop(event, rowIndex, false)}
-                onDragEnter={() => handleDragEnter(rowIndex)}
-                onDragOver={(event) => handleDragOver(event)}
-              >
+            <div
+              key={rowIndex}
+              className={`flex flex-col
+            hover:border-primary hover:cursor-pointer border-dashed
+            group border-2 border-primary/20 ${getHieghtSection(
+              row.columns.length
+            )}`}
+              onDragStart={(event) => handleDragStart(event, rowIndex)}
+              onDrop={handleDropRow}
+              onDragOver={handleDragOver}
+              onDragEnter={() => handleDragEnter(rowIndex)}
+            >
+              <div className="pl-1 w-full text-gray-700 text-xl font-semibold">
                 {row.label}
               </div>
               <div>
@@ -223,11 +208,11 @@ const NewForm = ({data=[],setData}) => {
                   subRow.columns.map((subColumn, subColumnIndex) => (
                     <div
                       key={subColumnIndex}
-                      className={`flex flex-col ml-2 mb-2 p-[5px] ${getColumnWidth(
+                      className={`flex flex-col   p-[5px] ${getColumnWidth(
                         subRow.columns.length
                       )}`}
                       onDragEnter={() => handleDragEnter(subRowIndex)}
-                      ondragover={(event) => handleDragOver(event, subRow)}
+                      onDragover={(event) => handleDragOver(event, subRow)}
                       onDrop={(event) =>
                         handleDrop(
                           event,
@@ -245,13 +230,14 @@ const NewForm = ({data=[],setData}) => {
                       ) : (
                         <div className="flex flex-col justify-between">
                           <label className="mb-1 text-gray-700 text-sm font-semibold">
-                            {subColumn.label}
+                            {subColumn.label} {subColumn.required ? "*" : ""}
                           </label>
+
                           <input
                             type={subColumn.type || "text"}
                             placeholder={subColumn.placeholder}
-                            maxLength={subColumn.maxlength}
-                            minLength={subColumn.minlength}
+                            maxLength={subColumn.maxLength}
+                            minLength={subColumn.minLength}
                             required={subColumn.required}
                             className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                             value={subColumn.value}
@@ -261,7 +247,7 @@ const NewForm = ({data=[],setData}) => {
                               {subColumn.validationMessage}
                             </span>
                           )}
-                          {(subColumn.minlength || subColumn.maxlength) && (
+                          {(subColumn.minlength || subColumn.maxLength) && (
                             <span className="text-red-500 text-xs mt-1">
                               {subColumn.minLengthMessage ||
                                 subColumn.maxLengthMessage}
@@ -273,64 +259,107 @@ const NewForm = ({data=[],setData}) => {
                   ))
                 )}
               </div>
+              <div
+                // onDrop={(event) => handleDrop(event, data.length, true)}
+                // onDragOver={handleDragOver}
+                onDrop={(event) => handleDrop(event, rowIndex, false)}
+                onDragEnter={() => handleDragEnter(rowIndex)}
+                onDragOver={(event) => handleDragOver(event)}
+                className="text-center p-2 flex flex-col items-center"
+              >
+                <FaPlusCircle className="text-blue-500 text-2xl mb-2 " />
+                <span className="text-gray-500 text-base font-semibold">
+                  Drop For a row ,you can make it collapseable or nested
+                </span>
+              </div>
             </div>
           ) : (
             <div
-              key={rowIndex}
-              className="flex flex-wrap w-full"
+              draggable={true}
+              onDragStart={(event) => handleDragStart(event, rowIndex)}
+              onDrop={handleDropRow}
               onDragOver={handleDragOver}
-              onDrop={(event) => handleDrop(event, rowIndex, false)}
+              onDragEnter={() => handleDragEnter(rowIndex)}
+              className="flex flex-wrap mt-1 w-full border-dashed
+              group border-2 border-primary/20"
             >
-              {row.columns.map((subColumn, subColumnIndex) => (
-                <div
-                  key={subColumnIndex}
-                  className={`flex flex-col mb-2 p-[5px] ${getColumnWidth(
-                    row.columns.length
-                  )}`}
-                  onDragEnter={() => handleDragEnter(rowIndex)}
-                >
-                  {subColumn.id === "button" ? (
-                    <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
-                      {subColumn.label}
-                    </button>
-                  ) : (
-                    <div className="flex flex-col justify-between">
-                      <label className="mb-1 text-gray-700 text-sm font-semibold">
+              <div
+                key={rowIndex}
+                onDragOver={handleDragOver}
+                className="flex flex-wrap border-dashed
+                group border-2 border-primary/20 w-full"
+              >
+                {row.columns.map((subColumn, subColumnIndex) => (
+                  <div
+                    key={subColumnIndex}
+                    className={`flex flex-col mb-2 p-[5px] ${getColumnWidth(
+                      row.columns.length
+                    )}`}
+                    // onDragEnter={() => handleDragEnter(rowIndex)}
+                    onDrop={(event) => handleDrop(event, rowIndex, false)}
+                  >
+                    {subColumn.id === "button" ? (
+                      <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
                         {subColumn.label}
-                      </label>
-                      <input
-                        type={subColumn.type || "text"}
-                        placeholder={subColumn.placeholder}
-                        maxLength={subColumn.maxlength}
-                        minLength={subColumn.minlength}
-                        required={subColumn.required}
-                        className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        value={subColumn.value}
-                      />
-                      {subColumn.required && subColumn.value === "" && (
-                        <span className="text-red-500 text-xs mt-1">
-                          {subColumn.validationMessage}
-                        </span>
-                      )}
-                      {(subColumn.minlength || subColumn.maxlength) && (
-                        <span className="text-red-500 text-xs mt-1">
-                          {subColumn.minLengthMessage ||
-                            subColumn.maxLengthMessage}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
+                      </button>
+                    ) : (
+                      <div className="flex flex-col justify-between">
+                        <label className="mb-1 text-gray-700 text-sm font-semibold flex">
+                          <div>{subColumn.label}</div>
+                          <div>
+                            <span className="text-red-500 text-xs mt-1">
+                              {subColumn.required ? "*" : ""}
+                            </span>
+                          </div>
+                          <div className="ml-2 mt-1">
+                            <SheetSide
+                              open={open}
+                              setOpen={setOpen}
+                              column={subColumn}
+                              handleSave={handleSave}
+                              handleDelete={handleDelete}
+                              columnIndex={subColumnIndex}
+                              parentId={rowIndex}
+                            />
+                          </div>
+                        </label>
+                        <input
+                          type={subColumn.type || "text"}
+                          placeholder={subColumn.placeholder}
+                          maxLength={subColumn.maxlength}
+                          minLength={subColumn.minlength}
+                          required={subColumn.required}
+                          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          value={subColumn.value}
+                          onChange={(event) =>
+                            handleValueChange(rowIndex, subColumnIndex, event)
+                          }
+                        />
+                        {subColumn.required && subColumn.value === "" && (
+                          <span className="text-red-500 text-xs mt-1">
+                            {subColumn.validationMessage}
+                          </span>
+                        )}
+                        {(subColumn.minlength || subColumn.maxlength) && (
+                          <span className="text-red-500 text-xs mt-1">
+                            {subColumn.minLengthMessage ||
+                              subColumn.maxLengthMessage}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )
         )}
         <div
           onDrop={(event) => handleDrop(event, data.length, true)}
           onDragOver={handleDragOver}
-          className="p-4 mb-2 bg-white text-center rounded-lg shadow-md border-dashed border-2 border-gray-300 flex flex-col items-center justify-center w-full"
+          className="p-4 mb-2 mt-1 bg-white text-center rounded-lg shadow-md border-dashed border-2 border-gray-300 flex flex-col items-center justify-center w-full"
         >
-          <FaPlusCircle className="text-blue-500 text-6xl mb-2 animate-bounce" />
+          <FaPlusCircle className="text-blue-500 text-6xl mb-2" />
           <span className="text-gray-500 text-base font-semibold">
             Drop For New row
           </span>

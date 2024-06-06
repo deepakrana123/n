@@ -21,7 +21,6 @@ function App() {
     JSON.stringify(useSelector((state) => state.screen.user))
   );
   if (Object.keys(user).length > 0) {
-    console.log("hiii");
     isSignedIn = true;
   }
   return (
@@ -43,19 +42,20 @@ function App() {
         <Route
           path="/createTemplate"
           element={
-            <Protected isSignedIn={true}>
+            <Protected isSignedIn={isSignedIn}>
               <CreateTemplate />
-            </Protected>
+             </Protected> 
           }
-        />
-        <Route
-          path="/createSingleForm"
-          element={
-            <Protected isSignedIn={true}>
-              <CreateSingleForm />
-            </Protected>
-          }
-        />
+          />
+           <Route
+            path="/createSingleForm"
+            element={
+              <Protected isSignedIn={true}>
+                <CreateSingleForm />
+              </Protected>
+            }
+          />
+          
         <Route
           path="/createStepForm"
           element={
@@ -75,9 +75,9 @@ function App() {
         <Route
           path="/getScreens/:id"
           element={
-            <Protected isSignedIn={isSignedIn}>
+            // <Protected isSignedIn={isSignedIn}>
               <ShowScreen />
-            </Protected>
+            // </Protected>
           }
         />
       </Routes>

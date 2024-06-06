@@ -6,32 +6,35 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "@/services/reducer/ScreenReducer";
-import { AES } from "crypto-js";
+import { BiHide } from "react-icons/bi";
+import { FaRegEye } from "react-icons/fa";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const Login = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogin = (event) => {
     event.preventDefault();
-
-    console.log(formData, "form");
-
     if (formData) {
       let errors = {};
-
-      // Validate form data
       for (const key in formData) {
         if (formData[key] === "") {
           errors[key] = `${key} this field is required`;
         }
       }
-
-      // If there are errors, set them and return early
       if (Object.keys(errors).length > 0) {
         setError(errors);
         return;
@@ -42,6 +45,7 @@ const Login = () => {
       body: JSON.stringify({
         email: formData.email,
         password: formData.password,
+        orgId: 1,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -51,12 +55,17 @@ const Login = () => {
         return res.json();
       })
       .then((response) => {
-        console.log(response);
-        if (response.status === 403) {
+        if (response.status === 400) {
           toast({
-            // variant: "destructive",
             title: "Email or password is wrong",
-            description: `Email or password is wrong`,
+            description: response.message,
+            position: "top-",
+          });
+        } else if (response.status === 403) {
+          toast({
+            title: "Email or password is wrong",
+            description: "Email or password is wrong",
+            // position: "top-",
           });
         }
         if (response.code === 200) {
@@ -67,7 +76,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-900">
+    <div className="flex justify-center items-center min-h-screen bg-gray-300">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         <form onSubmit={handleLogin}>
           <h2 className="text-2xl font-bold text-center mb-6">Algo Yodhas</h2>
@@ -93,7 +102,7 @@ const Login = () => {
           <div className="mb-4 relative">
             <Label className="block text-gray-700 mb-2">Password</Label>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               placeholder="Enter password"
               autoComplete="on"
@@ -105,8 +114,40 @@ const Login = () => {
                 }));
               }}
             />
+            <button
+              type="button"
+              className="absolute right-2 top-8"
+              onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+            >
+              {showPassword ? <BiHide /> : <FaRegEye />}
+            </button>
+
             <i className=" text-red-300 text-xs uppercase ">{error.password}</i>
           </div>
+          <div className="mb-4 relative">
+            <Label className="block text-gray-700 mb-2">
+              Select Organistion
+            </Label>
+            <Select
+              onValueChange={
+                (event) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    orgId: event,
+                  }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a organisation" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="1">Aiqa</SelectItem>
+                  <SelectItem value="2">Finncub</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+              </div>
           <Button
             className="w-full bg-blue-600 text-white py-2 rounded cursor-pointer hover:bg-blue-700"
             type="submit"
