@@ -216,7 +216,7 @@ const NewForm = ({ data = [], setData }) => {
     event.dataTransfer.setData("application/json", JSON.stringify(rowIndex));
     setStartIndex(rowIndex);
   };
-
+console.log(data,"data")
   return (
     <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
       <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">

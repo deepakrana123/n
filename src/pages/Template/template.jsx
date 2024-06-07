@@ -90,7 +90,7 @@ const Template = () => {
       })
       .then((data) => {
         if (data.code == 200) {
-          console.log(data, data?.data,"Data")
+          console.log(data, data?.data, "Data");
           naviagte(`/getScreens/${data?.data}`);
         }
       })
@@ -144,14 +144,14 @@ const Template = () => {
         ))}
       </div>
       <Separator className="mt-4" />
-      <div className="max-w-full mt-4 overflow-x-auto">
-        <Table className="min-w-full border border-gray-200">
-          <TableHeader className="bg-gray-200">
+      {/* <div className="max-w-full mt-4 overflow-x-auto">
+        <Table className=" border border-gray-200">
+          <TableHeader className="bg-gray-900 fixed w-full">
             <TableRow>
               {columns.map((item, index) => (
                 <TableHead
                   key={index}
-                  className="w-40 p-4 text-left text-gray-700 font-medium border-b border-gray-300"
+                  className="w-80 p-4 text-left text-white font-medium border-b border-gray-300"
                 >
                   {item.headerName}
                 </TableHead>
@@ -183,6 +183,47 @@ const Template = () => {
             ))}
           </TableBody>
         </Table>
+      </div> */}
+      <div className="max-w-full mt-4 overflow-x-auto">
+        <div className="relative">
+          <Table className="border border-gray-200 w-full">
+            <TableHeader className="bg-gray-900  z-10">
+              <TableRow>
+                {columns.map((item, index) => (
+                  <TableHead
+                    key={index}
+                    className="w-1/3 p-4 text-left text-white font-medium border-b border-gray-300"
+                  >
+                    {item.headerName}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {templateVisited?.map((rowData) => (
+                <TableRow
+                  key={rowData.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <TableCell className="font-medium p-4 border-b border-gray-200">
+                    <Link
+                      to={`/getScreens/${rowData.templateId}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {rowData.templateId}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-gray-200">
+                    {rowData.templateName}
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-gray-200">
+                    {rowData.templateType}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

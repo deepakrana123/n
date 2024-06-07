@@ -14,18 +14,53 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useRef } from "react";
 import { BsFileEarmarkPlus } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function SingleScreenDialog() {
   const navigate = useNavigate();
+  const user = JSON.parse(useSelector((state) => state.screen.user));
   const { state: singleForm } = useLocation();
   const screenRef = useRef();
   const descriptionRef = useRef();
-  console.log(singleForm,"singleForm")
+  console.log(singleForm, "singleForm");
   const handleSave = async () => {
     singleForm.screenName = screenRef.current.value;
-    singleForm.descriptionScreen = descriptionRef.current.value;
-    navigate("/createSingleForm", { state: { ...singleForm } });
+    singleForm.description = descriptionRef.current.value;
+    singleForm.orgId = user.orgId;
+    fetch("http://10.101.29.80:8080/api/saveScreenTemplateDetails", {
+      method: "POST",
+      body: JSON.stringify({"screenTemplateMasterDtoList":[singleForm]}),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((response) => {
+        if (response.status === 400) {
+          toast({
+            title: "Email or password is wrong",
+            description: response.message,
+            position: "top-",
+          });
+        } else if (response.status === 403) {
+          toast({
+            title: "Email or password is wrong",
+            description: "Email or password is wrong",
+            // position: "top-",
+          });
+        }
+        if (response.code === 200) {
+          // dispatch(login(response.data));
+
+          // navigate("/");
+          singleForm.screenId=response?.data[0]
+          navigate("/createSingleForm", { state: { ...singleForm } });
+        }
+      });
   };
   return (
     <Dialog>

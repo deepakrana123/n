@@ -319,7 +319,7 @@ const ShowScreen = () => {
                 key={id}
               >
                 <div
-                  className={`rounded-xl border bg-card text-card-foreground shadow hover:scale-120 hover:shadow-md transition duration-500  ${performAction(
+                  className={`rounded-xl border bg-card text-card-foreground shadow  hover:scale-160  hover:cursor-pointer hover:shadow-md transition duration-500  ${performAction(
                     index
                   )}`}
                 >
