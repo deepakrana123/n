@@ -73,9 +73,9 @@ const Sidebar = () => {
               columns?.map((newItem, index) => (
                 <Button
                   variant={"outline"}
-                  key={newItem?.label + "" + String(index)}
+                  key={newItem?.label + "" + String(newItem?.type)}
                   draggable
-                  onDragStart={(event) => handleDragStart(event, newItem?.id)}
+                  onDragStart={(event) => handleDragStart(event, newItem?.type)}
                   onDragEnd={(event) => handleDragEnd(event)}
                   className="flex flex-col gap-2 h-[80px] w-[120px] cursor-grab"
                 >
