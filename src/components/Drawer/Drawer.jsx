@@ -58,8 +58,7 @@ const SheetSide = ({
         return []
       });
   },[])
-  console.log(formValues,"formValues")
-  // console.log(handleValues(formValues.type))
+  
   return (
     <div className="flex flex-col gap-2 overflow-y-auto">
       <Sheet>
