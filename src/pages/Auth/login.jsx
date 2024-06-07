@@ -69,12 +69,7 @@ const Login = () => {
           });
           dispatch(
             login(
-              {
-                "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWthc2hAZ21haWwuY29tIiwiaWF0IjoxNzE3NzUxNjQ3LCJleHAiOjE3MTc3ODc2NDd9.WFYtE8COojVuvDE54N-KNK56y04n-RJLMFBObHgpNB8",
-                "username": "vikash@gmail.com",
-                "orgId": 1,
-                "userId": 15
-            }
+              data?.data
           )
           );
           navigate("/");
@@ -100,7 +95,7 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <h2 className="text-2xl font-bold text-center mb-6">Algo Yodhas</h2>
           <div className="mb-4 relative">
-            <Label className="block text-gray-700 mb-2">Email</Label>
+            <Label className="block text-gray-700 mb-2">Email <span className="bg-danger">{"*"}</span></Label>
             <Input
               type="email"
               required

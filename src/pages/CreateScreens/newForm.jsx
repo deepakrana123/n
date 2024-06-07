@@ -254,10 +254,10 @@ const NewForm = ({ data = [], setData }) => {
                 <span>
                   <div className="ml-2 mt-1">
                     <SheetSide
-                      column={subColumn}
+                      column={row}
                       handleSave={handleSave}
                       handleDelete={handleDelete}
-                      columnIndex={subColumnIndex}
+                      columnIndex={""}
                       parentId={rowIndex}
                     />
                   </div>

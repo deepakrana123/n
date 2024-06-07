@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { LuPencilLine } from "react-icons/lu";
 import { IoPencilOutline } from "react-icons/io5";
 import Sidebar2 from "../Auth/Sidebar2";
+import { IoMdArrowRoundBack } from "react-icons/io";
 const CreateScreens = () => {
   const { state } = useLocation();
   const [editOn, setEditOn] = useState(false);
@@ -51,28 +52,31 @@ const CreateScreens = () => {
     <>
       <main className="flex flex-col w-full overflow-x-hidden">
         <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
-          <h2 className="truncate font-medium flex">
-            <p className="text-muted-foreground mr-2">Screen:</p>
-            {editOn ? (
-              <input
-                ref={headerRef}
-                type="text"
-                placeholder="enter your name"
-                onChange={(event) => (state.screenName = event.target.value)}
-                onBlue={() => setEditOn((prev) => !prev)}
-              />
-            ) : (
-              <>
-                <IoPencilOutline
-                  className="mt-2 mr-2"
-                  onClick={() => setEditOn((prev) => !prev)}
-                />
-                <p className="text-muted-foreground">{state?.screenName}</p>
-              </>
-            )}
-          </h2>
+        <h2 className="flex items-center font-medium">
+  <IoMdArrowRoundBack className="mr-2" />
+  <p className="text-muted-foreground mr-2">Screen:</p>
+  {editOn ? (
+    <input
+      ref={headerRef}
+      type="text"
+      placeholder="Enter your name"
+      onChange={(event) => (state.screenName = event.target.value)}
+      onBlur={() => setEditOn((prev) => !prev)}
+      className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+    />
+  ) : (
+    <>
+      <IoPencilOutline
+        className="mt-1 mr-2 cursor-pointer"
+        onClick={() => setEditOn((prev) => !prev)}
+      />
+      <p className="text-muted-foreground">{state?.screenName}</p>
+    </>
+  )}
+</h2>
+
           <div className="flex items-center gap-2">
-            <button
+            {/* <button
               className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 gap-2"
               type="button"
               aria-haspopup="dialog"
@@ -94,7 +98,7 @@ const CreateScreens = () => {
                 <path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2V5a2 2 0 00-2-2zm0 16H5V7h14v12zm-5.5-6c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zM12 9c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4zm0 6.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"></path>
               </svg>
               Preview
-            </button>
+            </button> */}
             <button
               className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 gap-2"
               onClick={() => {

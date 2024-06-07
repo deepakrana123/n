@@ -20,13 +20,12 @@ const Alert = () => {
     <>
       <AlertDialog>
         <AlertDialogTrigger>
-          <Button size={"sm"} className="bg-blue-600">
+          <Button size={"xs"} className="bg-blue-600">
             Logout
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you wants to logout
             </AlertDialogDescription>
