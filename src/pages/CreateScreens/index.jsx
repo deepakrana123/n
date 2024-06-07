@@ -1,19 +1,18 @@
 "use client";
-import FixedMobileScreen from "@/components/MobileScreen";
 import Sidebar from "@/components/Sidebar";
 import NewForm from "./newForm";
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { LuPencilLine } from "react-icons/lu";
-import { IoPencilOutline } from "react-icons/io5";
-import Sidebar2 from "../Auth/Sidebar2";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaPencilAlt } from "react-icons/fa";
+
 const CreateScreens = () => {
   const { state } = useLocation();
   const [editOn, setEditOn] = useState(false);
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const headerRef = useRef();
+  const naviagte = useNavigate();
   useEffect(() => {
     if (state) {
       setCurrentScreenState(state?.fieldsMap || []);
@@ -31,8 +30,7 @@ const CreateScreens = () => {
       },
       body: JSON.stringify({
         ...state,
-        // templateId: "6659e4186e35a10301c5870e", // need to remove this lne
-        fieldsMap: currentScreenState,
+       fieldsMap: currentScreenState,
       }),
     })
       .then((res) => {
@@ -41,8 +39,7 @@ const CreateScreens = () => {
       .then((data) => {
         if (data.code == 200) {
           console.log(data.code, "data", data);
-          // setTemplateVisited([...data.data]);
-        }
+       }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -52,28 +49,30 @@ const CreateScreens = () => {
     <>
       <main className="flex flex-col w-full overflow-x-hidden">
         <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
-        <h2 className="flex items-center font-medium">
-  <IoMdArrowRoundBack className="mr-2" />
-  <p className="text-muted-foreground mr-2">Screen:</p>
-  {editOn ? (
-    <input
-      ref={headerRef}
-      type="text"
-      placeholder="Enter your name"
-      onChange={(event) => (state.screenName = event.target.value)}
-      onBlur={() => setEditOn((prev) => !prev)}
-      className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-    />
-  ) : (
-    <>
-      <IoPencilOutline
-        className="mt-1 mr-2 cursor-pointer"
-        onClick={() => setEditOn((prev) => !prev)}
-      />
-      <p className="text-muted-foreground">{state?.screenName}</p>
-    </>
-  )}
-</h2>
+          <h2 className="flex items-center font-medium">
+            <IoMdArrowRoundBack className="mr-2" onClick={() => naviagte(-1)} />
+            <p className="text-muted-foreground mr-2">Screen</p>
+            {editOn ? (
+              <input
+                ref={headerRef}
+                type="text"
+                placeholder="Enter your name"
+                onChange={(event) => (state.screenName = event.target.value)}
+                onBlur={() => setEditOn((prev) => !prev)}
+                className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+            ) : (
+              <>
+                <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 gap-2 text-white bg-gradient-to-r from-indigo-400 to-cyan-400">
+                  <p className="text-white">{state?.screenName}</p>
+                  <FaPencilAlt
+                    className="mt-1 mr-2 cursor-pointer"
+                    onClick={() => setEditOn((prev) => !prev)}
+                  />
+                </button>
+              </>
+            )}
+          </h2>
 
           <div className="flex items-center gap-2">
             {/* <button
@@ -154,7 +153,6 @@ const CreateScreens = () => {
               data={currentScreenState}
               setData={setCurrentScreenState}
             />
-            {/* <Sidebar2 /> */}
           </div>
         </div>
       </main>

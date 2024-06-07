@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { TemplateDialog } from "./dailog";
 import { Separator } from "@/components/ui/separator";
+import Loadings from "@/components/Loading/Loading"
 
 let a = {
   templateId: "create",
@@ -30,7 +31,9 @@ const Template = () => {
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const [templateVisited, setTemplateVisited] = useState([]);
   const [template, setTemplate] = useState([]);
+  const [loading,setLoading]=useState(false)
   useEffect(() => {
+    // setLoading(true)
     (async () => {})();
     fetch("http://10.101.29.80:8080/api/findAll", {
       method: "GET",
@@ -44,12 +47,14 @@ const Template = () => {
       })
       .then((data) => {
         if (data.code == 200) {
+          
           setTemplate([...data.data, a]);
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+      // setLoading(false)
   }, []);
   useEffect(() => {
     (async () => {})();
@@ -99,6 +104,7 @@ const Template = () => {
       });
   };
   return (
+    
     <div
       className="w-full   min-h-screen p-6 flex flex-col  h-screen overflow-hidden bg-white sm:bg-gray-25 mainOpacity"
       style={{

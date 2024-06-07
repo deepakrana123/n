@@ -310,7 +310,7 @@ const ShowScreen = () => {
               index
             ) => (
               <div
-                className="w-[250px]  "
+                className="w-[300px]  "
                 draggable={isDraggable}
                 onDragStart={(event) => handleDragStart(event, id)}
                 onDrop={handleDrop}
@@ -332,7 +332,7 @@ const ShowScreen = () => {
                     </h3>
                   </div>
                   <div className="p-6 pt-0 h-[20px] truncate text-sm text-muted-foreground">
-                    {/* {description} */}
+                    {description}
                   </div>
                   <div className="flex items-center p-6 pt-0">
                     <Link
@@ -359,7 +359,7 @@ const ShowScreen = () => {
           )}
         </div>
         <Button
-          className="text-white h-8 mb-2 bg-black mt-2"
+          className="flex text-white h-8 mb-4 bg-black mt-2 flex-end"
           onClick={() => ""}
         >
           Submit

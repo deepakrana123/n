@@ -237,10 +237,11 @@ const NewForm = ({ data = [], setData }) => {
   };
   console.log(data, "data");
   return (
-    <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
-      <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
+    <div className="bg-white w-full h-80 max-w-md mx-auto  shadow-2xl relative  rounded-xl">
+      <div className={`p-2 bg-gray-50 rounded-b-xl overflow-y-auto ${data.length > 3 ? 'scrollbar-mobile' : ''}`}
+      >
         {data?.map((row, rowIndex) =>
-          row.id === "section" ? (
+          row.type === "section" ? (
             <div
               key={rowIndex}
               className={`flex flex-col

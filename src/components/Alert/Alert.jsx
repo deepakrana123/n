@@ -20,7 +20,7 @@ const Alert = () => {
     <>
       <AlertDialog>
         <AlertDialogTrigger>
-          <Button size={"xs"} className="bg-blue-600">
+          <Button size={"xs"} className="bg-blue-600 p-3">
             Logout
           </Button>
         </AlertDialogTrigger>

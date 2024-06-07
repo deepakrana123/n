@@ -1,5 +1,5 @@
 export const renderInputField = (column, rowIndex, columnIndex) => {
-  switch (column.id) {
+  switch (column.type) {
     case "text":
     case "pincode":
     case "ifsc":
@@ -47,13 +47,25 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
           required={column.required}
           className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
           value={column.value}
-          disabled={true}
-       >
-          
+          // onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
+        >
+          {column.options.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       );
-   
-    case "upload":
+    // case "save":
+    //   return (
+    //     <button
+    //       className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2"
+    //       onClick={() => handleSave(rowIndex, columnIndex)}
+    //     >
+    //       Save
+    //     </button>
+    //   );
+    case "file":
       return (
         <input
           type="file"
@@ -63,19 +75,18 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
           onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
         />
       );
-      case "checkbox":
-        return (
-          <input
-            type="checkbox"
-            required={column.required}
-            disabled={column.disabled}
-            readOnly={column.readonly}
-            className="form-checkbox h-5 w-5 text-blue-500 mt-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            checked={column.value}
-            
-          />
-        );
-  
+    case "checkbox":
+      return (
+        <input
+          type="checkbox"
+          required={column.required}
+          disabled={column.disabled}
+          readOnly={column.readonly}
+          className="form-checkbox h-5 w-5 text-blue-500 mt-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          checked={column.value}
+        />
+      );
+
     case "radio":
       return (
         <input

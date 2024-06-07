@@ -60,7 +60,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="w-[350px]  h-[600px] max-w-[350px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
+      className="w-[350px]  h-[730px] max-w-[350px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
     scrollbar-mobile smooth-auto"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1 place-items-center">

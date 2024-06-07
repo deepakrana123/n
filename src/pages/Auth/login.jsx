@@ -21,6 +21,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    orgId:""
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState({});
@@ -76,13 +77,9 @@ const Login = () => {
         }
         if (response.code === 200) {
           dispatch(
-            login({
-              token:
-                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWthc2hAZ21haWwuY29tIiwiaWF0IjoxNzE3NzQ4NTA4LCJleHAiOjE3MTc3ODQ1MDh9.uKFxulQvhLa-kOIb-9XGYapl_eGpUVqBfMc_iatHGnM",
-              username: "vikash@gmail.com",
-              orgId: 1,
-              userId: 15,
-            })
+            login(
+           response?.data
+          )
           );
           navigate("/");
         }
@@ -90,12 +87,12 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-300">
+    <div className="flex justify-center items-center min-h-screen bg-gray-900">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         <form onSubmit={handleLogin}>
           <h2 className="text-2xl font-bold text-center mb-6">Algo Yodhas</h2>
           <div className="mb-4 relative">
-            <Label className="block text-gray-700 mb-2">Email <span className="bg-danger">{"*"}</span></Label>
+            <Label className="block text-gray-700 mb-2">Email <span className="text-red-600">{"*"}</span></Label>
             <Input
               type="email"
               required
@@ -114,7 +111,7 @@ const Login = () => {
             </p>
           </div>
           <div className="mb-4 relative">
-            <Label className="block text-gray-700 mb-2">Password</Label>
+            <Label className="block text-gray-700 mb-2">Password <span className="text-red-600">{"*"}</span></Label>
             <Input
               type={showPassword ? "text" : "password"}
               required
@@ -133,14 +130,14 @@ const Login = () => {
               className="absolute right-2 top-8"
               onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
             >
-              {showPassword ? <BiHide /> : <FaRegEye />}
+              {showPassword ? <FaRegEye />:<BiHide />}
             </button>
 
             <i className=" text-red-300 text-xs uppercase ">{error.password}</i>
           </div>
           <div className="mb-4 relative">
             <Label className="block text-gray-700 mb-2">
-              Select Organistion
+              Select Organistion <span className="text-red-600">{"*"}</span>
             </Label>
             <Select
               onValueChange={(event) =>
@@ -160,6 +157,7 @@ const Login = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <i className=" text-red-300 text-xs uppercase ">{error.orgId}</i>
           </div>
           <Button
             className="w-full bg-blue-600 text-white py-2 rounded cursor-pointer hover:bg-blue-700"

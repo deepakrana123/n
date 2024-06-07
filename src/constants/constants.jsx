@@ -460,7 +460,7 @@ export const idProofs=[
     "draggable": true,
     "columns": [
       {
-        "id": "text",
+        "type": "text",
         "label": "Text Input",
         "placeholder": "Enter text here",
         "icon": "textField",
@@ -475,7 +475,40 @@ export const idProofs=[
         "field": "text"
       },
       {
-        "id": "pincode",
+        "type": "number",
+        "label": "Number Input",
+        "icon": "numberField",
+        "placeholder": "Enter text here",
+        "maxlength": 50,
+        "minlength": 3,
+        "required": true,
+        "disabled": false,
+        "readonly": false,
+        "value": "",
+        "validation": "",
+        "validationMessage": "",
+        "field": "number"
+      },
+      {
+        "type": "radio",
+        "label": "Radio Button",
+        "required": true,
+        "disabled": false,
+        "readonly": false,
+        "icon": "radio",
+        "field": "radio"
+      },
+      {
+        "type": "checkbox",
+        "label": "Checkbox",
+        "required": true,
+        "disabled": false,
+        "readonly": false,
+        "icon": "checkbox",
+        "field": "checkbox"
+      },
+      {
+        "type": "pincode",
         "label": "Pincode",
         "placeholder": "Enter your Pincode",
         "maxlength": 6,
@@ -490,7 +523,7 @@ export const idProofs=[
         "field": "pincode",
         "dependableField": [
           {
-            "id": "state",
+            "type": "state",
             "label": "State",
             "parentId": "pincode",
             "placeholder": "Enter your State",
@@ -505,7 +538,7 @@ export const idProofs=[
             "field": "state"
           },
           {
-            "id": "city",
+            "type": "city",
             "label": "City",
             "parentId": "pincode",
             "placeholder": "Enter your City",
@@ -522,7 +555,7 @@ export const idProofs=[
         ]
       },
       {
-        "id": "occupation",
+        "type": "occupation",
         "label": "Occupation",
         "placeholder": "Enter your Occupation",
         "maxlength": 50,
@@ -537,7 +570,7 @@ export const idProofs=[
         "field": "occupation",
         "dependableField": [
           {
-            "id": "company",
+            "type": "company",
             "label": "Company",
             "parentId": "occupation",
             "placeholder": "Enter your Company",
@@ -552,7 +585,7 @@ export const idProofs=[
             "field": "company"
           },
           {
-            "id": "monthlySalary",
+            "type": "monthlySalary",
             "label": "Monthly Salary",
             "parentId": "income",
             "placeholder": "Enter your Monthly Salary",
@@ -569,7 +602,7 @@ export const idProofs=[
         ]
       },
       {
-        "id": "ifsc",
+        "type": "ifsc",
         "label": "IFSC Code",
         "icon": "bank",
         "placeholder": "Enter your IFSC Code",
@@ -584,7 +617,7 @@ export const idProofs=[
         "field": "ifsc",
         "dependableField": [
           {
-            "id": "bankName",
+            "type": "bankName",
             "label": "Bank Name",
             "parentId": "ifsc",
             "placeholder": "Enter your Bank Name",
@@ -599,7 +632,7 @@ export const idProofs=[
             "field": "bankName"
           },
           {
-            "id": "accountNumber",
+            "type": "accountNumber",
             "label": "Acc Number",
             "parentId": "ifsc",
             "placeholder": "Enter your Account Number",
@@ -616,46 +649,13 @@ export const idProofs=[
         ]
       },
       {
-        "id": "number",
-        "label": "Number Input",
-        "icon": "numberField",
-        "placeholder": "Enter text here",
-        "maxlength": 50,
-        "minlength": 3,
-        "required": true,
-        "disabled": false,
-        "readonly": false,
-        "value": "",
-        "validation": "",
-        "validationMessage": "",
-        "field": "number"
-      },
-      {
-        "id": "radio",
-        "label": "Radio Button",
-        "required": true,
-        "disabled": false,
-        "readonly": false,
-        "icon": "radio",
-        "field": "radio"
-      },
-      {
-        "id": "checkbox",
-        "label": "Checkbox",
-        "required": true,
-        "disabled": false,
-        "readonly": false,
-        "icon": "checkbox",
-        "field": "checkbox"
-      },
-      {
-        "id": "upload",
+        "type": "file",
         "label": "Upload",
         "icon": "upload",
         "field": "upload"
       },
       {
-        "id": "date",
+        "type": "date",
         "label": "Date Input",
         "placeholder": "Enter text here",
         "maxlength": 50,
@@ -670,7 +670,7 @@ export const idProofs=[
         "field": "date"
       },
       {
-        "id": "select",
+        "type": "select",
         "label": "Select Dropdown",
         "icon": "selectDropdown",
         "placeholder": "Enter text here",
@@ -685,7 +685,7 @@ export const idProofs=[
         "field": "select"
       },
       {
-        "id": "textarea",
+        "type": "textarea",
         "label": "Textarea",
         "placeholder": "Enter text here",
         "maxlength": 50,
@@ -700,47 +700,47 @@ export const idProofs=[
         "field": "textarea"
       },
       {
-        "id": "section",
+        "type": "section",
         "label": "Section",
         "field": "section"
       },
       {
-        "id": "button",
+        "type": "button",
         "label": "Save",
         "icon": "save",
         "field": "button_save"
       },
       {
-        "id": "button",
+        "type": "button",
         "label": "Back",
         "icon": "back",
         "field": "button_back"
       },
       {
-        "id": "button",
+        "type": "button",
         "label": "Update",
         "icon": "update",
         "field": "button_update"
       }
     ]
   },
-  {
-    "id": "2",
-    "header": "AlignMent",
-    "draggable": false,
-    "columns": [
-      {
-        "id": "One_In_Row",
-        "label": "One In Row",
-        "field": "one_in_row"
-      },
-      {
-        "id": "two_in_Row",
-        "label": "Two In Row",
-        "field": "two_in_row"
-      }
-    ]
-  }
+  // {
+  //   "id": "2",
+  //   "header": "AlignMent",
+  //   "draggable": false,
+  //   "columns": [
+  //     {
+  //       "id": "One_In_Row",
+  //       "label": "One In Row",
+  //       "field": "one_in_row"
+  //     },
+  //     {
+  //       "id": "two_in_Row",
+  //       "label": "Two In Row",
+  //       "field": "two_in_row"
+  //     }
+  //   ]
+  // }
 ]
 
 
