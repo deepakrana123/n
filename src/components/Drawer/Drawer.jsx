@@ -13,6 +13,7 @@ import {
   SheetClose,
 } from "../ui/sheet";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { useSelector } from "react-redux";
 
 const SheetSide = ({
   column = "",
@@ -24,6 +25,8 @@ const SheetSide = ({
   const [formValues, setFormData] = useState({
     ...column,
   });
+  const [optionsValue,setOptionValue]=useState([])
+  const user=JSON.parse(useSelector((state)=>state.screen.user))
 
   const handleInputChange = (e, fieldId) => {
     const value =
@@ -33,6 +36,30 @@ const SheetSide = ({
       [fieldId]: value,
     });
   };
+
+  useEffect(()=>{
+    fetch(`http://15.207.88.248:8080/api/getByfilter/${formValues.type}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.code == 200) {
+          setOptionValue(data?.data)
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        return []
+      });
+  },[])
+  console.log(formValues,"formValues")
+  // console.log(handleValues(formValues.type))
   return (
     <div className="flex flex-col gap-2 overflow-y-auto">
       <Sheet>
@@ -123,7 +150,6 @@ const SheetSide = ({
                   className="h-5 w-5"
                 />
               </div>
-
               <div className="flex items-center space-x-3">
                 <label htmlFor="disabled" className="font-semibold">
                   Disabled:
@@ -229,8 +255,9 @@ const SheetSide = ({
                 onChange={(event)=>handleInputChange(event,"field")}
                 className="p-2 border rounded"
               >
-                <option value="pincode">Pincode</option>
-                {/* Add other options here if needed */}
+                {optionsValue.map((item)=>(
+                <option value={item.value}>{item.label}</option>
+                ))}
               </select>
             </div>
           </form>

@@ -1,17 +1,15 @@
 .scrollbar-mobile::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px; /* width of the scrollbar */
 }
 
 .scrollbar-mobile::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f1f1; /* color of the scrollbar track */
 }
 
 .scrollbar-mobile::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 4px;
+  background: #888; /* color of the scrollbar thumb */
 }
 
 .scrollbar-mobile::-webkit-scrollbar-thumb:hover {
-  background: #a5b4fc;
+  background: #555; /* color of the scrollbar thumb on hover */
 }
