@@ -21,18 +21,12 @@ const abc = (data, value) => {
   return data.filter((item) => item.type == value.id);
 };
 const SheetSide = ({
-  open,
-  setOpen,
   column="",
-  screenId="",
-  screens="",
   parentId="",
   handleSave,
   columnIndex="",
   handleDelete,
-  sheetWidth = "w-[500px]",
 }) => {
-  const [color, setColor] = useState("#5e72e4");
   const [formData, setFormData] = useState({
     ...column,
   });
@@ -45,58 +39,20 @@ const SheetSide = ({
       [fieldId]: value,
     });
   };
+  console.log(formData,"formDta")
 
-  const handleColorChange = (newColor) => {
-    setColor(newColor.hex);
-    setFormData({
-      ...formData,
-      color: newColor.hex,
-    });
-  };
-  // useEffect(() => {
-  //   const a=  fetch(`http://10.101.28.30:8080/api/findAllFieldsByType/${'text'}`,{
-  //      method: "GET", 
-  //      headers: { 
-  //        "Content-type": "application/json; charset=UTF-8"
-  //    } 
-  //    })
-  //      .then((res) => {
-  //        if (!res.ok) {
-  //          throw new Error("Network response was not ok");
-  //        }
-  //        return res.json();
-  //      })
-  //      .then((data) => {
-  //        console.log(data);
-  //      })
-  //      .catch((error) => {
-  //        console.error("Error fetching data:", error);
-  //      });
-  //  }, []);
   return (
     <div className="flex flex-col gap-2">
-      <Sheet open={open}>
-        <SheetTrigger >
-          <HiOutlinePencilSquare className="cursor-pointer"  onClick={()=>setOpen((prev)=>!prev)}/>
+      <Sheet >
+        <SheetTrigger asChild>
+      <HiOutlinePencilSquare className="cursor-pointer"/>
         </SheetTrigger>
         <SheetContent
-          // className={`bg-white shadow-md rounded-lg ${sheetWidth}`}
           className={`bg-white shadow-md rounded-lg w-[500px]`}
-          style={{ backdropFilter: 'blur(2px)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }} // Adjust blur and background color opacity
-     
+          style={{ backdropFilter: 'blur(2px)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
           size="large"
           side="right"
         >
-          <SheetHeader>
-            {/* <SheetTitle>
-              {screens.filter((item) => item.id === screenId)[0].screenName}
-            </SheetTitle>
-            <SheetDescription>
-              Edit{" "}
-              {screens.filter((item) => item.id === screenId)[0].screenName}{" "}
-              Properties
-            </SheetDescription> */}
-          </SheetHeader>
           <div className="grid grid-cols-1 gap-1 p-2">
             {drawerConstant.map((field) => (
               <div key={field.id} className="flex flex-col">
@@ -142,7 +98,7 @@ const SheetSide = ({
             ))}
           </div>
           <SheetFooter className="flex justify-end">
-            {/* <SheetClose asChild> */}
+            <SheetClose asChild>
               <>
                 <Button
                   type="submit"
@@ -157,7 +113,7 @@ const SheetSide = ({
                   Delete
                 </Button>
               </>
-            {/* </SheetClose> */}
+            </SheetClose>
           </SheetFooter>
         </SheetContent>
       </Sheet>

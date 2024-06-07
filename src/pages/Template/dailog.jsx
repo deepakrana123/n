@@ -23,7 +23,7 @@ export function TemplateDialog() {
   const descriptionRef = useRef();
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const handleSave = async () => {
-    await fetch("http://15.207.88.248:8080/api/saveCustomTemplate", {
+    await fetch("http://10.101.29.80:8080/api/saveCustomTemplate", {
       method: "POST",
       body: JSON.stringify({
         templateField:templateRef.current.value.split(" ").join("_"),

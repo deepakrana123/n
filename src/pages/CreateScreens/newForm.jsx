@@ -147,7 +147,7 @@ const NewForm = ({ data = [], setData }) => {
 
   const handleSave = (parentId, columnIndex, formData) => {
     console.log(parentId, columnIndex, formData, "hiiii");
-    let newArr = JSON.parse(JSON.stringify(data)); 
+    let newArr = JSON.parse(JSON.stringify(data));
     newArr.forEach((column) => {
       column.columns.forEach((subColumn) => {
         if (subColumn.label === formData.label) {
@@ -216,7 +216,7 @@ const NewForm = ({ data = [], setData }) => {
     event.dataTransfer.setData("application/json", JSON.stringify(rowIndex));
     setStartIndex(rowIndex);
   };
-console.log(data,"data")
+  console.log(data, "data");
   return (
     <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
       <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
@@ -232,6 +232,17 @@ console.log(data,"data")
             >
               <div className="pl-1 w-full text-gray-700 text-xl font-semibold">
                 {row.label}
+                <span>
+                  <div className="ml-2 mt-1">
+                    <SheetSide
+                      column={subColumn}
+                      handleSave={handleSave}
+                      handleDelete={handleDelete}
+                      columnIndex={subColumnIndex}
+                      parentId={rowIndex}
+                    />
+                  </div>
+                </span>
               </div>
               <div>
                 {row.columns.map((subRow, subRowIndex) =>
@@ -301,8 +312,6 @@ console.log(data,"data")
                         </div>
                         <div className="ml-2 mt-1">
                           <SheetSide
-                            open={open}
-                            setOpen={setOpen}
                             column={subColumn}
                             handleSave={handleSave}
                             handleDelete={handleDelete}

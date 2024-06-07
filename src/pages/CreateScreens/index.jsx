@@ -22,7 +22,7 @@ const CreateScreens = () => {
     state?.fieldsMap || []
   );
   const handleSubmit = () => {
-    fetch(`http://15.207.88.248:8080/api/updateScreenTemplateDetail`, {
+    fetch(`http://10.101.29.80:8080/api/updateScreenTemplateDetail`, {
       method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",

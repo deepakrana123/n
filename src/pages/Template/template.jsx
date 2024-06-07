@@ -32,7 +32,7 @@ const Template = () => {
   const [template, setTemplate] = useState([]);
   useEffect(() => {
     (async () => {})();
-    fetch("http://15.207.88.248:8080/api/findAll", {
+    fetch("http://10.101.29.80:8080/api/findAll", {
       method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
