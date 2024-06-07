@@ -75,22 +75,22 @@ const Template = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
-  const handleSaveTempalteAgainstOrgId = () => {
-    template.orgId = user.orgId;
+  const handleSaveTempalteAgainstOrgId = (newTemplate) => {
+    newTemplate.orgId = user.orgId;
     fetch(`http://15.207.88.248:8080/api/saveCustomTemplate`, {
       method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: `Bearer ${user.token}`,
       },
-      body: JSON.stringify(template),
+      body: JSON.stringify(newTemplate),
     })
       .then((res) => {
         return res.json();
       })
       .then((data) => {
         if (data.code == 200) {
-          console.log(data,"Data")
+          console.log(data, data?.data,"Data")
           naviagte(`/getScreens/${data?.data}`);
         }
       })
@@ -115,24 +115,25 @@ const Template = () => {
             {template?.templateId === "create" ? (
               <TemplateDialog type="template" />
             ) : (
-              <div class="rounded-xl border bg-card text-card-foreground shadow">
-                <div class="flex flex-col space-y-1.5 p-6">
-                  <h3 class="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
-                    <span class="truncate font-bold">
+              <div className="rounded-xl border bg-card text-card-foreground shadow">
+                <div className="flex flex-col space-y-1.5 p-6">
+                  <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
+                    <span className="truncate font-bold">
                       {template?.templateName}
                     </span>
-                    <div class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80">
+                    <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-black text-destructive-foreground shadow hover:bg-destructive/80">
                       {template?.templateType}
                     </div>
                   </h3>
                 </div>
-                <div class="p-6 pt-0 h-[20px] truncate text-sm text-muted-foreground">
+                <div className="p-6 pt-0 h-[20px] truncate text-sm text-muted-foreground">
                   {template?.description}
                 </div>
-                <div className="flex items-center p-6 pt-0">
+                <div className="flex items-center p-6 pt-8">
                   <Button
-                    className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 w-full mt-2 text-md gap-4"
-                    onClick={() => handleSaveTempalteAgainstOrgId()}
+                    className="
+                    inline-flex items-center bg-black justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50  h-9 px-4 py-2 w-full mt-2 text-md gap-4"
+                    onClick={() => handleSaveTempalteAgainstOrgId(template)}
                   >
                     View Screen{" "}
                   </Button>

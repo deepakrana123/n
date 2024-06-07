@@ -146,7 +146,21 @@ const NewForm = ({ data = [], setData }) => {
   };
 
   const handleSave = (parentId, columnIndex, formData) => {
-    let newArr = JSON.parse(JSON.stringify(data));
+    console.log(parentId, columnIndex, formData, "hiiii");
+    let newArr = JSON.parse(JSON.stringify(data)); 
+    newArr.forEach((column) => {
+      column.columns.forEach((subColumn) => {
+        if (subColumn.label === formData.label) {
+          toast({
+            title: "Repeatable fields",
+            description: "You are trying to enter same fields",
+            // position: "top-",
+          });
+          return;
+        }
+      });
+    });
+
     if (
       parentId < newArr.length &&
       columnIndex < newArr[parentId]["columns"].length
@@ -165,7 +179,8 @@ const NewForm = ({ data = [], setData }) => {
     ) {
       newArr[parentId]["columns"].splice(columnIndex, 1);
     }
-    setData(newArr);
+    const a = newArr.filter((item) => item.columns != 0);
+    setData(a);
   };
   const handleValueChange = (parentId, columnIndex, event) => {
     let newArr = JSON.parse(JSON.stringify(data));
@@ -201,17 +216,7 @@ const NewForm = ({ data = [], setData }) => {
     event.dataTransfer.setData("application/json", JSON.stringify(rowIndex));
     setStartIndex(rowIndex);
   };
-  console.log(data, "data");
-  const handleSaves = () => {
-    a.forEach((item) => {
-      item.columns.forEach((column) => {
-        if (column.label === abc.label) {
-          console.log("Not allowed");
-          return;
-        }
-      });
-    });
-  };
+
   return (
     <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
       <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
@@ -285,7 +290,6 @@ const NewForm = ({ data = [], setData }) => {
                     className={`flex flex-col mb-2 p-[5px] ${getColumnWidth(
                       row.columns.length
                     )}`}
-                    // onDragEnter={() => handleDragEnter(rowIndex)}
                   >
                     <div className="flex flex-col justify-between">
                       <label className="mb-1 text-gray-700 text-sm font-semibold flex">
