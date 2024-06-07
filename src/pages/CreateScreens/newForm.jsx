@@ -5,6 +5,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { useToast } from "@/components/ui/use-toast";
 import SheetSide from "@/components/Drawer/Drawer";
 import { useDispatch, useSelector } from "react-redux";
+import  {renderInputField}  from "../Auth/a";
 import {
   drawerOpenClose,
   sidebarStatus,
@@ -103,6 +104,15 @@ const NewForm = ({ data = [], setData }) => {
         let col = [...freezedValue.dependableField];
         delete freezedValue.dependableField;
         col.push(freezedValue);
+        console.log(col,newData,"hiii")
+        const labelsInA = newData.flatMap(row => row.columns.map(column => column.label));
+        console.log(labelsInA,"labelsInA")
+        col.forEach((item)=>{
+          if(labelsInA.includes(item.label)){
+            console.log("throw error")
+            return 
+          }
+        })
         newData.push({
           row: rowIndex,
           columns: col,
@@ -119,6 +129,14 @@ const NewForm = ({ data = [], setData }) => {
         let col = [...freezedValue.dependableField];
         delete freezedValue.dependableField;
         col.push(freezedValue);
+        const labelsInA = newData.flatMap(row => row.columns.map(column => column.label));
+        console.log(labelsInA,"labelsInA")
+        col.forEach((item)=>{
+          if(labelsInA.includes(item.label)){
+            console.log("throw error")
+            return 
+          }
+        })
         newData.push({
           row: rowIndex + 1,
           columns: col,
@@ -150,6 +168,7 @@ const NewForm = ({ data = [], setData }) => {
     let newArr = JSON.parse(JSON.stringify(data));
     newArr.forEach((column) => {
       column.columns.forEach((subColumn) => {
+
         if (subColumn.label === formData.label) {
           toast({
             title: "Repeatable fields",
@@ -320,19 +339,9 @@ const NewForm = ({ data = [], setData }) => {
                           />
                         </div>
                       </label>
-                      <input
-                        type={subColumn.type || "text"}
-                        placeholder={subColumn.placeholder}
-                        maxLength={subColumn.maxlength}
-                        minLength={subColumn.minlength}
-                        required={subColumn.required}
-                        className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                        value={subColumn.value}
-                        onChange={(event) =>
-                          handleValueChange(rowIndex, subColumnIndex, event)
-                        }
-                      />
+                      {renderInputField(subColumn,rowIndex,subColumnIndex)}
                     </div>
+                   
                   </div>
                 ))}
               </div>

@@ -1,207 +1,107 @@
-const renderInputField = (column, rowIndex, columnIndex) => {
+export const renderInputField = (column, rowIndex, columnIndex) => {
   switch (column.id) {
     case "text":
     case "pincode":
     case "ifsc":
     case "occupation":
+    case "state":
+    case "city":
       return (
-        <div className="flex flex-col justify-between">
-          <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-            <div>{column.label}</div>
-            <div>
-              <span className="text-red-500 text-xs mt-1">
-                {column.required ? "*" : ""}
-              </span>
-            </div>
-            <div className="ml-2 mt-1">
-              <SheetSide
-                open={open}
-                setOpen={setOpen}
-                column={column}
-                handleSave={handleSave}
-                handleDelete={handleDelete}
-                columnIndex={columnIndex}
-                parentId={rowIndex}
-              />
-            </div>
-          </label>
-          <input
-            type="text"
-            placeholder={column.placeholder}
-            maxLength={column.maxlength}
-            minLength={column.minlength}
-            required={column.required}
-            className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-            value={column.value}
-            onChange={(event) =>
-              handleValueChange(rowIndex, columnIndex, event)
-            }
-          />
-          {column.required && column.value === "" && (
-            <span className="text-red-500 text-xs mt-1">
-              {column.validationMessage}
-            </span>
-          )}
-          {(column.minlength || column.maxlength) && (
-            <span className="text-red-500 text-xs mt-1">
-              {column.minLengthMessage || column.maxLengthMessage}
-            </span>
-          )}
-        </div>
+        <input
+          type="text"
+          placeholder={column.placeholder}
+          maxLength={column.maxlength}
+          minLength={column.minlength}
+          required={column.required}
+          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+          value={column.value}
+          disabled={true}
+        />
       );
     case "number":
       return (
-        <div className="flex flex-col justify-between">
-          <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-            <div>{column.label}</div>
-            <div>
-              <span className="text-red-500 text-xs mt-1">
-                {column.required ? "*" : ""}
-              </span>
-            </div>
-            <div className="ml-2 mt-1">
-              <SheetSide
-                open={open}
-                setOpen={setOpen}
-                column={column}
-                handleSave={handleSave}
-                handleDelete={handleDelete}
-                columnIndex={columnIndex}
-                parentId={rowIndex}
-              />
-            </div>
-          </label>
-          <input
-            type="number"
-            placeholder={column.placeholder}
-            max={column.max}
-            min={column.min}
-            required={column.required}
-            className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-            value={column.value}
-            onChange={(event) =>
-              handleValueChange(rowIndex, columnIndex, event)
-            }
-          />
-          {column.required && column.value === "" && (
-            <span className="text-red-500 text-xs mt-1">
-              {column.validationMessage}
-            </span>
-          )}
-          {(column.min || column.max) && (
-            <span className="text-red-500 text-xs mt-1">
-              {column.minMessage || column.maxMessage}
-            </span>
-          )}
-        </div>
+        <input
+          type="number"
+          placeholder={column.placeholder}
+          max={column.max}
+          min={column.min}
+          required={column.required}
+          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+          value={column.value}
+          disabled={true}
+        />
       );
-    case "radio":
+    case "date":
       return (
-        <div className="flex items-center">
-          <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-            <div>{column.label}</div>
-            <div>
-              <span className="text-red-500 text-xs mt-1">
-                {column.required ? "*" : ""}
-              </span>
-            </div>
-            <div className="ml-2 mt-1">
-              <SheetSide
-                open={open}
-                setOpen={setOpen}
-                column={column}
-                handleSave={handleSave}
-                handleDelete={handleDelete}
-                columnIndex={columnIndex}
-                parentId={rowIndex}
-              />
-            </div>
-          </label>
-          <input
-            type="radio"
-            required={column.required}
-            disabled={column.disabled}
-            readOnly={column.readonly}
-            className="ml-2"
-            value={column.value}
-            onChange={(event) =>
-              handleValueChange(rowIndex, columnIndex, event)
-            }
-          />
-        </div>
+        <input
+          type="date"
+          required={column.required}
+          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+          value={column.value}
+          disabled={true}
+        />
       );
-    case "checkbox":
+    case "select":
       return (
-        <div className="flex items-center">
-          <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-            <div>{column.label}</div>
-            <div>
-              <span className="text-red-500 text-xs mt-1">
-                {column.required ? "*" : ""}
-              </span>
-            </div>
-            <div className="ml-2 mt-1">
-              <SheetSide
-                open={open}
-                setOpen={setOpen}
-                column={column}
-                handleSave={handleSave}
-                handleDelete={handleDelete}
-                columnIndex={columnIndex}
-                parentId={rowIndex}
-              />
-            </div>
-          </label>
+        <select
+          required={column.required}
+          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+          value={column.value}
+          disabled={true}
+       >
+          
+        </select>
+      );
+   
+    case "upload":
+      return (
+        <input
+          type="file"
+          required={column.required}
+          accept={column.accept}
+          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+          onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
+        />
+      );
+      case "checkbox":
+        return (
           <input
             type="checkbox"
             required={column.required}
             disabled={column.disabled}
             readOnly={column.readonly}
-            className="ml-2"
-            value={column.value}
-            onChange={(event) =>
-              handleValueChange(rowIndex, columnIndex, event)
-            }
+            className="form-checkbox h-5 w-5 text-blue-500 mt-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            checked={column.value}
+            
           />
-        </div>
-      );
-    case "file":
+        );
+  
+    case "radio":
       return (
-        <div className="flex flex-col justify-between">
-          <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-            <div>{column.label}</div>
-            <div>
-              <span className="text-red-500 text-xs mt-1">
-                {column.required ? "*" : ""}
-              </span>
-            </div>
-            <div className="ml-2 mt-1">
-              <SheetSide
-                open={open}
-                setOpen={setOpen}
-                column={column}
-                handleSave={handleSave}
-                handleDelete={handleDelete}
-                columnIndex={columnIndex}
-                parentId={rowIndex}
-              />
-            </div>
-          </label>
-          <input
-            type="file"
-            required={column.required}
-            accept={column.accept}
-            className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-            onChange={(event) =>
-              handleValueChange(rowIndex, columnIndex, event)
-            }
-          />
-          {column.required && !column.value && (
-            <span className="text-red-500 text-xs mt-1">
-              {column.validationMessage}
-            </span>
-          )}
-        </div>
+        <input
+          type="radio"
+          required={column.required}
+          disabled={column.disabled}
+          readOnly={column.readonly}
+          className="form-radio h-5 w-5 text-blue-500 mt-2"
+          checked={column.value}
+          onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
+        />
+      );
+    case "save":
+      return (
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2">
+          Save
+        </button>
+      );
+    case "back":
+      return (
+        <button
+          className="bg-gray-400 text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 mt-2"
+          onClick={handleBack}
+        >
+          Back
+        </button>
       );
     default:
       return null;

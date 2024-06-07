@@ -13,21 +13,15 @@ import {
   SheetClose,
 } from "../ui/sheet";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { useSelector, useDispatch } from "react-redux";
-import { editScreenDeatils } from "@/services/reducer/ScreenReducer";
-import { drawerConstant } from "@/constants/constants";
 
-const abc = (data, value) => {
-  return data.filter((item) => item.type == value.id);
-};
 const SheetSide = ({
-  column="",
-  parentId="",
+  column = "",
+  parentId = "",
   handleSave,
-  columnIndex="",
+  columnIndex = "",
   handleDelete,
 }) => {
-  const [formData, setFormData] = useState({
+  const [formValues, setFormData] = useState({
     ...column,
   });
 
@@ -35,80 +29,224 @@ const SheetSide = ({
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setFormData({
-      ...formData,
+      ...formValues,
       [fieldId]: value,
     });
   };
-  console.log(formData,"formDta")
-
   return (
-    <div className="flex flex-col gap-2">
-      <Sheet >
+    <div className="flex flex-col gap-2 overflow-y-auto">
+      <Sheet>
         <SheetTrigger asChild>
-      <HiOutlinePencilSquare className="cursor-pointer"/>
+          <HiOutlinePencilSquare className="cursor-pointer" />
         </SheetTrigger>
         <SheetContent
           className={`bg-white shadow-md rounded-lg w-[500px]`}
-          style={{ backdropFilter: 'blur(2px)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
+          style={{
+            backdropFilter: "blur(2px)",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+          }}
           size="large"
           side="right"
         >
-          <div className="grid grid-cols-1 gap-1 p-2">
-            {drawerConstant.map((field) => (
-              <div key={field.id} className="flex flex-col">
-                <Label
-                  htmlFor={field.id}
-                  className="text-left text-sm text-muted-foreground"
-                >
-                  {field.label}
-                </Label>
-                { field.type === "checkbox" ? (
-                  <input
-                    id={field.id}
-                    type="checkbox"
-                    defaultChecked={formData[field.id]}
-                    className=" w-5 h-5 p-2 ml-2 mt-4 border rounded"
-                    onChange={(e) => handleInputChange(e, field.id)}
-                  />
-                ) : field.type === "text" || field.type === "number" ? (
-                  <Input
-                    id={field.id}
-                    placeholder={field.placeholder}
-                    defaultValue={formData[field.id]}
-                    className="mt-1 p-2 border rounded"
-                    type={field.type}
-                    onChange={(e) => handleInputChange(e, field.id)}
-                  />
-                ) : (
-                  <select
-                    id={field.id}
-                    className="mt-1 p-2 border rounded"
-                    value={formData[field.id]}
-                    onChange={(e) => handleInputChange(e, field.id)}
-                  >
-                    {field?.options &&
-                      abc(field.options, column)?.map((option) => (
-                        <option key={option.value} value={option.label}>
-                          {option.label}
-                        </option>
-                      ))}
-                  </select>
-                )}
+          <form className="grid grid-cols-2 gap-x-4 gap-y-6">
+            <div className="flex flex-col">
+              <label htmlFor="label" className="font-semibold">
+                Label:
+              </label>
+              <input
+                type="text"
+                id="label"
+                name="label"
+                value={formValues.label}
+                onChange={(event)=>handleInputChange(event,"label")}
+                placeholder="Enter Label"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="placeholder" className="font-semibold">
+                Placeholder:
+              </label>
+              <input
+                type="text"
+                id="placeholder"
+                name="placeholder"
+                value={formValues.placeholder}
+                onChange={(event)=>handleInputChange(event,"placeholder")}
+                placeholder="Enter Placeholder"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="maxlength" className="font-semibold">
+                Max Length:
+              </label>
+              <input
+                type="number"
+                id="maxlength"
+                name="maxlength"
+                value={formValues.maxlength}
+                onChange={(event)=>handleInputChange(event,"maxlength")}
+                placeholder="Enter Max Length"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="minlength" className="font-semibold">
+                Min Length:
+              </label>
+              <input
+                type="number"
+                id="minlength"
+                name="minlength"
+                value={formValues.minlength}
+                onChange={(event)=>handleInputChange(event,"minlength")}
+                placeholder="Enter Min Length"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col space-y-3">
+              <div className="flex items-center space-x-3">
+                <label htmlFor="required" className="font-semibold">
+                  Required:
+                </label>
+                <input
+                  type="checkbox"
+                  id="required"
+                  name="required"
+                  checked={formValues.required}
+                  onChange={(event)=>handleInputChange(event,"required")}
+                  className="h-5 w-5"
+                />
               </div>
-            ))}
-          </div>
-          <SheetFooter className="flex justify-end">
+
+              <div className="flex items-center space-x-3">
+                <label htmlFor="disabled" className="font-semibold">
+                  Disabled:
+                </label>
+                <input
+                  type="checkbox"
+                  id="disabled"
+                  name="disabled"
+                  checked={formValues.disabled}
+                  // onChange={handleInputChange}
+                  onChange={(event)=>handleInputChange(event,"disabled")}
+                  className="h-5 w-5"
+                />
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <label htmlFor="readonly" className="font-semibold">
+                  Read-Only:
+                </label>
+                <input
+                  type="checkbox"
+                  id="readonly"
+                  name="readonly"
+                  checked={formValues.readonly}
+                  // onChange={handleInputChange}
+                  onChange={(event)=>handleInputChange(event,"readonly")}
+                  className="h-5 w-5"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="validation" className="font-semibold">
+                Validation:
+              </label>
+              <input
+                type="text"
+                id="validation"
+                name="validation"
+                value={formValues.validation}
+                // onChange={handleInputChange}
+                onChange={(event)=>handleInputChange(event,"validation")}
+                placeholder="Enter Validation Regex"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="validationMessage" className="font-semibold">
+                Validation Message:
+              </label>
+              <input
+                type="text"
+                id="validationMessage"
+                name="validationMessage"
+                value={formValues.validationMessage}
+                // onChange={handleInputChange}
+                onChange={(event)=>handleInputChange(event,"validationMessage")}
+                placeholder="Enter Validation Message"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="value" className="font-semibold">
+                Value:
+              </label>
+              <input
+                type="text"
+                id="value"
+                name="value"
+                value={formValues.value}
+                // onChange={handleInputChange}
+                onChange={(event)=>handleInputChange(event,"value")}
+                placeholder="Enter Value"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="icon" className="font-semibold">
+                Icon:
+              </label>
+              <input
+                type="text"
+                id="icon"
+                name="icon"
+                value={formValues.icon}
+                onChange={(event)=>handleInputChange(event,"icon")}
+                placeholder="Enter Icon"
+                className="p-2 border rounded"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="field" className="font-semibold">
+                Field:
+              </label>
+              <select
+                id="field"
+                name="field"
+                value={formValues.field}
+                onChange={(event)=>handleInputChange(event,"field")}
+                className="p-2 border rounded"
+              >
+                <option value="pincode">Pincode</option>
+                {/* Add other options here if needed */}
+              </select>
+            </div>
+          </form>
+
+          <SheetFooter className="flex justify-end mt-2">
             <SheetClose asChild>
               <>
                 <Button
                   type="submit"
-                  onClick={() => handleSave(parentId,columnIndex, formData)}
+                  onClick={() => handleSave(parentId, columnIndex, formValues)}
                 >
                   Save
                 </Button>
                 <Button
                   type="submit"
-                  onClick={() => handleDelete(parentId,columnIndex)}
+                  onClick={() => handleDelete(parentId, columnIndex)}
                 >
                   Delete
                 </Button>
