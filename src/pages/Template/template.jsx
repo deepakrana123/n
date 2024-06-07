@@ -75,7 +75,7 @@ const Template = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
-  const handleSaveTempalteAgainstOrgId = (template) => {
+  const handleSaveTempalteAgainstOrgId = () => {
     template.orgId = user.orgId;
     fetch(`http://15.207.88.248:8080/api/saveCustomTemplate`, {
       method: "POST",
@@ -90,7 +90,8 @@ const Template = () => {
       })
       .then((data) => {
         if (data.code == 200) {
-          naviagte(`/getScreens/${template?.templateId}`);
+          console.log(data,"Data")
+          naviagte(`/getScreens/${data?.data}`);
         }
       })
       .catch((error) => {
@@ -98,7 +99,16 @@ const Template = () => {
       });
   };
   return (
-    <div className="w-full   min-h-screen p-6 flex flex-col  h-screen overflow-hidden bg-white sm:bg-gray-25 mainOpacity">
+    <div
+      className="w-full   min-h-screen p-6 flex flex-col  h-screen overflow-hidden bg-white sm:bg-gray-25 mainOpacity"
+      style={{
+        backgroundImage: `
+            radial-gradient(at 50% 0%, rgba(114, 101, 230, 0.1) 0px, transparent 50%), 
+            radial-gradient(at 0% 0%, rgba(88, 41, 245, 0.08) 0px, transparent 50%), 
+            radial-gradient(at 100% 0%, rgba(103, 228, 193, 0.4) 0px, transparent 50%)
+          `,
+      }}
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {template?.map((template, index) => (
           <>
@@ -122,7 +132,7 @@ const Template = () => {
                 <div className="flex items-center p-6 pt-0">
                   <Button
                     className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 px-4 py-2 w-full mt-2 text-md gap-4"
-                    onClick={() => handleSaveTempalteAgainstOrgId(template)}
+                    onClick={() => handleSaveTempalteAgainstOrgId()}
                   >
                     View Screen{" "}
                   </Button>

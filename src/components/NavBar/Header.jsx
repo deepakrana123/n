@@ -1,8 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
+
 import Logo from "../Logo/Logo";
-import Alert from "../Alert/Alert";
-// import ThemeSwitcher from "../tabs/Tab";
+
 import Logout from "./Logout";
 import { useSelector } from "react-redux";
 

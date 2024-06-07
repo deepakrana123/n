@@ -831,3 +831,55 @@ export const and = [
     templateId: "6659dd046e35a10301c586da",
   },
 ];
+
+
+const handleEncryption = async (data) => {
+  const SECRET_KEY = "8clF4dyq1kll58gvFVGtdwHCjmiPjojO";
+  const SALT = "678025308de70905";
+  const encrypt = async (text) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const keyMaterial = await getKeyMaterial(SECRET_KEY);
+    const key = await getKey(keyMaterial, SALT);
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await window.crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv: iv,
+      },
+      key,
+      data
+    );
+    const buffer = new Uint8Array(encrypted);
+    const ivAndEncrypted = new Uint8Array(iv.byteLength + buffer.byteLength);
+    ivAndEncrypted.set(iv, 0);
+    ivAndEncrypted.set(buffer, iv.byteLength);
+    return btoa(String.fromCharCode.apply(null, ivAndEncrypted));
+  };
+  const getKeyMaterial = async (secret) => {
+    const encoder = new TextEncoder();
+    return window.crypto.subtle.importKey(
+      "raw",
+      encoder.encode(secret),
+      { name: "PBKDF2" },
+      false,
+      ["deriveBits", "deriveKey"]
+    );
+  };
+  const getKey = async (keyMaterial, salt) => {
+    const encoder = new TextEncoder();
+    return window.crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt: encoder.encode(salt),
+        iterations: 65536,
+        hash: "SHA-256",
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      true,
+      ["encrypt", "decrypt"]
+    );
+  };
+  return await encrypt(JSON.stringify(data));
+};

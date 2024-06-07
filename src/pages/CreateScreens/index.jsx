@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { LuPencilLine } from "react-icons/lu";
 import { IoPencilOutline } from "react-icons/io5";
+import Sidebar2 from "../Auth/Sidebar2";
 const CreateScreens = () => {
   const { state } = useLocation();
   const [editOn, setEditOn] = useState(false);
@@ -48,7 +49,7 @@ const CreateScreens = () => {
   };
   return (
     <>
-      <main className="flex flex-col w-full">
+      <main className="flex flex-col w-full overflow-x-hidden">
         <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
           <h2 className="truncate font-medium flex">
             <p className="text-muted-foreground mr-2">Screen:</p>
@@ -142,11 +143,15 @@ const CreateScreens = () => {
             </button>
           </div>
         </nav>
-        <div className="flex w-full min-h-screen bg-accent bg-[url(/paper.svg)]">
-          <Sidebar />
-          <NewForm data={currentScreenState} setData={setCurrentScreenState} />
-          {/* <Drawer/> */}
-          <div></div>
+        <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[602px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] overflow-x-hidden">
+          <div className="flex w-full h-full">
+            <Sidebar />
+            <NewForm
+              data={currentScreenState}
+              setData={setCurrentScreenState}
+            />
+            {/* <Sidebar2 /> */}
+          </div>
         </div>
       </main>
     </>

@@ -4,8 +4,13 @@ import { FaPlusCircle } from "react-icons/fa";
 // import { useToast } from "../../components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import SheetSide from "@/components/Drawer/Drawer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  drawerOpenClose,
+  sidebarStatus,
+} from "@/services/reducer/ScreenReducer";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
 const getColumnWidth = (columnsLength) => {
-  console.log(columnsLength, "columnsLength");
   switch (columnsLength) {
     case 1:
       return "w-full";
@@ -18,7 +23,6 @@ const getColumnWidth = (columnsLength) => {
   }
 };
 const getHieghtSection = (columnsLength) => {
-  console.log(columnsLength, "columnsLength");
   switch (columnsLength) {
     case 0:
       return "h-[100px]";
@@ -27,14 +31,18 @@ const getHieghtSection = (columnsLength) => {
     case 2:
       return "h-[300px]";
     default:
-      return "h-[350px]";
+      return "h-[300px]";
   }
 };
 
 const NewForm = ({ data = [], setData }) => {
   const [open, setOpen] = useState(false);
   // const [data, setData] = useState(initialState);
+  const sidebarStatus1 = useSelector((state) => state.screen.sidebarStatus);
+  const drawerOpens = useSelector((state) => state.screen.drawerOpen);
   const [targetIndex, setTargetIndex] = useState("");
+  const [startIndex, setStartIndex] = useState("");
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const handleDrop = (
     event,
@@ -43,18 +51,20 @@ const NewForm = ({ data = [], setData }) => {
     subRowIndex = "",
     subColumnIndex = ""
   ) => {
-    console.log(event, rowIndex, isNewRow, "hiii");
-    const item = event.dataTransfer.getData("text/plain");
-    const value = idProofs[0].columns.filter((items) => items.id === item)[0];
+    event.preventDefault();
+    const item = JSON.parse(event.dataTransfer.getData("text/plain"));
+    const value = idProofs[0].columns.filter(
+      (items) => items.id === item.type
+    )[0];
     const newData = JSON.parse(JSON.stringify(data));
     const threeInOneRow =
       newData?.filter((item) => item?.row == rowIndex)[0]?.columns?.length >= 3;
     const condition = newData?.some((item) => {
       return item?.columns.some((news) => news.id === "button");
     });
-    if (subRowIndex && subColumnIndex) {
-      newData[rowIndex].columns[subRowIndex].columns.push(value);
-    }
+    // if (subRowIndex && subColumnIndex) {
+    //   newData[rowIndex].columns[subRowIndex].columns.push(value);
+    // }
     if (condition && value.id != "button") {
       toast({
         variant: "destructive",
@@ -64,12 +74,21 @@ const NewForm = ({ data = [], setData }) => {
       return;
     }
     if (threeInOneRow) {
-      toast({
-        variant: "destructive",
-        title: "Try to make new row",
-        description: `More then three input fields in one row is not allowed`,
-      });
-      return;
+      if (newData[rowIndex].id === "section") {
+        toast({
+          variant: "destructive",
+          title: "Try to make new row",
+          description: `More then three row is not allowed`,
+        });
+        return;
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Try to make new row",
+          description: `More then three input fields in one row is not allowed`,
+        });
+        return;
+      }
     }
     if (isNewRow) {
       if (value.id === "section") {
@@ -117,9 +136,9 @@ const NewForm = ({ data = [], setData }) => {
         }
       }
     }
+    dispatch(sidebarStatus(false));
     setData(newData);
   };
-  console.log(data, "data");
 
   const handleDragOver = (event) => {
     // console.log(event, "event");
@@ -159,46 +178,52 @@ const NewForm = ({ data = [], setData }) => {
       setData(newArr);
     }
   };
-  const handleDragEnter = (id) => {
+  const handleDragEnter = (event, id) => {
+    event.preventDefault();
     setTargetIndex(id);
   };
-  const swapIds = (index1, index2) => {
-    const newArray = [...data];
-    let temp = newArray[index1];
-    newArray[index1] = newArray[index2];
-    newArray[index2] = temp;
-    setData(newArray);
-  };
-  const handleDropRow = (event) => {
-    console.log(event, "event");
-    const item = event.dataTransfer.getData("text/plain");
-    swapIds(item, targetIndex);
+  const handleDropRow = (event, rowIndex) => {
+    event.preventDefault();
+    const { rowIndex: draggedRowIndex } = JSON.parse(
+      event.dataTransfer.getData("application/json")
+    );
+    if (startIndex !== null) {
+      const newArray = [...data];
+      const temp = newArray[startIndex];
+      newArray[startIndex] = newArray[rowIndex];
+      newArray[rowIndex] = temp;
+      setData(newArray);
+      setStartIndex(null); // Reset start index
+    }
   };
 
   const handleDragStart = (event, rowIndex) => {
-    event.dataTransfer.setData("text/plain", rowIndex);
+    event.dataTransfer.setData("application/json", JSON.stringify(rowIndex));
+    setStartIndex(rowIndex);
+  };
+  console.log(data, "data");
+  const handleSaves = () => {
+    a.forEach((item) => {
+      item.columns.forEach((column) => {
+        if (column.label === abc.label) {
+          console.log("Not allowed");
+          return;
+        }
+      });
+    });
   };
   return (
-    // <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
-    //   <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
-    //     {data?.map((row, rowIndex) => (row.id === "section" ? "" : ""))}
-    //   </div>
-    // </div>
-    <div className="bg-white w-full h-100 max-w-md mx-auto  shadow-lg relative bg-gradient-to-b from-gray-100 to-white rounded-xl">
-      <div className="h-[calc(100vh-70px)] p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
+    <div className="bg-white w-full h-160 max-w-md mx-auto  shadow-2xl relative   rounded-xl">
+      <div className=" p-2 bg-gray-50 rounded-b-xl overflow-y-auto scrollbar-mobile">
         {data?.map((row, rowIndex) =>
           row.id === "section" ? (
             <div
               key={rowIndex}
               className={`flex flex-col
-            hover:border-primary hover:cursor-pointer border-dashed
-            group border-2 border-primary/20 ${getHieghtSection(
-              row.columns.length
-            )}`}
-              onDragStart={(event) => handleDragStart(event, rowIndex)}
-              onDrop={handleDropRow}
-              onDragOver={handleDragOver}
-              onDragEnter={() => handleDragEnter(rowIndex)}
+                    hover:border-primary hover:cursor-pointer border-dashed
+                    group border-2 border-primary/20 ${getHieghtSection(
+                      row.columns.length
+                    )}`}
             >
               <div className="pl-1 w-full text-gray-700 text-xl font-semibold">
                 {row.label}
@@ -206,62 +231,24 @@ const NewForm = ({ data = [], setData }) => {
               <div>
                 {row.columns.map((subRow, subRowIndex) =>
                   subRow.columns.map((subColumn, subColumnIndex) => (
-                    <div
-                      key={subColumnIndex}
-                      className={`flex flex-col   p-[5px] ${getColumnWidth(
-                        subRow.columns.length
-                      )}`}
-                      onDragEnter={() => handleDragEnter(subRowIndex)}
-                      onDragover={(event) => handleDragOver(event, subRow)}
-                      onDrop={(event) =>
-                        handleDrop(
-                          event,
-                          rowIndex,
-                          false,
-                          subRowIndex,
-                          subColumnIndex
-                        )
-                      }
-                    >
-                      {subColumn.id === "button" ? (
-                        <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
-                          {subColumn.label}
-                        </button>
-                      ) : (
-                        <div className="flex flex-col justify-between">
-                          <label className="mb-1 text-gray-700 text-sm font-semibold">
-                            {subColumn.label} {subColumn.required ? "*" : ""}
-                          </label>
-
-                          <input
-                            type={subColumn.type || "text"}
-                            placeholder={subColumn.placeholder}
-                            maxLength={subColumn.maxLength}
-                            minLength={subColumn.minLength}
-                            required={subColumn.required}
-                            className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                            value={subColumn.value}
-                          />
-                          {subColumn.required && subColumn.value === "" && (
-                            <span className="text-red-500 text-xs mt-1">
-                              {subColumn.validationMessage}
-                            </span>
-                          )}
-                          {(subColumn.minlength || subColumn.maxLength) && (
-                            <span className="text-red-500 text-xs mt-1">
-                              {subColumn.minLengthMessage ||
-                                subColumn.maxLengthMessage}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                    <div className="flex flex-col justify-between">
+                      <label className="mb-1 text-gray-700 text-sm font-semibold">
+                        {subColumn.label} {subColumn.required ? "*" : ""}
+                      </label>
+                      <input
+                        type={subColumn.type || "text"}
+                        placeholder={subColumn.placeholder}
+                        maxLength={subColumn.maxLength}
+                        minLength={subColumn.minLength}
+                        required={subColumn.required}
+                        className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        value={subColumn.value}
+                      />
                     </div>
                   ))
                 )}
               </div>
               <div
-                // onDrop={(event) => handleDrop(event, data.length, true)}
-                // onDragOver={handleDragOver}
                 onDrop={(event) => handleDrop(event, rowIndex, false)}
                 onDragEnter={() => handleDragEnter(rowIndex)}
                 onDragOver={(event) => handleDragOver(event)}
@@ -275,19 +262,22 @@ const NewForm = ({ data = [], setData }) => {
             </div>
           ) : (
             <div
+              className={`flex flex-wrap mt-1 mb-1 w-full border-dashed
+                group border-2 border-primary/20 p-3 ${
+                  targetIndex === rowIndex ? "bg-gray-100" : ""
+                }`}
               draggable={true}
               onDragStart={(event) => handleDragStart(event, rowIndex)}
-              onDrop={handleDropRow}
               onDragOver={handleDragOver}
-              onDragEnter={() => handleDragEnter(rowIndex)}
-              className="flex flex-wrap mt-1 w-full border-dashed
-              group border-2 border-primary/20"
+              onDragEnter={(event) => handleDragEnter(event, rowIndex)}
+              onDrop={(event) => handleDropRow(event, rowIndex)}
             >
               <div
                 key={rowIndex}
                 onDragOver={handleDragOver}
-                className="flex flex-wrap border-dashed
+                className="flex flex-wrap 
                 group border-2 border-primary/20 w-full"
+                onDrop={(event) => handleDrop(event, rowIndex, false)}
               >
                 {row.columns.map((subColumn, subColumnIndex) => (
                   <div
@@ -296,58 +286,40 @@ const NewForm = ({ data = [], setData }) => {
                       row.columns.length
                     )}`}
                     // onDragEnter={() => handleDragEnter(rowIndex)}
-                    onDrop={(event) => handleDrop(event, rowIndex, false)}
                   >
-                    {subColumn.id === "button" ? (
-                      <button className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 transition-colors duration-300">
-                        {subColumn.label}
-                      </button>
-                    ) : (
-                      <div className="flex flex-col justify-between">
-                        <label className="mb-1 text-gray-700 text-sm font-semibold flex">
-                          <div>{subColumn.label}</div>
-                          <div>
-                            <span className="text-red-500 text-xs mt-1">
-                              {subColumn.required ? "*" : ""}
-                            </span>
-                          </div>
-                          <div className="ml-2 mt-1">
-                            <SheetSide
-                              open={open}
-                              setOpen={setOpen}
-                              column={subColumn}
-                              handleSave={handleSave}
-                              handleDelete={handleDelete}
-                              columnIndex={subColumnIndex}
-                              parentId={rowIndex}
-                            />
-                          </div>
-                        </label>
-                        <input
-                          type={subColumn.type || "text"}
-                          placeholder={subColumn.placeholder}
-                          maxLength={subColumn.maxlength}
-                          minLength={subColumn.minlength}
-                          required={subColumn.required}
-                          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          value={subColumn.value}
-                          onChange={(event) =>
-                            handleValueChange(rowIndex, subColumnIndex, event)
-                          }
-                        />
-                        {subColumn.required && subColumn.value === "" && (
+                    <div className="flex flex-col justify-between">
+                      <label className="mb-1 text-gray-700 text-sm font-semibold flex">
+                        <div>{subColumn.label}</div>
+                        <div>
                           <span className="text-red-500 text-xs mt-1">
-                            {subColumn.validationMessage}
+                            {subColumn.required ? "*" : ""}
                           </span>
-                        )}
-                        {(subColumn.minlength || subColumn.maxlength) && (
-                          <span className="text-red-500 text-xs mt-1">
-                            {subColumn.minLengthMessage ||
-                              subColumn.maxLengthMessage}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                        </div>
+                        <div className="ml-2 mt-1">
+                          <SheetSide
+                            open={open}
+                            setOpen={setOpen}
+                            column={subColumn}
+                            handleSave={handleSave}
+                            handleDelete={handleDelete}
+                            columnIndex={subColumnIndex}
+                            parentId={rowIndex}
+                          />
+                        </div>
+                      </label>
+                      <input
+                        type={subColumn.type || "text"}
+                        placeholder={subColumn.placeholder}
+                        maxLength={subColumn.maxlength}
+                        minLength={subColumn.minlength}
+                        required={subColumn.required}
+                        className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        value={subColumn.value}
+                        onChange={(event) =>
+                          handleValueChange(rowIndex, subColumnIndex, event)
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

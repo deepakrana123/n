@@ -13,7 +13,7 @@ import { and, finalSpaceCharacters } from "@/constants/constants";
 import { MdOutlinePrivacyTip } from "react-icons/md";
 
 function performAction(input) {
-  const normalizedInput = input % 3; 
+  const normalizedInput = input % 3;
   if (normalizedInput === 0) {
     return "shadow-blue-600";
   } else if (normalizedInput === 1) {
@@ -21,13 +21,13 @@ function performAction(input) {
   } else if (normalizedInput === 2) {
     return "shadow-red-600";
   } else {
-    ;
     return "shadow-green-600";
   }
 }
 
 const ShowScreen = () => {
   const { id: templateId } = useParams();
+  // const { toast } = useToast();
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const [screen, setScreen] = useState([]);
   const [targetValue, setTargetValue] = useState("");
@@ -72,7 +72,7 @@ const ShowScreen = () => {
 
   const handleDrop = (event) => {
     const item = event.dataTransfer.getData("text/plain");
-    swapIds(item, targetValue);
+    swapScreens(item, targetValue);
   };
 
   const handleDragOver = (event) => {
@@ -82,17 +82,166 @@ const ShowScreen = () => {
   const handleDragEnter = (id) => {
     setTargetValue(id);
   };
-useEffect(() => {
-    fetch(
-      `http://15.207.88.248:8080/api/findAllScreenMaster/${templateId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${user.token}`,
-        },
+  // const swapScreens = (sourceId, targetId) => {
+  //   const updatedScreens = [...screen];
+  //   const sourceIndex = updatedScreens.findIndex((s) => s.id === sourceId);
+  //   const targetIndex = updatedScreens.findIndex((s) => s.id === targetId);
+  //   if (sourceIndex !== -1 && targetIndex !== -1) {
+  //     const temp = updatedScreens[sourceIndex];
+  //     updatedScreens[sourceIndex] = updatedScreens[targetIndex];
+  //     updatedScreens[targetIndex] = temp;
+
+  //     const arePreScreenBefore = (swapScreen) => {
+  //       const currentPreScreens = swapScreen.preScreens.split(",");
+  //       const currentIndex = updatedScreens.findIndex(
+  //         (swap) => (swap.id = swapScreen.id)
+  //       );
+  //       const invalidPreScreens = [];
+  //       for (const preScreens of currentPreScreens) {
+  //         const preScreenIndex = updatedScreens.findIndex(
+  //           (s) => s.id === preScreen
+  //         );
+  //         if (preScreenIndex === -1 || preScreenIndex >= currentIndex) {
+  //           invalidPreScreens.push(preScreen);
+  //         }
+  //       }
+  //       return invalidPreScreens;
+  //     };
+  //     const arePostScreensAfter = (currentScreen) => {
+  //       const currentPostScreens = currentScreen.postScreens.split(",");
+  //       const currentIndex = updatedScreens.findIndex(
+  //         (s) => s.id === currentScreen.id
+  //       );
+  //       const invalidPostScreens = [];
+  //       for (const postScreen of currentPostScreens) {
+  //         const postScreenIndex = updatedScreens.findIndex(
+  //           (s) => s.id === postScreen
+  //         );
+  //         if (postScreenIndex === -1 || postScreenIndex <= currentIndex) {
+  //           invalidPostScreens.push(postScreen);
+  //         }
+  //       }
+  //       return invalidPostScreens;
+  //     };
+
+  //     setScreen(updatedScreens);
+  //   }
+  // };
+  const swapScreens = (sourceId, targetId) => {
+    const updatedScreens = [...screen];
+    const sourceIndex = updatedScreens.findIndex((s) => s.id === sourceId);
+    const targetIndex = updatedScreens.findIndex((s) => s.id === targetId);
+
+    // Helper function to check if all preScreens are before the given screen
+    const arePreScreensBefore = (currentScreen) => {
+      const currentPreScreens = currentScreen.preScreens.split(",");
+      const currentIndex = updatedScreens.findIndex(
+        (s) => s.id === currentScreen.id
+      );
+      const invalidPreScreens = [];
+      for (const preScreen of currentPreScreens) {
+        const preScreenIndex = updatedScreens.findIndex(
+          (s) => s.id === preScreen
+        );
+        if (preScreenIndex === -1 || preScreenIndex >= currentIndex) {
+          invalidPreScreens.push(preScreen);
+        }
       }
-    )
+      return invalidPreScreens;
+    };
+
+    // Helper function to check if all postScreens are after the given screen
+    const arePostScreensAfter = (currentScreen) => {
+      const currentPostScreens = currentScreen.postScreens.split(",");
+      const currentIndex = updatedScreens.findIndex(
+        (s) => s.id === currentScreen.id
+      );
+      const invalidPostScreens = [];
+      for (const postScreen of currentPostScreens) {
+        const postScreenIndex = updatedScreens.findIndex(
+          (s) => s.id === postScreen
+        );
+        if (postScreenIndex === -1 || postScreenIndex <= currentIndex) {
+          invalidPostScreens.push(postScreen);
+        }
+      }
+      return invalidPostScreens;
+    };
+
+    if (sourceIndex !== -1 && targetIndex !== -1) {
+      const sourceScreen = updatedScreens[sourceIndex];
+      const targetScreen = updatedScreens[targetIndex];
+
+      // Check if all preScreens are before the source target
+      const invalidPreScreensSource = arePreScreensBefore(sourceScreen);
+      const invalidPreScreensTarget = arePreScreensBefore(targetScreen);
+      if (
+        invalidPreScreensSource.length > 0 ||
+        invalidPreScreensTarget.length > 0
+      ) {
+        console.error(
+          "Error: Some preScreens are not before the source or target screen."
+        );
+        console.error(
+          `Invalid preScreens for source screen ${
+            sourceScreen.screenName
+          }: ${invalidPreScreensSource.join(", ")}`
+        );
+        console.error(
+          `Invalid preScreens for target screen ${
+            targetScreen.screenName
+          }: ${invalidPreScreensTarget.join(", ")}`
+        );
+        return;
+      }
+
+      // Check if all postScreens are after the source target
+      const invalidPostScreensSource = arePostScreensAfter(sourceScreen);
+      const invalidPostScreensTarget = arePostScreensAfter(targetScreen);
+      if (
+        invalidPostScreensSource.length > 0 ||
+        invalidPostScreensTarget.length > 0
+      ) {
+        console.error(
+          "Error: Some postScreens are not after the source or target screen."
+        );
+        console.error(
+          `Invalid postScreens for source screen ${
+            sourceScreen.screenName
+          }: ${invalidPostScreensSource.join(", ")}`
+        );
+        console.error(
+          `Invalid postScreens for target screen ${
+            targetScreen.screenName
+          }: ${invalidPostScreensTarget.join(", ")}`
+        );
+        toast({
+          title: "Email or password is wrong",
+          description: `${
+            sourceScreen.screenName
+          }: ${invalidPostScreensSource.join(", ")}`,
+          // position: "top-",
+        });
+        return;
+      }
+
+      // Swap the screens
+      updatedScreens[sourceIndex] = targetScreen;
+      updatedScreens[targetIndex] = sourceScreen;
+      setScreen(updatedScreens);
+    } else {
+      console.error("Error: Source or target screen not found.");
+    }
+  };
+
+  useEffect(() => {
+    fetch(`http://15.207.88.248:8080/api/findAllScreenMaster/${templateId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -100,7 +249,7 @@ useEffect(() => {
         if (data.code == 200) {
           console.log(data.code, "data", data);
           // setTemplateVisited([...data.data]);
-          setScreen(data?.data)
+          setScreen(data?.data);
         }
       })
       .catch((error) => {
@@ -137,7 +286,6 @@ useEffect(() => {
   return (
     <>
       <div className="w-full min-h-screen p-6">
-       
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[
             ...screen,
@@ -153,7 +301,7 @@ useEffect(() => {
                 screenName,
                 description,
                 thumb,
-                isDraggable,
+                isDraggable = true,
                 fieldsMap,
                 isMandatory,
                 templateId,
@@ -170,12 +318,16 @@ useEffect(() => {
                 onDragEnter={() => handleDragEnter(id)}
                 key={id}
               >
-                <div className={`rounded-xl border bg-card text-card-foreground shadow hover:scale-120 hover:shadow-md transition duration-500  ${performAction(index)}`}>
+                <div
+                  className={`rounded-xl border bg-card text-card-foreground shadow hover:scale-120 hover:shadow-md transition duration-500  ${performAction(
+                    index
+                  )}`}
+                >
                   <div className="flex flex-col space-y-1.5 p-6">
                     <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
                       <span className="truncate font-bold">{screenName}</span>
                       <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80">
-                        {isMandatory === "Y" ? <MdOutlinePrivacyTip/> : ""}
+                        {isMandatory === "Y" ? <MdOutlinePrivacyTip /> : ""}
                       </div>
                     </h3>
                   </div>
@@ -195,7 +347,7 @@ useEffect(() => {
                         fieldsMap,
                         isMandatory,
                         templateId,
-                        ...rest
+                        ...rest,
                       }}
                     >
                       Edit {screenName}{" "}
@@ -206,10 +358,12 @@ useEffect(() => {
             )
           )}
         </div>
-        <Button className="text-white h-8 mb-2 bg-black mt-2" onClick={() => ""}>
+        <Button
+          className="text-white h-8 mb-2 bg-black mt-2"
+          onClick={() => ""}
+        >
           Submit
         </Button>
-
       </div>
     </>
   );

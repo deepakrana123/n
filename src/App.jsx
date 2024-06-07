@@ -14,6 +14,7 @@ import Template from "./pages/Template/template";
 import CreateTemplate from "./pages/Template/createTemplate";
 import CreateSingleForm from "./pages/Template/createSingleForm";
 import CreateStepForm from "./pages/Template/createStepForm";
+// import ReactFlows from "./ReactFlow";
 
 function App() {
   let isSignedIn = false;
@@ -44,18 +45,18 @@ function App() {
           element={
             <Protected isSignedIn={isSignedIn}>
               <CreateTemplate />
-             </Protected> 
+            </Protected>
           }
-          />
-           <Route
-            path="/createSingleForm"
-            element={
-              <Protected isSignedIn={true}>
-                <CreateSingleForm />
-              </Protected>
-            }
-          />
-          
+        />
+        <Route
+          path="/createSingleForm"
+          element={
+            <Protected isSignedIn={true}>
+              <CreateSingleForm />
+            </Protected>
+          }
+        />
+
         <Route
           path="/createStepForm"
           element={
@@ -76,11 +77,19 @@ function App() {
           path="/getScreens/:id"
           element={
             // <Protected isSignedIn={isSignedIn}>
-              <ShowScreen />
+            <ShowScreen />
             // </Protected>
           }
         />
-      </Routes>
+            {/* <Route
+          path="/get"
+          element={
+            // <Protected isSignedIn={isSignedIn}>
+            <ReactFlows />
+            // </Protected>
+          }
+        /> */}
+    </Routes>
     </>
   );
 }

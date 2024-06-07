@@ -14,6 +14,8 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { FaArrowLeft, FaEdit, FaSave, FaUniversity } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
 import { TbNumber123 } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { sidebarStatus } from "@/services/reducer/ScreenReducer";
 
 const getIcon = {
   numberField: <TbNumber123 className="h-8 w-8 text-black cursor-grab" />,
@@ -37,15 +39,23 @@ const getIcon = {
 const Sidebar = () => {
   const [dragEnd, setDragEnd] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const dispatch=useDispatch()
   const handleDragStart = (event, item) => {
-    event.dataTransfer.setData("text/plain", item);
-    setDragEnd(item);
-    setIsDragging(true);
+    console.log(item, "hihi");
+    let obj = {
+      type: item,
+      where: "sidebar",
+    };
+    event.dataTransfer.setData("text/plain", JSON.stringify(obj));
+    dispatch(sidebarStatus(true))
+
+    // setDragEnd(item);
+    // setIsDragging(true);
   };
 
   const handleDragEnd = () => {
-    setDragEnd(null);
-    setIsDragging(false);
+    // setDragEnd(null);
+    // setIsDragging(false);
   };
 
   return (

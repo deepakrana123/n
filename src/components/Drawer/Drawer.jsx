@@ -14,7 +14,6 @@ import {
 } from "../ui/sheet";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { useSelector, useDispatch } from "react-redux";
-import InputColor from "react-input-color";
 import { editScreenDeatils } from "@/services/reducer/ScreenReducer";
 import { drawerConstant } from "@/constants/constants";
 
@@ -81,7 +80,10 @@ const SheetSide = ({
           <HiOutlinePencilSquare className="cursor-pointer"  onClick={()=>setOpen((prev)=>!prev)}/>
         </SheetTrigger>
         <SheetContent
-          className={`bg-white shadow-md rounded-lg ${sheetWidth}`}
+          // className={`bg-white shadow-md rounded-lg ${sheetWidth}`}
+          className={`bg-white shadow-md rounded-lg w-[500px]`}
+          style={{ backdropFilter: 'blur(2px)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }} // Adjust blur and background color opacity
+     
           size="large"
           side="right"
         >
@@ -104,14 +106,7 @@ const SheetSide = ({
                 >
                   {field.label}
                 </Label>
-                {field.type === "color" ? (
-                  <InputColor
-                    initialValue={field.value}
-                    onChange={handleColorChange}
-                    placement="left"
-                    className=" w-5 h-5 p-2 rounded-md  ml-20 mt-4 border "
-                  />
-                ) : field.type === "checkbox" ? (
+                { field.type === "checkbox" ? (
                   <input
                     id={field.id}
                     type="checkbox"

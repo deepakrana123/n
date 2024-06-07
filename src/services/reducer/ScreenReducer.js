@@ -10,6 +10,8 @@ export const screenSlice = createSlice({
     template: [],
     templateVisited: [],
     user: localStorage.getItem("user") ? localStorage.getItem("user") : {},
+    sidebar: false,
+    drawerOpen:false
   },
   reducers: {
     addTemplate: (state, action) => {
@@ -45,6 +47,12 @@ export const screenSlice = createSlice({
     templateVisited: (state, action) => {
       state.templateVisited.push(action.payload);
     },
+    sidebarStatus: (state, action) => {
+      state.sidebarStatus = action.payload;
+    },
+    drawerOpenClose:(state,action)=>{
+      state.drawerOpen = action.payload
+    }
   },
 });
 export const {
@@ -54,7 +62,9 @@ export const {
   login,
   logout,
   addTemplate,
-  templateVisited
+  templateVisited,
+  sidebarStatus,
+  drawerOpenClose
 } = screenSlice.actions;
 
 export default screenSlice.reducer;
