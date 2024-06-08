@@ -72,6 +72,7 @@ const NewForm = ({ data = [], setData }) => {
     const value = idProofs[0].columns.filter(
       (items) => items.type === item.type
     )[0];
+    console.log(value,idProofs,"hiii",item,"hii")
     const newData = JSON.parse(JSON.stringify(data));
     const threeInOneRow =
       newData?.filter((item) => item?.row == rowIndex)[0]?.columns?.length >= 3;
@@ -275,9 +276,10 @@ const NewForm = ({ data = [], setData }) => {
                     row.columns.length
                   )}`}
           >
-            <div className="pl-1 w-full text-gray-700 text-xl font-semibold">
-              {row.label}
+            <div className="flex pl-2 w-full text-gray-700 text-xl font-semibold">
               <span>
+              {row.label}
+                  </span>
                 <div className="ml-2 mt-1">
                   <SheetSide
                     column={row}
@@ -287,9 +289,8 @@ const NewForm = ({ data = [], setData }) => {
                     parentId={rowIndex}
                   />
                 </div>
-              </span>
             </div>
-            <div>
+            <div className="pl-2">
               {row.columns.map((subRow, subRowIndex) =>
                 subRow.columns.map((subColumn, subColumnIndex) => (
                   <div className="flex flex-col justify-between">
