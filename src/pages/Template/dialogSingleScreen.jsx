@@ -17,7 +17,7 @@ import { BsFileEarmarkPlus } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function SingleScreenDialog() {
+export function SingleScreenDialog({ id }) {
   const navigate = useNavigate();
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const { state: singleForm } = useLocation();
@@ -28,9 +28,46 @@ export function SingleScreenDialog() {
     singleForm.screenName = screenRef.current.value;
     singleForm.description = descriptionRef.current.value;
     singleForm.orgId = user.orgId;
-    fetch("http://10.101.29.80:8080/api/saveScreenTemplateDetails", {
+    if (id) {
+      singleForm.templateType = id;
+    }
+    if (!singleForm.templateId) {
+      await fetch("http://api.ninjagyan.com:8080/api/saveCustomTemplate", {
+        method: "POST",
+        body: JSON.stringify({
+          templateField: singleForm.templateField,
+          templateName: singleForm.templateName,
+          description: singleForm.description,
+          orgId: user.orgId,
+          templateType: singleForm.templateType,
+          status: "D",
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((response) => {
+          if (response.code === 200) {
+            handleSingleScreenSave({
+              ...singleForm,
+              templateId: response.data,
+            });
+          }
+        });
+    } else {
+      handleSingleScreenSave({
+        ...singleForm,
+      });
+    }
+  };
+  const handleSingleScreenSave = async (singleForm) => {
+    await fetch("http://api.ninjagyan.com:8080/api/saveScreenTemplateDetails", {
       method: "POST",
-      body: JSON.stringify({"screenTemplateMasterDtoList":[singleForm]}),
+      body: JSON.stringify({ screenTemplateMasterDtoList: [singleForm] }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: `Bearer ${user.token}`,
@@ -57,7 +94,7 @@ export function SingleScreenDialog() {
           // dispatch(login(response.data));
 
           // navigate("/");
-          singleForm.screenId=response?.data[0]
+          singleForm.screenId = response?.data[0];
           navigate("/createSingleForm", { state: { ...singleForm } });
         }
       });

@@ -91,7 +91,7 @@ const NewForm = ({ data = [], setData }) => {
       return;
     }
     if (threeInOneRow) {
-      if (newData[rowIndex].id === "section") {
+      if (newData[rowIndex].type === "section") {
         toast({
           variant: "destructive",
           title: "Try to make new row",

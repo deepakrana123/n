@@ -23,35 +23,15 @@ export function TemplateDialog() {
   const descriptionRef = useRef();
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const handleSave = async () => {
-    await fetch("http://10.101.29.80:8080/api/saveCustomTemplate", {
-      method: "POST",
-      body: JSON.stringify({
-        templateField:templateRef.current.value.split(" ").join("_"),
-        templateName: templateRef.current.value,
-        description: descriptionRef.current.value,
-        orgId: user.orgId,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code === 200) {
-          let inputSingleForm={
-            templateName: templateRef.current.value,
-            description: descriptionRef.current.value,
-            orgId: user.orgId,
-            templateId : data.data
-          }
-          navigate("/createTemplate", {
-            state: { ...inputSingleForm, fieldsMap: [] },
-          });
-        }
-      });
+    let inputSingleForm = {
+      templateField: templateRef.current.value.split(" ").join("_"),
+      templateName: templateRef.current.value,
+      description: descriptionRef.current.value,
+      orgId: user.orgId,
+    };
+    navigate("/createTemplate", {
+      state: { ...inputSingleForm, fieldsMap: [] },
+    });
   };
   return (
     <Dialog>

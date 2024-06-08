@@ -39,7 +39,7 @@ const getIcon = {
 const Sidebar = () => {
   const [dragEnd, setDragEnd] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const handleDragStart = (event, item) => {
     console.log(item, "hihi");
     let obj = {
@@ -47,7 +47,7 @@ const Sidebar = () => {
       where: "sidebar",
     };
     event.dataTransfer.setData("text/plain", JSON.stringify(obj));
-    dispatch(sidebarStatus(true))
+    dispatch(sidebarStatus(true));
 
     // setDragEnd(item);
     // setIsDragging(true);
