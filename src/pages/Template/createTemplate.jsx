@@ -8,7 +8,7 @@ const createTemplate = [
     to: "createSingleForm",
   },
   {
-    id: "personal_info",
+    id: "multiStepForm",
     screenName: "Step Form",
     to: "createStepForm",
   },
@@ -31,7 +31,7 @@ const CreateTemplate = () => {
           {createTemplate?.map(({ id, screenName, description, to }, index) => (
             <>
               {id === "singleForm" ? (
-                <SingleScreenDialog />
+                <SingleScreenDialog id={id} />
               ) : (
                 <button
                   className="w-[230px] h-[230px] ml-4 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2 group border border-primary/20  items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4"
@@ -40,7 +40,11 @@ const CreateTemplate = () => {
                   aria-expanded="false"
                   aria-controls="radix-:Rdllb6la:"
                   data-state="closed"
-                  onClick={() => naviagte(`/${to}`, { state: { ...state } })}
+                  onClick={() =>
+                    naviagte(`/${to}`, {
+                      state: { ...state, templateType: id },
+                    })
+                  }
                 >
                   <svg
                     stroke="currentColor"
