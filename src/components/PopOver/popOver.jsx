@@ -28,8 +28,11 @@ export function PopoverDemo({ id }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="px-[3px] py-[2px] cursor-pointer h-5">
-          <BsThreeDotsVertical  />
+        <Button
+          variant="outline"
+          className="px-[3px] py-[2px] cursor-pointer h-5"
+        >
+          <BsThreeDotsVertical />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
@@ -90,7 +93,7 @@ export function PopoverDemo({ id }) {
               <HoverCard>
                 <HoverCardTrigger>Delete</HoverCardTrigger>
                 <HoverCardContent>
-                  Are you sure you wants to delete this
+                  Are you sure you want to delete this
                 </HoverCardContent>
               </HoverCard>
             </Button>

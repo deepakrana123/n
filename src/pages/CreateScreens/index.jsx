@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaPencilAlt } from "react-icons/fa";
+import useApiCallHandler from "@/useApiCallHandler";
 
 const CreateScreens = () => {
   const { state } = useLocation();
@@ -21,38 +22,33 @@ const CreateScreens = () => {
   const [currentScreenState, setCurrentScreenState] = useState(
     state?.fieldsMap || []
   );
+
+  const { handleApiCall } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {},
+    showToast: true,
+  });
   const handleSubmit = () => {
-    fetch(`http://api.ninjagyan.com:8080/api/updateScreenTemplateDetail`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({
+    handleApiCall({
+      id: "/api/updateScreenTemplateDetail",
+      data: {
         ...state,
-       fieldsMap: currentScreenState,
-      }),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code == 200) {
-          console.log(data.code, "data", data);
-          // setTemplateVisited([...data.data]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+        fieldsMap: currentScreenState,
+      },
+    });
   };
   return (
     <>
-      <main className="flex flex-col w-full overflow-x-hidden">
-        <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
+      <main
+        className="flex flex-col w-full overflow-x-hidden"
+        style={{
+          height: "100vh",
+        }}
+      >
+        <nav className="flex justify-between border-b-2 p-4 gap-3 items-center bg-white">
           <h2 className="flex items-center font-medium">
             <IoMdArrowRoundBack className="mr-2" onClick={() => naviagte(-1)} />
-            <p className="text-muted-foreground mr-2">Screen</p>
+            {/* <p className="text-muted-foreground mr-2">Screen</p> */}
             {editOn ? (
               <input
                 ref={headerRef}
@@ -77,8 +73,8 @@ const CreateScreens = () => {
 
           <div className="flex items-center gap-2">
             <button
-               className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 gap-2 text-white bg-gradient-to-r from-indigo-400 to-cyan-400"
-               onClick={() => {
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 gap-2 text-white bg-gradient-to-r from-indigo-400 to-cyan-400"
+              onClick={() => {
                 handleSubmit();
               }}
             >
@@ -98,15 +94,15 @@ const CreateScreens = () => {
               </svg>
               Save
             </button>
-            <button
+            {/* <button
               className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 gap-2 text-white bg-gradient-to-r from-indigo-400 to-cyan-400"
               type="button"
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="radix-:r7:"
               data-state="closed"
-            >
-              <svg
+            > */}
+            {/* <svg
                 stroke="currentColor"
                 fill="currentColor"
                 stroke-width="0"
@@ -120,17 +116,19 @@ const CreateScreens = () => {
                 <path d="M5 4h14v2H5zm0 10h4v6h6v-6h4l-7-7-7 7zm8-2v6h-2v-6H9.83L12 9.83 14.17 12H13z"></path>
               </svg>
               Publish
-            </button>
+            </button> */}
           </div>
         </nav>
-        <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[602px] bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] overflow-x-hidden">
-          <div className="flex w-full h-full">
-            <Sidebar />
-            <NewForm
-              data={currentScreenState}
-              setData={setCurrentScreenState}
-            />
-          </div>
+        <div
+          className="flex w-full flex-grow  relative overflow-y-auto h-full bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)] overflow-x-hidden"
+          style={{
+            flex: 1,
+            width: window.innerWidth,
+            height: "100vh",
+          }}
+        >
+          <Sidebar />
+          <NewForm data={currentScreenState} setData={setCurrentScreenState} />
         </div>
       </main>
     </>

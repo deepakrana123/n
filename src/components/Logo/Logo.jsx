@@ -1,15 +1,23 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Logo = () => {
   return (
-      <Link
+    <Link
       to={"/"}
-      className="font-bold text-3xl bg-gradient-to-r from-indigo-400 to-cyan-400 text-transparent bg-clip-text hover:cursor-pointer"
+      className="font-bold text-3xl bg-gradient-to-r from-[#fff] to-[#fff] text-transparent bg-clip-text hover:cursor-pointer"
     >
-      Algo Yoddhas
+      {/* <img
+        src="/logohackathon.png"
+        style={{
+          width: 40,
+          height: 40,
+          alignSelf: "center",
+        }}
+      ></img>{" "} */}
+      Quick Craft
     </Link>
-  )
-}
+  );
+};
 
-export default Logo
+export default Logo;

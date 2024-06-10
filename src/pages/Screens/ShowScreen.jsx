@@ -11,6 +11,8 @@ import { BsWindowDesktop } from "react-icons/bs";
 import { IoMdSunny } from "react-icons/io";
 import { and, finalSpaceCharacters } from "@/constants/constants";
 import { MdOutlinePrivacyTip } from "react-icons/md";
+import useApiCallHandler from "@/useApiCallHandler";
+import { Pencil, Plus, Trash2Icon } from "lucide-react";
 
 function performAction(input) {
   const normalizedInput = input % 3;
@@ -26,7 +28,7 @@ function performAction(input) {
 }
 
 const ShowScreen = () => {
-  const { id: templateId } = useParams();
+  const { id: templateId, ...rest } = useParams();
   // const { toast } = useToast();
   const user = JSON.parse(useSelector((state) => state.screen.user));
   const [screen, setScreen] = useState([]);
@@ -72,6 +74,7 @@ const ShowScreen = () => {
 
   const handleDrop = (event) => {
     const item = event.dataTransfer.getData("text/plain");
+    console.log("@@@@", item, targetValue);
     swapScreens(item, targetValue);
   };
 
@@ -134,7 +137,7 @@ const ShowScreen = () => {
 
     // Helper function to check if all preScreens are before the given screen
     const arePreScreensBefore = (currentScreen) => {
-      const currentPreScreens = currentScreen.preScreens.split(",");
+      const currentPreScreens = currentScreen.preScreens?.split(",") || [];
       const currentIndex = updatedScreens.findIndex(
         (s) => s.id === currentScreen.id
       );
@@ -152,7 +155,7 @@ const ShowScreen = () => {
 
     // Helper function to check if all postScreens are after the given screen
     const arePostScreensAfter = (currentScreen) => {
-      const currentPostScreens = currentScreen.postScreens.split(",");
+      const currentPostScreens = currentScreen.postScreens?.split(",") || [];
       const currentIndex = updatedScreens.findIndex(
         (s) => s.id === currentScreen.id
       );
@@ -192,7 +195,7 @@ const ShowScreen = () => {
             targetScreen.screenName
           }: ${invalidPreScreensTarget.join(", ")}`
         );
-        return;
+        // return;
       }
 
       // Check if all postScreens are after the source target
@@ -215,14 +218,14 @@ const ShowScreen = () => {
             targetScreen.screenName
           }: ${invalidPostScreensTarget.join(", ")}`
         );
-        toast({
-          title: "Email or password is wrong",
-          description: `${
-            sourceScreen.screenName
-          }: ${invalidPostScreensSource.join(", ")}`,
-          // position: "top-",
-        });
-        return;
+        // toast({
+        //   title: "Email or password is wrong",
+        //   description: `${
+        //     sourceScreen.screenName
+        //   }: ${invalidPostScreensSource.join(", ")}`,
+        //   // position: "top-",
+        // });
+        // return;
       }
 
       // Swap the screens
@@ -233,66 +236,69 @@ const ShowScreen = () => {
       console.error("Error: Source or target screen not found.");
     }
   };
-
-  useEffect(() => {
-    fetch(`http://15.207.88.248:8080/api/findAllScreenMaster/${templateId}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${user.token}`,
+  const { handleApiCall } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {
+      setScreen(
+        response?.data?.data.sort((a, b) => {
+          return a.sequence - b.sequence;
+        })
+      );
+    },
+  });
+  const { handleApiCall: handleSubmitApi } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {},
+    showToast: true,
+  });
+  console.log("@@@screen", screen);
+  const handleSubmit = () => {
+    const dataToUpdate = screen.map((item, index) => {
+      return {
+        ...item,
+        sequence: index + 1,
+      };
+    });
+    handleSubmitApi({
+      id: "/api/updateTemplateDetail",
+      data: {
+        templateId,
+        templateName: "",
+        screenTemplateMasterDtoList: dataToUpdate,
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code == 200) {
-          console.log(data.code, "data", data);
-          // setTemplateVisited([...data.data]);
-          setScreen(data?.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-  const handleSaveData = () => {
-    fetch(`http://10.101.28.30:8080/api/findScreenById/${1}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZWVwYWt5YWRhdjkxNUBnbWFpbC5jb20iLCJpYXQiOjE3MTY5ODkxMzAsImV4cCI6MTcxNzAyNTEzMH0.HUxfHns_tB1uOmts7jSU1IlFrhQ3DPrB4qdVkdIUF3M",
-      },
-      body: JSON.stringify({
-        email: "Deepakyadav915@gmail.com",
-        password: "Deepak",
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // setDatas(data?.data?.fieldsMapList)
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    });
   };
+  const handleRemoveTemplate = (id) => {
+    setScreen(
+      screen.filter((item) => {
+        return item.id !== id;
+      })
+    );
+  };
+  useEffect(() => {
+    handleApiCall({ id: `/api/findAllScreenMaster/${templateId}` }, "GET");
+  }, []);
+  console.log("@@@@");
   return (
     <>
-      <div className="w-full min-h-screen p-6">
+      <div
+        className="w-full  p-6 items-center justify-center "
+        style={{
+          flexDirection: "column",
+          display: "flex",
+          justifyContent: "space-between",
+          height: window.innerHeight - 50,
+        }}
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[
             ...screen,
             {
               id: "create",
-              screenName: "Create Work",
-              description: "Creating an new screen",
+              screenName: "Add New Screen",
+              description: "Creating a new screen",
+              templateId,
+              isDraggable: false,
             },
           ]?.map(
             (
@@ -310,7 +316,7 @@ const ShowScreen = () => {
               index
             ) => (
               <div
-                className="w-[300px]  "
+                className="w-[300px]"
                 draggable={isDraggable}
                 onDragStart={(event) => handleDragStart(event, id)}
                 onDrop={handleDrop}
@@ -326,8 +332,22 @@ const ShowScreen = () => {
                   <div className="flex flex-col space-y-1.5 p-6">
                     <h3 className="font-semibold leading-none tracking-tight flex items-center gap-2 justify-between">
                       <span className="truncate font-bold">{screenName}</span>
-                      <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80">
-                        {isMandatory === "Y" ? <MdOutlinePrivacyTip /> : ""}
+                      <div className="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent 0">
+                        {id != "create" ? (
+                          <div
+                            onClick={() => handleRemoveTemplate(id)}
+                            className="text-blue-600 hover:underline"
+                          >
+                            <Trash2Icon color="red" />
+                          </div>
+                        ) : (
+                          <div
+                            // onClick={() => handleRemoveTemplate(id)}
+                            className="text-blue-600 hover:underline w-6 h-6"
+                          >
+                            {/* <Trash2Icon color="red" /> */}
+                          </div>
+                        )}
                       </div>
                     </h3>
                   </div>
@@ -350,7 +370,18 @@ const ShowScreen = () => {
                         ...rest,
                       }}
                     >
-                      Edit {screenName}{" "}
+                      {id != "create" ? (
+                        <>
+                          <Pencil width={15} height={15} />
+                          {"Edit " + screenName}
+                        </>
+                      ) : (
+                        <>
+                          <Plus width={20} height={20} /> Add
+                        </>
+                      )}
+
+                      {/* { ? : "Add"} */}
                     </Link>
                   </div>
                 </div>
@@ -360,7 +391,7 @@ const ShowScreen = () => {
         </div>
         <Button
           className="flex text-white h-8 mb-4 bg-black mt-2 flex-end"
-          onClick={() => ""}
+          onClick={() => handleSubmit()}
         >
           Submit
         </Button>

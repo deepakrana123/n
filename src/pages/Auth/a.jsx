@@ -1,3 +1,5 @@
+import { Icon, Upload } from "lucide-react";
+
 export const renderInputField = (column, rowIndex, columnIndex) => {
   switch (column.type) {
     case "text":
@@ -12,7 +14,7 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
           placeholder={column.placeholder}
           maxLength={column.maxlength}
           minLength={column.minlength}
-          required={column.required}
+          required={column.isRequired}
           className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
           value={column.value}
           disabled={true}
@@ -25,7 +27,7 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
           placeholder={column.placeholder}
           max={column.max}
           min={column.min}
-          required={column.required}
+          required={column.isRequired}
           className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
           value={column.value}
           disabled={true}
@@ -35,7 +37,7 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
       return (
         <input
           type="date"
-          required={column.required}
+          required={column.isRequired}
           className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
           value={column.value}
           disabled={true}
@@ -44,12 +46,12 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
     case "select":
       return (
         <select
-          required={column.required}
+          required={column.isRequired}
           className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
           value={column.value}
           // onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
         >
-          {column.options.map((option, index) => (
+          {column.options?.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}
             </option>
@@ -67,20 +69,24 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
     //   );
     case "file":
       return (
-        <input
-          type="file"
-          required={column.required}
-          accept={column.accept}
-          className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
-          onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
-        />
+        // <input
+        //   type="file"
+        //   required={column.isRequired}
+        //   accept={column.accept}
+        //   className="border border-gray-300 p-2 w-full rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mt-2"
+        //   onChange={(event) => handleValueChange(rowIndex, columnIndex, event)}
+        // />
+        <div style={{ ...styles.button, ...styles.container }}>
+          <p style={styles.buttonText}>Capture or Browse Files</p>
+          <Upload as={Upload} width={20} color={"#a9a9a9"} />
+        </div>
       );
     case "checkbox":
       return (
         <input
           type="checkbox"
-          required={column.required}
-          disabled={column.disabled}
+          required={column.isRequired}
+          disabled={true}
           readOnly={column.readonly}
           className="form-checkbox h-5 w-5 text-blue-500 mt-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           checked={column.value}
@@ -91,8 +97,8 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
       return (
         <input
           type="radio"
-          required={column.required}
-          disabled={column.disabled}
+          required={column.isRequired}
+          disabled={true}
           readOnly={column.readonly}
           className="form-radio h-5 w-5 text-blue-500 mt-2"
           checked={column.value}
@@ -117,4 +123,55 @@ export const renderInputField = (column, rowIndex, columnIndex) => {
     default:
       return null;
   }
+};
+
+const styles = {
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderStyle: "dashed",
+    borderColor: "#00000090",
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  button: {
+    borderRadius: 5,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flex: 1,
+    width: "100%",
+  },
+  buttonText: {
+    color: "#00000090",
+    fontSize: 16,
+    marginRight: 10,
+  },
+  fileInfo: {
+    // marginTop: 20,
+    gap: 10,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  fileName: {
+    flex: 1,
+    fontSize: 14,
+    marginRight: 20,
+    color: "blue",
+    textDecorationLine: "underline",
+    // marginBottom: 10,
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
 };

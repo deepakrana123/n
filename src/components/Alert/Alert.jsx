@@ -15,24 +15,24 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/services/reducer/ScreenReducer";
 
 const Alert = () => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   return (
     <>
       <AlertDialog>
         <AlertDialogTrigger>
-          <Button size={"xs"} className="bg-blue-600 p-3">
-            Logout
-          </Button>
+          <Button className="bg-red-400 p-3 h-[34px]">Logout</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogDescription>
-              Are you sure you wants to logout
+              Are you sure you want to logout
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => ""}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => dispatch(logout({}))}>Ok</AlertDialogAction>
+            <AlertDialogAction onClick={() => dispatch(logout({}))}>
+              Ok
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

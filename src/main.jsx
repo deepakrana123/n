@@ -5,16 +5,18 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
-import { Toaster } from "@/components/ui/toaster"
-
+import { Toaster } from "@/components/ui/toaster";
+import { ToastContainer } from "react-toastify";
+import ParentComponent from "./ParentComponent.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ParentComponent>
       <BrowserRouter>
         <App />
         <Toaster className="" />
+        <ToastContainer />
       </BrowserRouter>
-    </Provider>
-  // </React.StrictMode>
+    </ParentComponent>
+  </Provider>
 );

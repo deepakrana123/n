@@ -15,9 +15,25 @@ import CreateTemplate from "./pages/Template/createTemplate";
 import CreateSingleForm from "./pages/Template/createSingleForm";
 import CreateStepForm from "./pages/Template/createStepForm";
 import ReactFlows from "./ReactFlow";
+import { getAsyncStorageKey, setHeader } from "./apiHandler";
+import { useEffect, useState } from "react";
+import useToast from "./components/ui/useToast";
 // import ReactFlows from "./ReactFlow";
 
 function App() {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      // debugger;
+      const token = await getAsyncStorageKey("token");
+      if (token) {
+        setHeader(token);
+      }
+      setLoading(false);
+      console.log("@@@@@", token);
+    })();
+  }, []);
   let isSignedIn = false;
   const user = JSON.parse(
     JSON.stringify(useSelector((state) => state.screen.user))
@@ -25,9 +41,9 @@ function App() {
   if (Object.keys(user).length > 0) {
     isSignedIn = true;
   }
-  return (
+
+  return !loading ? (
     <>
-      <Header />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
@@ -77,12 +93,12 @@ function App() {
         <Route
           path="/getScreens/:id"
           element={
-            // <Protected isSignedIn={isSignedIn}>
-            <ShowScreen />
-            // </Protected>
+            <Protected isSignedIn={isSignedIn}>
+              <ShowScreen />
+            </Protected>
           }
         />
-            {/* <Route
+        {/* <Route
           path="/get"
           element={
             // <Protected isSignedIn={isSignedIn}>
@@ -90,8 +106,10 @@ function App() {
             // </Protected>
           }
         /> */}
-    </Routes>
+      </Routes>
     </>
+  ) : (
+    <></>
   );
 }
 

@@ -12,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import useToast from "@/components/ui/useToast";
+import useApiCallHandler from "@/useApiCallHandler";
 import { useRef } from "react";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -23,81 +25,58 @@ export function SingleScreenDialog({ id }) {
   const { state: singleForm } = useLocation();
   const screenRef = useRef();
   const descriptionRef = useRef();
-  console.log(singleForm, "singleForm");
-  const handleSave = async () => {
-    singleForm.screenName = screenRef.current.value;
-    singleForm.description = descriptionRef.current.value;
-    singleForm.orgId = user.orgId;
-    if (id) {
-      singleForm.templateType = id;
-    }
-    if (!singleForm.templateId) {
-      await fetch("http://api.ninjagyan.com:8080/api/saveCustomTemplate", {
-        method: "POST",
-        body: JSON.stringify({
-          templateField: singleForm.templateField,
-          templateName: singleForm.templateName,
-          description: singleForm.description,
-          orgId: user.orgId,
-          templateType: singleForm.templateType,
-          status: "D",
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((response) => {
-          if (response.code === 200) {
-            handleSingleScreenSave({
-              ...singleForm,
-              templateId: response.data,
-            });
-          }
+  const { toast } = useToast();
+  const { handleApiCall } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {
+      singleForm.templateId = response.data?.data;
+      handleSingleScreenSave(singleForm);
+    },
+  });
+  const { handleApiCall: handleScreenSave } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {
+      singleForm.id = response?.data?.data[0];
+      navigate("/createSingleForm", { state: { ...singleForm } });
+    },
+    showToast: true,
+    successMessage: "Screen created successfully",
+  });
+  const handleSave = async (e) => {
+    if (screenRef.current.value) {
+      singleForm.screenName = screenRef.current.value;
+      singleForm.description = descriptionRef.current.value;
+      singleForm.orgId = user.orgId;
+      if (id) {
+        singleForm.templateType = id;
+      }
+      if (!singleForm.templateId) {
+        handleApiCall({
+          id: `/api/saveCustomTemplate`,
+          data: {
+            templateField: singleForm.templateField,
+            templateName: singleForm.templateName,
+            description: singleForm.description,
+            orgId: user.orgId,
+            templateType: singleForm.templateType,
+            status: "D",
+          },
         });
+      } else {
+        handleSingleScreenSave({
+          ...singleForm,
+        });
+      }
     } else {
-      handleSingleScreenSave({
-        ...singleForm,
-      });
+      e.preventDefault();
+      toast("error", "Screen Name is mandatory");
     }
   };
   const handleSingleScreenSave = async (singleForm) => {
-    await fetch("http://api.ninjagyan.com:8080/api/saveScreenTemplateDetails", {
-      method: "POST",
-      body: JSON.stringify({ screenTemplateMasterDtoList: [singleForm] }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        if (response.status === 400) {
-          toast({
-            title: "Email or password is wrong",
-            description: response.message,
-            position: "top-",
-          });
-        } else if (response.status === 403) {
-          toast({
-            title: "Email or password is wrong",
-            description: "Email or password is wrong",
-            // position: "top-",
-          });
-        }
-        if (response.code === 200) {
-          // dispatch(login(response.data));
-
-          // navigate("/");
-          singleForm.screenId = response?.data[0];
-          navigate("/createSingleForm", { state: { ...singleForm } });
-        }
-      });
+    handleScreenSave({
+      id: `/api/saveScreenTemplateDetails`,
+      data: { screenTemplateMasterDtoList: [singleForm] },
+    });
   };
   return (
     <Dialog>
@@ -108,23 +87,26 @@ export function SingleScreenDialog({ id }) {
         >
           <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
           <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">
-            Create Single Form
+            Create Single Screen
           </p>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create Single Form</DialogTitle>
+          <DialogTitle>Create Single Screen</DialogTitle>
           <DialogDescription>
             Create a new Single to start collecting responses
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col  space-x-2 space-y-4">
           <div className="grid flex-1 gap-2">
-            <Label>Change Screen Name</Label>
+            <Label>
+              Screen Name <span className="text-red-500 text-xs mt-1">*</span>
+            </Label>
             <Input
               type="text"
-              placeholder="Enter your screen"
+              required
+              placeholder="Enter screen name"
               ref={screenRef}
             />
           </div>
@@ -143,7 +125,7 @@ export function SingleScreenDialog({ id }) {
               type="button"
               variant="secondary"
               className="w-full mt-4 bg-black text-white"
-              onClick={() => handleSave()}
+              onClick={(e) => handleSave(e)}
             >
               <span>Save</span>
             </Button>

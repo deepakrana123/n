@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { BiHide } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import useApiCallHandler from "@/useApiCallHandler";
 const Regisiter = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -17,7 +18,14 @@ const Regisiter = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState({});
-
+  const { handleApiCall } = useApiCallHandler({
+    defaultData: [],
+    onSuccess: (response) => {
+      navigate("/login");
+    },
+    showToast: true,
+    successMessage: "User created successfully",
+  });
   const handleRegister = (event) => {
     event.preventDefault();
     if (formData) {
@@ -39,38 +47,17 @@ const Regisiter = () => {
       });
       return;
     }
-    fetch("http://15.207.88.248:8080/admin/register", {
-      method: "POST",
-      body: JSON.stringify({
+    handleApiCall({
+      id: "/admin/register",
+      data: {
         organizationId: "1",
         userId: "5",
         firstname: formData.firstname,
         lastname: formData.lastname,
         email: formData.email,
         password: formData.password,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code === 400) {
-          toast({
-            description: data.message,
-          });
-        } else if (data.code == 200 || true) {
-          toast({
-            description: data.message,
-          });
-          navigate("/login");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    });
   };
 
   return (

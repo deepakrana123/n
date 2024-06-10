@@ -7,12 +7,10 @@ export const getScreenDeatilsApi = createApi({
   }),
   endpoints(build) {
     return {
-      query: build.query({ query: () => ({ url: "/query", method: "get" }) }),
+      query: build.query({ query: () => ({ url: "/query", method: "GET" }) }),
       mutation: build.mutation({
         query: () => ({ url: "/mutation", method: "post" }),
       }),
     };
   },
 });
-
-

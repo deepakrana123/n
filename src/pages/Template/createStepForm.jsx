@@ -7,6 +7,7 @@ import { TemplateDialog } from "./dailog";
 import { SingleScreenDialog } from "./dialogSingleScreen";
 import { MdOutlinePrivacyTip } from "react-icons/md";
 import { useSelector } from "react-redux";
+import useApiCallHandler from "@/useApiCallHandler";
 let a = {
   id: "create",
   screenName: "Create Your step form",
@@ -27,38 +28,20 @@ const CreateStepForm = () => {
   //   setCreateStepForm(abc);
   //   // setOpen(abc);
   // };
+
+  const { handleApiCall } = useApiCallHandler({
+    onSuccess: (response) => {
+      setCreateStepForm([...response?.data?.data, a]);
+    },
+  });
   useEffect(() => {
     if (state.templateId) {
-      handleMultiStepForm(state.templateId);
+      handleApiCall({
+        id: `/api/findAllScreenMaster/${state.templateId}`,
+      });
     }
   }, [state.templateId]);
 
-  const handleMultiStepForm = async () => {
-    await fetch(
-      `http://15.207.88.248:8080/api/findAllScreenMaster/${state?.templateId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code == 200) {
-          console.log(data.code, "data", data);
-          // setTemplateVisited([...data.data]);
-          setCreateStepForm([...data?.data, a]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-  console.log(state, "ceete");
   return (
     <>
       <div className="w-full min-h-screen p-6">
@@ -111,7 +94,7 @@ const CreateStepForm = () => {
                           fieldsMap,
                           isMandatory,
                           templateId,
-                          // ...rest,
+                          ...rest,
                         }}
                       >
                         Edit {screenName}{" "}

@@ -14,6 +14,7 @@ import {
 } from "../ui/sheet";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { useSelector } from "react-redux";
+import useApiCallHandler from "@/useApiCallHandler";
 
 const SheetSide = ({
   column = "",
@@ -25,9 +26,7 @@ const SheetSide = ({
   const [formValues, setFormData] = useState({
     ...column,
   });
-  const [optionsValue,setOptionValue]=useState([])
-  const user=JSON.parse(useSelector((state)=>state.screen.user))
-
+  const user = JSON.parse(useSelector((state) => state.screen.user));
   const handleInputChange = (e, fieldId) => {
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -36,41 +35,26 @@ const SheetSide = ({
       [fieldId]: value,
     });
   };
+  const { handleApiCall, data: optionsValue } = useApiCallHandler({
+    defaultData: [],
+  });
 
-  useEffect(()=>{
-    fetch(`http://15.207.88.248:8080/api/getByfilter/${formValues.type}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        if (data.code == 200) {
-          setOptionValue(data?.data)
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        return []
-      });
-  },[])
-  console.log(formValues,"formValues")
+  useEffect(() => {
+    handleApiCall({ id: `/api/getByfilter/${formValues.type}` }, "GET");
+  }, []);
   // console.log(handleValues(formValues.type))
   return (
-    <div className="flex flex-col gap-2 overflow-y-auto">
+    <div className="flex flex-col gap-2 overflow-y-auto h-full">
       <Sheet>
         <SheetTrigger asChild>
           <HiOutlinePencilSquare className="cursor-pointer" />
         </SheetTrigger>
         <SheetContent
-          className={`bg-white shadow-md rounded-lg w-[500px]`}
+          className={`bg-white shadow-md rounded-lg w-[500px] h-full justify-between flex`}
           style={{
             backdropFilter: "blur(2px)",
             backgroundColor: "rgba(255, 255, 255, 0.8)",
+            flexDirection: "column",
           }}
           size="large"
           side="right"
@@ -85,7 +69,7 @@ const SheetSide = ({
                 id="label"
                 name="label"
                 value={formValues.label}
-                onChange={(event)=>handleInputChange(event,"label")}
+                onChange={(event) => handleInputChange(event, "label")}
                 placeholder="Enter Label"
                 className="p-2 border rounded"
               />
@@ -100,7 +84,7 @@ const SheetSide = ({
                 id="placeholder"
                 name="placeholder"
                 value={formValues.placeholder}
-                onChange={(event)=>handleInputChange(event,"placeholder")}
+                onChange={(event) => handleInputChange(event, "placeholder")}
                 placeholder="Enter Placeholder"
                 className="p-2 border rounded"
               />
@@ -115,7 +99,7 @@ const SheetSide = ({
                 id="maxlength"
                 name="maxlength"
                 value={formValues.maxlength}
-                onChange={(event)=>handleInputChange(event,"maxlength")}
+                onChange={(event) => handleInputChange(event, "maxlength")}
                 placeholder="Enter Max Length"
                 className="p-2 border rounded"
               />
@@ -130,7 +114,7 @@ const SheetSide = ({
                 id="minlength"
                 name="minlength"
                 value={formValues.minlength}
-                onChange={(event)=>handleInputChange(event,"minlength")}
+                onChange={(event) => handleInputChange(event, "minlength")}
                 placeholder="Enter Min Length"
                 className="p-2 border rounded"
               />
@@ -138,34 +122,34 @@ const SheetSide = ({
 
             <div className="flex flex-col space-y-3">
               <div className="flex items-center space-x-3">
-                <label htmlFor="required" className="font-semibold">
+                <label htmlFor="isRequired" className="font-semibold">
                   Required:
                 </label>
                 <input
                   type="checkbox"
-                  id="required"
-                  name="required"
-                  checked={formValues.required}
-                  onChange={(event)=>handleInputChange(event,"required")}
+                  id="isRequired"
+                  name="isRequired"
+                  checked={formValues.isRequired}
+                  onChange={(event) => handleInputChange(event, "isRequired")}
                   className="h-5 w-5"
                 />
               </div>
               <div className="flex items-center space-x-3">
-                <label htmlFor="disabled" className="font-semibold">
+                <label htmlFor="isDisabled" className="font-semibold">
                   Disabled:
                 </label>
                 <input
                   type="checkbox"
-                  id="disabled"
-                  name="disabled"
-                  checked={formValues.disabled}
+                  id="isDisabled"
+                  name="isDisabled"
+                  checked={formValues.isDisabled}
                   // onChange={handleInputChange}
-                  onChange={(event)=>handleInputChange(event,"disabled")}
+                  onChange={(event) => handleInputChange(event, "isDisabled")}
                   className="h-5 w-5"
                 />
               </div>
 
-              <div className="flex items-center space-x-3">
+              {/* <div className="flex items-center space-x-3">
                 <label htmlFor="readonly" className="font-semibold">
                   Read-Only:
                 </label>
@@ -175,13 +159,13 @@ const SheetSide = ({
                   name="readonly"
                   checked={formValues.readonly}
                   // onChange={handleInputChange}
-                  onChange={(event)=>handleInputChange(event,"readonly")}
+                  onChange={(event) => handleInputChange(event, "readonly")}
                   className="h-5 w-5"
                 />
-              </div>
+              </div> */}
             </div>
 
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label htmlFor="validation" className="font-semibold">
                 Validation:
               </label>
@@ -191,13 +175,13 @@ const SheetSide = ({
                 name="validation"
                 value={formValues.validation}
                 // onChange={handleInputChange}
-                onChange={(event)=>handleInputChange(event,"validation")}
+                onChange={(event) => handleInputChange(event, "validation")}
                 placeholder="Enter Validation Regex"
                 className="p-2 border rounded"
               />
-            </div>
+            </div> */}
 
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label htmlFor="validationMessage" className="font-semibold">
                 Validation Message:
               </label>
@@ -207,15 +191,17 @@ const SheetSide = ({
                 name="validationMessage"
                 value={formValues.validationMessage}
                 // onChange={handleInputChange}
-                onChange={(event)=>handleInputChange(event,"validationMessage")}
+                onChange={(event) =>
+                  handleInputChange(event, "validationMessage")
+                }
                 placeholder="Enter Validation Message"
                 className="p-2 border rounded"
               />
-            </div>
+            </div> */}
 
             <div className="flex flex-col">
               <label htmlFor="value" className="font-semibold">
-                Value:
+                Default Value:
               </label>
               <input
                 type="text"
@@ -223,7 +209,7 @@ const SheetSide = ({
                 name="value"
                 value={formValues.value}
                 // onChange={handleInputChange}
-                onChange={(event)=>handleInputChange(event,"value")}
+                onChange={(event) => handleInputChange(event, "value")}
                 placeholder="Enter Value"
                 className="p-2 border rounded"
               />
@@ -238,7 +224,7 @@ const SheetSide = ({
                 id="icon"
                 name="icon"
                 value={formValues.icon}
-                onChange={(event)=>handleInputChange(event,"icon")}
+                onChange={(event) => handleInputChange(event, "icon")}
                 placeholder="Enter Icon"
                 className="p-2 border rounded"
               />
@@ -252,11 +238,11 @@ const SheetSide = ({
                 id="field"
                 name="field"
                 value={formValues.field}
-                onChange={(event)=>handleInputChange(event,"field")}
+                onChange={(event) => handleInputChange(event, "field")}
                 className="p-2 border rounded"
               >
-                {optionsValue.map((item)=>(
-                <option value={item.value}>{item.label}</option>
+                {optionsValue.map((item) => (
+                  <option value={item.value}>{item.label}</option>
                 ))}
               </select>
             </div>
@@ -264,20 +250,22 @@ const SheetSide = ({
 
           <SheetFooter className="flex justify-end mt-2">
             <SheetClose asChild>
-              <>
-                <Button
-                  type="submit"
-                  onClick={() => handleSave(parentId, columnIndex, formValues)}
-                >
-                  Save
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => handleDelete(parentId, columnIndex)}
-                >
-                  Delete
-                </Button>
-              </>
+              <Button
+                type="submit"
+                onClick={(e) =>
+                  handleSave(e, parentId, columnIndex, formValues)
+                }
+              >
+                Save
+              </Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button
+                type="submit"
+                onClick={(e) => handleDelete(e, parentId, columnIndex)}
+              >
+                Delete
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

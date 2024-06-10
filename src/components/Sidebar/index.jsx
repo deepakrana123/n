@@ -13,7 +13,7 @@ import { AiOutlineFileText, AiOutlineFontSize } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaArrowLeft, FaEdit, FaSave, FaUniversity } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
-import { TbNumber123 } from "react-icons/tb";
+import { TbNumber123, TbTableFilled } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { sidebarStatus } from "@/services/reducer/ScreenReducer";
 
@@ -34,6 +34,7 @@ const getIcon = {
   back: <FaArrowLeft className="h-8 w-8 text-black cursor-grab" />,
   update: <FaEdit className="h-8 w-8 text-black cursor-grab" />,
   upload: <LuUpload className="h-8 w-8 text-black cursor-grab" />,
+  section: <TbTableFilled className="h-8 w-8 text-black cursor-grab" />,
 };
 
 const Sidebar = () => {
@@ -60,8 +61,11 @@ const Sidebar = () => {
 
   return (
     <aside
-      className="w-[350px]  h-[730px] max-w-[350px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
+      className="w-[350px]  max-w-[350px] flex flex-col flex-grow gap-2 border-l-2 border-muted p-4 bg-background overflow-y-auto 
     scrollbar-mobile smooth-auto"
+      style={{
+        height: window.innerHeight - 60,
+      }}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1 place-items-center">
         {idProofs.map(({ header, columns, draggable, icon }, index) => (
