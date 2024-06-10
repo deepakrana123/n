@@ -60,6 +60,7 @@ const NewForm = ({ data = [], setData }) => {
     const value = idProofs[0].columns.filter(
       (items) => items.type === item.type
     )[0];
+    console.log(value, idProofs, "hiii", item, "hii");
     const newData = JSON.parse(JSON.stringify(data));
     const threeInOneRow =
       newData?.filter((item) => item?.row == rowIndex)[0]?.columns?.length >= 3;

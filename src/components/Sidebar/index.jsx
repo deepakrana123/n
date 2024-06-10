@@ -77,7 +77,7 @@ const Sidebar = () => {
               columns?.map((newItem, index) => (
                 <Button
                   variant={"outline"}
-                  key={newItem?.label + "" + String(index)}
+                  key={newItem?.label + "" + String(newItem?.type)}
                   draggable
                   onDragStart={(event) => handleDragStart(event, newItem?.type)}
                   onDragEnd={(event) => handleDragEnd(event)}

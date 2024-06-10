@@ -37,6 +37,9 @@ const SheetSide = ({
   };
   const { handleApiCall, data: optionsValue } = useApiCallHandler({
     defaultData: [],
+    onSuccess: (response) => {
+      setOptionValue(response?.data?.data);
+    },
   });
 
   useEffect(() => {
